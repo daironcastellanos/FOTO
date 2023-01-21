@@ -1,8 +1,15 @@
 // This component is a simple login form that uses React hooks to manage its state
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+
+
+import { Link } from 'react-router-dom'
 // Import the styles for this component
+
+
 const Login = () => {
+  
     // Use React hooks to manage the state of the form
     const [email, setEmail] = useState('');
     // The second argument to useState is the function that will be used to update the state
@@ -51,14 +58,19 @@ const Login = () => {
                             required 
                         />
                     </div>
-                    <button className="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600">
+                    <button className="bg-indigo-500 text-white py-2 px-8 rounded-lg hover:bg-indigo-600">
                         Log in
+                    </button>
+                    <button  className="block mt-4 text-center text-indigo-500">
+                        Don't have an account? Sign up
                     </button>
                 </form>
             </div>
         </div>
     )
 }
+
+
 
 // Export the component
 export default Login;
