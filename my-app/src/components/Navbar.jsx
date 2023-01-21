@@ -7,6 +7,7 @@ const MENU_LIST = [
   { text: "Home", href: "/" },
   { text: "About Us", href: "/about" },
   { text: "Contact", href: "/contact" },
+  { text: "Signup", href: "./screens/Login" },
 ];
 const Navbar = () => {
   const [navActive, setNavActive] = useState(null);
@@ -16,9 +17,9 @@ const Navbar = () => {
     <header>
       <nav className={`nav`}>
         <Link href={"/"}>
-          <a>
-            <h1 className="">CodeWithMarish</h1>
-          </a>
+
+          <h1 className="">CodeWithMarish</h1>
+
         </Link>
         <div
           onClick={() => setNavActive(!navActive)}

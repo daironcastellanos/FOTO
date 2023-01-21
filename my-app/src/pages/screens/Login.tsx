@@ -1,12 +1,15 @@
 // This component is a simple login form that uses React hooks to manage its state
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import NavItem from "../../components/NavItem";
+import Link from "next/link";
 
-
-
-import { Link } from 'react-router-dom'
 // Import the styles for this component
-
+const MENU_LIST = [
+    { text: "Home", href: "/" },
+    { text: "About Us", href: "/about" },
+    { text: "Contact", href: "/contact" },
+  ];
 
 const Login = () => {
   
@@ -27,7 +30,9 @@ const Login = () => {
         <div className="fixed top-0 left-0 h-screen w-screen flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg">
 
-            
+            <Link href="./screens/Login">
+                <img src="./images/Logo.png" alt="" width="249" height="107"/>
+            </Link>
                 <h1 className="text-2xl font-medium mb-4 text-purple-600 ">Welcome to Freel</h1>
       
                 
@@ -61,9 +66,11 @@ const Login = () => {
                     <button className="bg-indigo-500 text-white py-2 px-8 rounded-lg hover:bg-indigo-600">
                         Log in
                     </button>
+                    <Link href="/screens/SignUpForm">
                     <button  className="block mt-4 text-center text-indigo-500">
                         Don't have an account? Sign up
                     </button>
+                    </Link>
                 </form>
             </div>
         </div>

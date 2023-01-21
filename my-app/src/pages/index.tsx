@@ -1,7 +1,26 @@
-import Navbar from '../components/Navbar';
+import Head from 'next/head'
+import { Inter } from '@next/font/google'
+import Login from './screens/Login';
+import SignUpForm from './screens/SignUpForm';
+import Testr from '@/pages/screens/test';
+
+
+
+const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  return <div>
-      <Navbar/>
+  return (
+    <div className="">
+      <Head>
+        <title>Freel</title>
+      </Head>
+
+      {/* Login*/}
+      
+      <Login />
+      
+      {/* Feed*/}
+      {/* Modal*/}
     </div>
+  );
 }

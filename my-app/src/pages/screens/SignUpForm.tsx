@@ -83,9 +83,16 @@ const Signup = () => {
                             required 
                         />
                     </div>
-                    <button className="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600">
+                    <div className='space-x-2'>
+                    <button className="bg-red-200 text-gray-800 py-2 px-7 rounded-lg hover:bg-indigo-600" onClick={() => window.history.back()}>
+                        Back   
+                    </button>
+                    <button className="bg-indigo-500 text-white py-2 px-4 rounded-lg  hover:bg-indigo-600">
                         Register
                     </button>
+                    </div>
+                    
+
                     
                   </form>
             </div>
