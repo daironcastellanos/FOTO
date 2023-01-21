@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { Inter } from '@next/font/google'
 import Login from './screens/Login';
 import SignUpForm from './screens/SignUpForm';
-import Testr from '@/pages/screens/test';
+import Testr from '/Users/daironcastellanos/Desktop/repo/Freel/my-app/src/pages/screens/test';
 
 
 
@@ -17,7 +17,7 @@ export default function Home() {
 
       {/* Login*/}
       
-      <Login />
+      <Testr />
       
       {/* Feed*/}
       {/* Modal*/}
