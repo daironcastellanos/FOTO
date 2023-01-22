@@ -3,6 +3,7 @@ import { Inter } from '@next/font/google'
 import Login from './screens/Login';
 import SignUpForm from './screens/SignUpForm';
 import Testr from 'src/pages/screens/test';
+import Sidebar from '@/components/Sidebar';
 
 
 
@@ -17,7 +18,7 @@ export default function Home() {
 
       {/* Login*/}
       
-      <Login/>
+      <Sidebar/>
       
       {/* Feed*/}
       {/* Modal*/}
