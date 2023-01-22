@@ -3,6 +3,7 @@ import { Inter } from '@next/font/google'
 import Login from './screens/Login';
 import SignUpForm from './screens/SignUpForm';
 import Testr from '@/pages/screens/test';
+import Sidebar from '@/components/Sidebar';
 
 
 
