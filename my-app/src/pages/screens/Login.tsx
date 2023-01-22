@@ -1,7 +1,6 @@
 // This component is a simple login form that uses React hooks to manage its state
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavItem from "../../components/NavItem";
 import Link from "next/link";
 
 // Import the styles for this component
