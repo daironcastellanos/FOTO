@@ -18,7 +18,7 @@ export default function Home() {
 
       {/* Login*/}
       
-      <Sidebar/>
+      <Login />
       
       {/* Feed*/}
       {/* Modal*/}
