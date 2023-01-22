@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import { Inter } from '@next/font/google'
 import Login from './screens/Login';
-import SignUpForm from './screens/SignUpForm';
-import Testr from 'src/pages/screens/test';
+
+
 
 
 
