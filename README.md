@@ -13,10 +13,10 @@ Freel App the ultimate platform for photographers.  Lets take your perfect shot.
 
 Members: 
 
-Sergio Arcila
+Sergio Arcila (Front-end)
 
-Dairon Castellanos
+Dairon Castellanos (Front-end)
 
-Jose Simon 
+Jose Simon (Back-end)
 
-Eric Dequevedo
+Eric Dequevedo (Back-end)
