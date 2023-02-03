@@ -5,7 +5,16 @@ import SignUpForm from './screens/SignUpForm';
 import Testr from 'src/pages/screens/test';
 import Sidebar from '@/components/Sidebar';
 
-
+export async function getServerSideProps() {
+  const {status} = await fetch("http://localhost:8000/status").then(x => x.json());
+  //const {username} = await fetch("http://localhost:8000/username").then(x => x.json());
+  return {
+    props: {
+      status: status,
+      //username: username,
+    }
+  }
+}
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,8 +29,12 @@ export default function Home() {
       
       <Login />
       
+      
       {/* Feed*/}
       {/* Modal*/}
     </div>
+    
   );
+
+  
 }

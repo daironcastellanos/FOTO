@@ -2,6 +2,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Link from "next/link";
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    setPersistence,
+    browserSessionPersistence,
+  } from "firebase/auth";
+  import { app } from "../../config/firebaseConfig";
+//import {app} from
 
 // Import the styles for this component
 const MENU_LIST = [

@@ -1,22 +1,38 @@
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-Freel App 
+## Getting Started
 
-Freedom for the Freelancer
+First, run the development server:
 
-Project description: 
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
 
-At Freel, we believe in freedom. Freedom of life, freedom of choice, freedom for the freelancer. We aim to prove a service which facilitates and revolutionizes the way photographers conduct their lead generation. On our web-based application, content creators can sign up and showcase their portfolio to a specific audience in a specific location. Imagine it as a google maps for available photographers near me but the difference is it can be anywhere in the world. Users who are in need of a photographer can sign up and search for available photographers in their immediate surrounding. This is beneficial for the user because it allows them to find and hire photographers at a moments notice. It also allows the user to see what type of work the photographer does by looking at their profile which showcases the photographers portfolio. For the photographer, our services are nothing shy of revolutionary. Now, the content creator has the ability to travel the world and have reach to generate new business anywhere they are. Our location based services allows a very well known photographer to travel to the other side of the world and showcase their portfolio to users in that area and create new business. Not only are photographers expanding their reach but we also have a booking system where the photographers can show their availability and accept bookings right from the site. Photographers are also able to use our site as a portfolio showcase. A place they take new leads to showoff their work and book new clients. Photographers are able to choose their own username which anyone one around the world can search up.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-In short, we aim to create a site where freelance photographers can sign up, upload, and showcase their work and at the same time facilitate the booking process. What makes us unique is that on our site the photographer has full freedom to choose where they take their business. In most freelancing websites, you can hire freelancers around the world but rarely can you find someone who can meet you in real life.  At Freel, the photographer can travel the world and have reach to a whole new set of clients. At Freel we feature available photographers in your immediate area, where ever that may-be. In the future, we have plans to expand our reach to other types of local freelance services. We aim to create a market place where you can find local available services in your immediate area while allowing complete freedom to the creator.
+You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-Freel App the ultimate platform for photographers.  Lets take your perfect shot.
+[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-Members: 
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-Sergio Arcila (Front-end)
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-Dairon Castellanos (Front-end)
+## Learn More
 
-Jose Simon (Back-end)
+To learn more about Next.js, take a look at the following resources:
 
-Eric Dequevedo (Back-end)
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
