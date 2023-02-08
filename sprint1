@@ -1,0 +1,18 @@
+SPRINT1 FRONT-END
+User Stories
+As a user, I want to sign up for an account on the website to access its features.
+As a user, I want to log in to my account to access my information.
+As a user, I want to edit my profile information so that I can keep my info up-to-date.
+Issues to Address
+Issue 1: Implement sign-up functionality
+Issue 2: Implement log-in functionality
+Issue 3: Implement profile editing functionality
+Issue 4: Implement correct layout
+Issue 5:  Linking buttons: Implement proper layout
+Successfully Completed Issues
+Issue 1: Implement sign-up functionality
+Issue 2: Implement log-in functionality
+Issue 3: Implement profile editing functionality
+Issue 4: Implement correct layout
+Uncompleted Issues
+Issue 5: Linking buttons working correctly: The backend developers haven't been able to create data base yet.
