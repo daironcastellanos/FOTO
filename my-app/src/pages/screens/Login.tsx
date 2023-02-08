@@ -26,24 +26,26 @@ const Login = () => {
        
         if(email.length && password.length){
             try{
+                /* */
                 const userCredential = await signInWithEmailAndPassword(auth,email,password);
                 userIsAuth = userCredential.user;
                 setEmail("");
                 setPassword("");
-
                 //const userInfo = await getUser();
 
 
                 // Simple print to check authentication 
                 if(userIsAuth){
                     console.log('USer is Authorized ')
+
                 }else{
                     console.log("not authorized")
                 }
 
             }catch{
-
+                /* This is what executes when the login is invalid*/
                 console.log("error",(e));
+                
             }
         }
     };
