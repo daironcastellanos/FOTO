@@ -36,7 +36,7 @@ const Login = () => {
 
                 // Simple print to check authentication 
                 if(userIsAuth){
-                    console.log('USer is Authorized ')
+                    console.log('User is Authorized ')
 
                 }else{
                     console.log("not authorized")
@@ -45,7 +45,7 @@ const Login = () => {
             }catch{
                 /* This is what executes when the login is invalid*/
                 console.log("error",(e));
-                
+
             }
         }
     };
