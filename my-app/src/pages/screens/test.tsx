@@ -8,7 +8,8 @@ function Testr() {
             <Link href="./screens/Login">
                 <img src="./images/Logo.png" alt="" width="249" height="107"/>
             </Link>
-            <h1>YO</h1>
+            
+            <h1>Signed in</h1>
         </div>
         <div></div>
     </header>

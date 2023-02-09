@@ -1,6 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useContext } from 'react';
+import {app} from '../../firebase/firebase'
+import { getAuth } from '@firebase/auth';
+import { Link, useNavigate } from 'react-router-dom';
+import {auth} from '../../firebase/firebase'
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const Signup = () => {
+
+    const auth = getAuth(app);
+    
     const [fullName, setFullName] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -10,7 +18,16 @@ const Signup = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // Handle form submission here, such as sending a request to your server's signup endpoint
+        if(email.length && password.length){
+        createUserWithEmailAndPassword(auth, email, password).then((res) => {             console.log(res.user)           })
+        setEmail(email)
+        setPassword(password)
+        }
     }
+        
+
+       
+
 
     return (
         <div className="fixed top-0 left-0 h-screen w-screen flex items-center justify-center">

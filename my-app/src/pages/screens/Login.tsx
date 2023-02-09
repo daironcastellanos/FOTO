@@ -1,7 +1,9 @@
 // This component is a simple login form that uses React hooks to manage its state
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import Link from "next/link";
+import {getAuth, signInWithEmailAndPassword} from 'firebase/auth'
+import {auth} from '../../firebase/firebase'
 
 // Import the styles for this component
 const MENU_LIST = [
@@ -11,16 +13,42 @@ const MENU_LIST = [
   ];
 
 const Login = () => {
-  
+
+    let userIsAuth = null;
     // Use React hooks to manage the state of the form
     const [email, setEmail] = useState('');
     // The second argument to useState is the function that will be used to update the state
     const [password, setPassword] = useState('');
     // Handle form submission
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // Handle form submission here, such as sending a request to your server's login endpoint
-    }
+       
+        if(email.length && password.length){
+            try{
+                /* */
+                const userCredential = await signInWithEmailAndPassword(auth,email,password);
+                userIsAuth = userCredential.user;
+                setEmail("");
+                setPassword("");
+                //const userInfo = await getUser();
+
+
+                // Simple print to check authentication 
+                if(userIsAuth){
+                    console.log('User is Authorized ')
+
+                }else{
+                    console.log("not authorized")
+                }
+
+            }catch{
+                /* This is what executes when the login is invalid*/
+                console.log("error",(e));
+
+            }
+        }
+    };
     // Render the form
     return (
         
@@ -71,6 +99,7 @@ const Login = () => {
                     </button>
                     </Link>
                 </form>
+                
             </div>
         </div>
     )
