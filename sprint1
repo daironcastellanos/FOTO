@@ -42,5 +42,6 @@ Successfully Completed Issues
 Issues to Address
     Issue 1: Create API endpoints to allow the mongoDB and Go backend to communicate with App
     Issue 2: Finish setting up hosting it on GCP
+    Issue 3: Set up Github Workflows to help with the dev process
     
     
