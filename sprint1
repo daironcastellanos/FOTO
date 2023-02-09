@@ -26,7 +26,6 @@ User Stories:
     As a user, I want to be able to upload as much of my art as possible.
     As I user, I want to communicate with clients in a secure manor and know my meta data is not being stored.
     As I user, I want to be able to share my updated location with clients without constantly being tracked
-    
  Issues to Address
     Issue 1: Set up firebase
     Issue 2: Set up firestore
@@ -34,14 +33,12 @@ User Stories:
     Issue 4: Make user authentication with google firebase using JWT
     Issue 5: Attach GO Backend to project to communicate with Firebase and fireStore
     Issue 6: Host on google cloud make API endpoints to communicate between services 
-    
 Successfully Completed Issues
     Issue 1: Set up google firebase 
     Issue 2: Set Up Firebase Authentication
     Issue 3: Created Mongo DB
     Issue 4: Created Go backend 
     Issue 5: Added Username and Password as well as logiin with Google functionality
-
 Issues to Address
     Issue 1: Create API endpoints to allow the mongoDB and Go backend to communicate with App
     Issue 2: Finish setting up hosting it on GCP
