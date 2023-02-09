@@ -98,6 +98,12 @@ const Login = () => {
                         Don't have an account? Sign up
                     </button>
                     </Link>
+
+                    <Link href="/screens/GoogleSignIn">
+                    <button  className="block mt-4 text-center text-indigo-500">
+                        Sign In with Google
+                    </button>
+                    </Link>
                 </form>
                 
             </div>

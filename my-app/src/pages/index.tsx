@@ -14,7 +14,6 @@ export default function Home() {
     <div className="">
       <Head>
         <title>Freel</title>
-        <script src="https://accounts.google.com/gsi/client" async defer></script>
       </Head>
 
       {/* Login*/}
