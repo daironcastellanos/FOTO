@@ -1,23 +1,26 @@
   Tips for working with GO 🧞‍♂️ *Feel free to add to this file to document any new functions or useful tips for using Golang or Mongo*
 
-    - initialize go path to project
+    - initialize go path to project (export GOPATH=/path/to/workspace)
 
-    - remember to go install (see go_commands.txt for list of useful go commands)
+    - remember to (go install) (see notes/go_commands.txt for list of useful go commands)
 
     - Capitalization matters
         - names that start with a capital letter are exported, which means they are visible and accessible from other packages,
         - while names that start with a lowercase letter are un-exported and can only be accessed within the same package.
 
     - importing modules from folders is done like the following example below
-        - "Freel.com/folder/sub_folder/filename"
+        - import(
+            "Freel.com/folder/sub_folder/filename"
+            )
             - Go to file.go from "Freel.com/" <- which is the base dir
+            - do not include .go when importing Freel Go modules
+            - use functions inside module Ex.( mongo.func_name(*possible params*) )
 
-    - do not include .go when importing Freel Go modules
-
+    - relative filepaths start at the beginning of the go project not from where that individual go module is 
+        - EX. mongo.go function referencing the image in database/data/test_photo/photo1.jpg is referenced like 
+        - ("database/test_photo/photo1.jpg")
+    
     - Saving deletes unused imports with vscode extension 
-
-    - filepaths start at the beginning of the go project not from where that individual go module is 
-
 
 
 (Running main Go module)
@@ -72,23 +75,29 @@
 
                 - (location.All_User_In_10km(mongoURI, test_user_input_id))
                     - function to find all users in a specified distance given one users ID
-                    - * needs to be changed to take in varible distance currently hard coded value*
+                    - * needs to be changed to take in variable distance currently hard coded value*
 
 
                 - (location.Distance_Between_Two_Users(mongoURI, test_user_input_id, test_user_input_id2))
                     - function to find distance (miles) between 2 user_id takes in user_id
+                    - uses a helper function in mongo module
             
 
         "Freel.com/tester"
             - Module made for Go unit test and can be used if want to test a modules function independently*/
             - Currently empty *will updates notes file when used*
     
+    
         "Freel.com/databases/data" 
-
             "Freel.com/databases/data/user
-                - Function to create new user 
-                - function to create test user
-                - function to update user bio for specified user
+                - (user.Insert_User(user User, URI_ string))
+                    - Function to create new user 
+
+                - (user.Create_Test_User(URI_ string))
+                    - function to create test user
+
+                - (user.Update_User_Bio(userID string, newBio string, URI_ string))
+                    - function to update user bio for specified user
 
             "Freel.com.databases/data/post"
                 - folder just holds the template object type for posting photos
