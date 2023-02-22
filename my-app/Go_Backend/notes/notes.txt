@@ -1,4 +1,6 @@
-  Tips for working with GO 🧞‍♂️ *Feel free to add to this file to document any new functions or useful tips for using Golang or Mongo*
+🧞‍♂️🧞‍♂️🧞‍♂️ Tips for working with GO 🧞‍♂️🧞‍♂️🧞‍♂️
+
+/* 🧞Feel free to add to this file to document any new functions or useful tips for using Golang or Mongo🧞 */
 
     - initialize go path to project (export GOPATH=/path/to/workspace)
 
@@ -23,7 +25,10 @@
     - Saving deletes unused imports with vscode extension 
 
 
-(Running main Go module)
+
+/* 🧛🧛🧛Documentation For Go Modules and functions for accessing Mongo and Routing content for API🧛🧛🧛 */
+
+(Running main Go module) 🏃‍♂️💨
 - Run go project with go run main.go in toe GO_Backend folder (go run main.go) after cding into Go_Backend
     - main.go has all the Go functions built but commented out after i made them work once
     - main.go has test_user_id strings for the functions that require an existing user id
@@ -32,7 +37,7 @@
 
 
 (Other Freel created go modules)
-    "Freel.com/router"
+    "Freel.com/router" 📍
     - router.go has the function InitializeRouter (router.InitializeRouter()) that starts a router that you can access in your browser
     - r.HandleFunc inside router.go stores different go functions that will be called at localhost:8081/whatever_the_path_is
     - Router.go contains mostly commented out functions that have not been properly setup to pass on data
@@ -41,13 +46,14 @@
     - this Routing page will create an API for the typescript front end to access database
 
 
-    ("Freel.com/databases/mongo")
+    ("Freel.com/databases/mongo") 🧠
         - The module created to access info from the mongo Database
         - The functions in this module have all worked once 
         - Some functions in this module could probably be named in a more efficient way
         - *need to create functions to avoid the reuse of code and condense*
 
-            *Functions that get either User or Content collections with mongo API (dont do anything rn but example)*
+
+            *Functions that get either User or Content collections with mongo API (dont do anything rn but example)* 😓
 	            mongo.Get_User_Collection()
 	            mongo.Get_Content_Collection()
 
@@ -61,7 +67,7 @@
 	            mongo.Find_User_By_ID(test_user_input_id, mongoURI)
 
 
-        
+
         "Freel.com/functions/location" 🪧
             - Module to query locational data of users using following functions
 
@@ -83,13 +89,17 @@
                     - uses a helper function in mongo module
             
 
-        "Freel.com/tester"
+
+        "Freel.com/tester" 🧪
             - Module made for Go unit test and can be used if want to test a modules function independently*/
             - Currently empty *will updates notes file when used*
     
-    
-        "Freel.com/databases/data" 
-            "Freel.com/databases/data/user
+
+
+        "Freel.com/databases/data" 📃
+
+
+            "Freel.com/databases/data/user 👥
                 - (user.Insert_User(user User, URI_ string))
                     - Function to create new user 
 
@@ -99,13 +109,16 @@
                 - (user.Update_User_Bio(userID string, newBio string, URI_ string))
                     - function to update user bio for specified user
 
-            "Freel.com.databases/data/post"
+
+            "Freel.com.databases/data/post" 📬
                 - folder just holds the template object type for posting photos
                 - Not currently used and object is redeclare in each go module
                 - post.go will hold more functions when I sort out the posting functions that are currently in the mongo module
         
 
-Mongo Db:
+
+
+/* 📭📭📭 Tips for accessing Mongo DB with Golang and tips for an optimized dataset 📬📬📬 */
 
 access tips: 🚦
     - database has minor security settings for development (anyone can Get/Delete all data)
