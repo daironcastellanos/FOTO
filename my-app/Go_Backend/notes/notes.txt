@@ -8,14 +8,13 @@
 
     - importing modules from folders is done like the following example below
         - "Freel.com/folder/sub_folder/filename"
-
-    - Go to file.go from "Freel.com/" <- which is the base dir
+            - Go to file.go from "Freel.com/" <- which is the base dir
 
     - do not include .go when importing Freel Go modules
 
     - Saving deletes unused imports with vscode extension 
 
-    - filepaths start at the beginning of the go project
+    - filepaths start at the beginning of the go project not from where that individual go module is 
 
 
 
@@ -82,7 +81,8 @@
 
 Mongo Db:
 
-access tips:
+access tips: 🚦
+    - database has minor security settings for development (anyone can Get/Delete all data)
     - Connects to Mongo database with URI in .env file, get value with godotenv.Load() function commented out in main
     - The database name is "freel"
     - All photo data is currently sent to a GridFSBucket called photos
@@ -91,7 +91,7 @@ access tips:
     - follow the template of other functions as there are mostly the same flow just different funcs or IDs utilized for different data
     - You can restructure the database using golang and the URI_ provided 
 
-optimized storage techniques:
+optimized storage techniques: 👌
     - Use indexing to speed up queries: For example, you can create an index on the user_id
         - field in your pictures collection to quickly retrieve all pictures posted by a particular user.
 
