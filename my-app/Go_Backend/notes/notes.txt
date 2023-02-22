@@ -52,7 +52,7 @@
     - this Routing page will create an API for the typescript front end to access database
 
 
-    ("Freel.com/databases/mongo") 🧠
+        ("Freel.com/databases/mongo") 🧠
         - The module created to access info from the mongo Database
         - The functions in this module have all worked once 
         - Some functions in this module could probably be named in a more efficient way
@@ -74,7 +74,7 @@
 
 
 
-        "Freel.com/functions/location" 🪧
+        ("Freel.com/functions/location") 🪧
             - Module to query locational data of users using following functions
 
                 - (location.Add_Location(mongoURI))
@@ -96,16 +96,16 @@
             
 
 
-        "Freel.com/tester" 🧪
+        ("Freel.com/tester") 🧪
             - Module made for Go unit test and can be used if want to test a modules function independently*/
             - Currently empty *will updates notes file when used*
     
 
 
-        "Freel.com/databases/data" 📃
+        ("Freel.com/databases/data") 📃
             - Folder that stores the Go modules {user,post}
 
-            "Freel.com/databases/data/user 👥
+            ("Freel.com/databases/data/user) 👥
                 - (user.Insert_User(user User, URI_ string))
                     - Function to create new user 
 
@@ -115,7 +115,7 @@
                 - (user.Update_User_Bio(userID string, newBio string, URI_ string))
                     - function to update user bio for specified user
 
-            "Freel.com.databases/data/post" 📬
+            ("Freel.com.databases/data/post") 📬
                 - folder just holds the template object type for posting photos
                 - Not currently used and object is redeclare in each go module
                 - post.go will hold more functions when I sort out the posting functions that are currently in the mongo module
