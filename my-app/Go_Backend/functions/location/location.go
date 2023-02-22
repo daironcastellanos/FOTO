@@ -113,7 +113,6 @@ func deg2rad(deg float64) float64 {
 func Add_Location(URI_ string) {
 
 	// Set up a MongoDB client and connect to the database
-
 	clientOptions := options.Client().ApplyURI(URI_)
 	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
