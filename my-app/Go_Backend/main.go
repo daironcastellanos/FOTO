@@ -9,13 +9,13 @@ func main() {
 	/*Loads the .env file*/
 	/*
 		err := godotenv.Load()
-		if err != nil {
-			fmt.Println("Error loading .env file")
-		}
+		if err != nil { 			fmt.Println("Error loading .env file") 		}
+
 	*/
 
 	/* Loads the MONGO_URI_ From the .env file */
 	//mongoURI := os.Getenv("MONGODB_URI")
+
 	/* User object id string used to test the function that search via specific user ID */
 	//test_user_input_id := "63f565f8df6db2c34aed8997"
 	//test_user_input_id2 := "63f5687adcf9b9a96ad516a4"
@@ -34,7 +34,6 @@ func main() {
 	//mongo.Get_All_Photos(mongoURI)
 	//mongo.Download_Photo(mongoURI)
 	//mongo.Delete_Photo(, mongoURI) /* this Test case wont work because object with specific ID has already been deleted */
-
 	//mongo.Find_User_By_ID(test_user_input_id, mongoURI)
 
 	/* User Functions */
