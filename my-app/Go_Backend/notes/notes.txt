@@ -35,7 +35,7 @@
 /* 🧛🧛🧛 Documentation For Go Modules and functions for accessing Mongo and Routing content for API 🧛🧛🧛 */
 
 (Running main Go module) 🏃‍♂️💨
-- Run go project with go run main.go in toe GO_Backend folder (go run main.go) after cding into Go_Backend
+- Run go project with go run main.go in toe GO_Backend folder (go run main.go) after cding into Go_Backend directory
     - main.go has all the Go functions built but commented out after i made them work once
     - main.go has test_user_id strings for the functions that require an existing user id
     - main.go access mongo Database with a URI this URI is stored in a .env file for security 
