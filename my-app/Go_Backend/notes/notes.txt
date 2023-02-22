@@ -1,10 +1,11 @@
 🧞‍♂️🧞‍♂️🧞‍♂️ Tips for working with GO 🧞‍♂️🧞‍♂️🧞‍♂️
 
-/* 🧞Feel free to add to this file to document any new functions or useful tips for using Golang or Mongo🧞 */
+/* 🧞 Feel free to add to this file to document any new functions or useful tips for using Golang or Mongo 🧞 */
 
     - initialize go path to project (export GOPATH=/path/to/workspace)
 
     - remember to (go install) (see notes/go_commands.txt for list of useful go commands)
+        - run (go mod tidy) to clean up any unused dependencies in project
 
     - Capitalization matters
         - names that start with a capital letter are exported, which means they are visible and accessible from other packages,
@@ -24,9 +25,14 @@
     
     - Saving deletes unused imports with vscode extension 
 
+    - When making new go modules you can create a folder with a .go file in the same folder
+        - declare name of the package at top ex.(package example_package_name)
+        - reference package in imports "Freel.com/folder/example_package_name"
+            - *I have been keeping the folder, file.go, and package name the same*
 
 
-/* 🧛🧛🧛Documentation For Go Modules and functions for accessing Mongo and Routing content for API🧛🧛🧛 */
+
+/* 🧛🧛🧛 Documentation For Go Modules and functions for accessing Mongo and Routing content for API 🧛🧛🧛 */
 
 (Running main Go module) 🏃‍♂️💨
 - Run go project with go run main.go in toe GO_Backend folder (go run main.go) after cding into Go_Backend
@@ -97,7 +103,7 @@
 
 
         "Freel.com/databases/data" 📃
-
+            - Folder that stores the Go modules {user,post}
 
             "Freel.com/databases/data/user 👥
                 - (user.Insert_User(user User, URI_ string))
@@ -108,7 +114,6 @@
 
                 - (user.Update_User_Bio(userID string, newBio string, URI_ string))
                     - function to update user bio for specified user
-
 
             "Freel.com.databases/data/post" 📬
                 - folder just holds the template object type for posting photos

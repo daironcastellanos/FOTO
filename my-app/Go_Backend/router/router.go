@@ -63,7 +63,13 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func InitializeRouter() {
+	/* Creates new router object */
 	r := mux.NewRouter()
+
+	/*Handle func adds a path and a function to the router*/
+	/* the function referenced by Handled Func needs the parameters (w http.ResponseWriter, r *http.Request) */
+
+	/* declares basic default page */
 	r.HandleFunc("/", home).Methods("GET")
 
 	/* Un comment Rest API path when route have been tested */
@@ -89,5 +95,8 @@ func InitializeRouter() {
 	//r.HandleFunc("/location/{id}/users", location.All_User_In_10km).Methods("GET")
 	//r.HandleFunc("/location/{id1}/distance/{id2}", location.Distance_Between_Two_Users).Methods("GET")
 
+	/* This Function starts the Router at (localhost:8081) */
+	/* All the Functions and paths added with HandleFunc can be accessed at (localhost:8081/path) */
+	/* Log function will be used to print when the Router is closed */
 	log.Fatal(http.ListenAndServe(":8081", r))
 }
