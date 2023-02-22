@@ -6,11 +6,7 @@
 
     - remember to (go install) (see notes/go_commands.txt for list of useful go commands)
         - run (go mod tidy) to clean up any unused dependencies in project
-
-    - Capitalization matters
-        - names that start with a capital letter are exported, which means they are visible and accessible from other packages,
-        - while names that start with a lowercase letter are un-exported and can only be accessed within the same package.
-
+    
     - importing modules from folders is done like the following example below
         - import(
             "Freel.com/folder/sub_folder/filename"
@@ -18,6 +14,10 @@
             - Go to file.go from "Freel.com/" <- which is the base dir
             - do not include .go when importing Freel Go modules
             - use functions inside module Ex.( mongo.func_name(*possible params*) )
+
+    - Capitalization matters
+        - names that start with a capital letter are exported, which means they are visible and accessible from other packages,
+        - while names that start with a lowercase letter are un-exported and can only be accessed within the same package.
 
     - relative filepaths start at the beginning of the go project not from where that individual go module is 
         - EX. mongo.go function referencing the image in database/data/test_photo/photo1.jpg is referenced like 
@@ -129,10 +129,10 @@ access tips: 🚦
     - database has minor security settings for development (anyone can Get/Delete all data)
     - Connects to Mongo database with URI in .env file, get value with godotenv.Load() function commented out in main
     - The database name is "freel"
-    - All photo data is currently sent to a GridFSBucket called photos
-    - There are 2 collections named "Content" and "users" There are examples how to access them with mongo API
+    - All photo data is currently sent to a GridFSBucket called photos inside the freel database
+    - There are 2 collections named "Content" and "users" There are examples how to access them with mongo API each collection is inside the freel database
     - all other functions use golang functions with URI_ to connect to the mongo database
-    - follow the template of other functions as there are mostly the same flow just different funcs or IDs utilized for different data
+    - follow the template of other functions as there are mostly the same flow just different funcs or variables utilized for different data
     - You can restructure the database using golang and the URI_ provided 
 
 
