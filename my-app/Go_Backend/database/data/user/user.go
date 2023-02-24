@@ -74,7 +74,7 @@ func Create_Test_User(URI_ string) {
 	Insert_User(test_user, URI_)
 }
 
-func Update_User_Bio(userID string, newBio string, URI_ string) error {
+func Update_User_Bio(newBio string, URI_ string, userID string) error {
 	// Set up a MongoDB client and connect to the database
 	clientOptions := options.Client().ApplyURI(URI_)
 	client, err := mongo.Connect(context.Background(), clientOptions)

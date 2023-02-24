@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Freel.com/router"
+	"Freel.com/functions/serve"
 )
 
 func main() {
@@ -22,8 +22,11 @@ func main() {
 
 	/* the Functions that are commented out have been tested Make sure to add the necessary imports above to run code GO like to delete them if they arent used when saved */
 
-	/* ROUTER*/
-	router.InitializeRouter()
+	/* ROUTER*/ /* API */
+	//router.InitializeRouter()
+
+	/* Serving Files */
+	serve.Serve_File()
 
 	/* MONGO COLLECTIONS */
 	//mongo.Get_User_Collection()

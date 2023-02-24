@@ -8,6 +8,7 @@ import (
 	"os"
 
 	/* My Modules */
+	"Freel.com/database/data/user"
 	"Freel.com/database/mongo"
 
 	/*Additional go packages */
@@ -62,6 +63,11 @@ func home(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Backend Home Page")
 }
 
+func update_bio(w http.ResponseWriter, r *http.Request) {
+	/* needs user ID and new BIO */
+	user.Update_User_Bio(string("new_bio"), string("USER_ID"), string("NEW BIO"))
+}
+
 func InitializeRouter() {
 	/* Creates new router object */
 	r := mux.NewRouter()
@@ -87,7 +93,7 @@ func InitializeRouter() {
 	// USER FUNCTIONS
 	r.HandleFunc("/user/{id}", serve_user_id).Methods("GET")
 	//r.HandleFunc("/user/create", user.Create_Test_User).Methods("POST")
-	//r.HandleFunc("/user/{id}/bio", user.Update_User_Bio).Methods("PUT")
+	r.HandleFunc("/user/{id}/bio", update_bio).Methods("PUT")
 
 	// LOCATION FUNCTIONS
 	//r.HandleFunc("/location/add", location.Add_Location).Methods("POST")
