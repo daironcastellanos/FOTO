@@ -163,7 +163,8 @@ func Update_Location(URI_ string, User_ID string) {
 		panic(err)
 	}
 
-	// This will be replaced
+	// This will be replaced with typescript code that gets users location from the browser
+
 	user.Location = Location{
 		Type: "Point",
 		Coordinates: []float64{
