@@ -1,8 +1,10 @@
+
+
 import { getAuth, signOut } from 'firebase/auth'
 import { useAuthState } from '../../firebase/firebase'
 
 export const Home = () => {
-  const { user } = useAuthState()
+  //const { user } = useAuthState()
 
   return (
     <>
