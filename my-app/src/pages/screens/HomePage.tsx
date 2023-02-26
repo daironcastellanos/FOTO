@@ -7,6 +7,7 @@ import Head from 'next/head';
 
 
 import ScrollingView from '@/components/ScrollView';
+import TopBar from '@/components/topbar';
 
 
 
@@ -14,14 +15,16 @@ function HomePage() {
   return (
     <div>
       <Head>
+      <TopBar/>
         <title>My App</title>
       </Head>
-      <h1>Welcome to My App!</h1>
-      <p>Please login to continue.</p>
+     
 
       <div className="flex justify-center ">
-      <ScrollingView />
+      <ScrollingView/>
       </div>
+
+      
 
        
       

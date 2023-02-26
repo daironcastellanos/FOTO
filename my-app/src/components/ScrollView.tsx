@@ -21,9 +21,9 @@ const ScrollingView = () => {
   }, []);
 
   return (
-    <div>
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {images.map((image) => (
-        <div key={image.id} style={{ margin: '250px' }}>
+        <div key={image.id}>
           <Image src={image.url} alt={image.caption} width={800} height={200} />
           <p>{image.caption}</p>
         </div>
