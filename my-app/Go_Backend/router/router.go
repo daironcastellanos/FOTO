@@ -14,6 +14,8 @@ import (
 	/*Additional go packages */
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"gorm.io/gorm"
+
 )
 
 func serve_pics(w http.ResponseWriter, r *http.Request) {
@@ -86,14 +88,14 @@ func InitializeRouter() {
 
 	// MONGO PHOTO FUNCTIONS
 	//r.HandleFunc("/mongo/photos/upload", mongo.Upload_Pic).Methods("POST")
-	r.HandleFunc("/mongo/photos/all", serve_pics).Methods("GET")
+	r.HandleFunc("/api/photos/all", serve_pics).Methods("GET")
 	//r.HandleFunc("/mongo/photos/{id}", mongo.Download_Photo).Methods("GET")
 	//r.HandleFunc("/mongo/photos/{id}", mongo.Delete_Photo).Methods("DELETE")
 
 	// USER FUNCTIONS
-	r.HandleFunc("/user/{id}", serve_user_id).Methods("GET")
+	r.HandleFunc("/api/user/{id}", serve_user_id).Methods("GET")
 	//r.HandleFunc("/user/create", user.Create_Test_User).Methods("POST")
-	r.HandleFunc("/user/{id}/bio", update_bio).Methods("PUT")
+	r.HandleFunc("/api/user/{id}/bio", update_bio).Methods("PUT")
 
 	// LOCATION FUNCTIONS
 	//r.HandleFunc("/location/add", location.Add_Location).Methods("POST")
@@ -104,5 +106,10 @@ func InitializeRouter() {
 	/* This Function starts the Router at (localhost:8081) */
 	/* All the Functions and paths added with HandleFunc can be accessed at (localhost:8081/path) */
 	/* Log function will be used to print when the Router is closed */
+
+
+
+
+	
 	log.Fatal(http.ListenAndServe(":8081", r))
 }

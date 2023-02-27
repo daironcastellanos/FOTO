@@ -185,6 +185,7 @@ func Upload_Pic(URI_ string) {
 
 	fmt.Println("File uploaded successfully.")
 }
+
 func Get_All_Photos(URI_ string) ([]byte, error) {
 	// Set up a MongoDB client and connect to the database
 	clientOptions := options.Client().ApplyURI(URI_)
@@ -299,6 +300,7 @@ func Delete_Photo(Photo_ID string, URI_ string) error {
 	fmt.Printf("Photo with ID %s deleted successfully\n", Photo_ID)
 	return nil
 }
+
 
 /*This function takes in user mongo Id and returns all user data */
 func Find_User_By_ID(userID string, URI_ string) (*User, error) {
