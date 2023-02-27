@@ -1,23 +1,14 @@
 package main
 
 import (
-	"os"
-
-	"Freel.com/functions/serve"
-	"github.com/joho/godotenv"
+	"Freel.com/freel_api"
 )
 
 func main() {
 
 	/*Loads the .env file*/
-	
-		err := godotenv.Load()
-		if err != nil { 			fmt.Println("Error loading .env file") 		}
-
-	
 
 	/* Loads the MONGO_URI_ From the .env file */
-	mongoURI := os.Getenv("MONGODB_URI")
 
 	/* User object id string used to test the function that search via specific user ID */
 	//test_user_input_id := "63f565f8df6db2c34aed8997"
@@ -29,7 +20,6 @@ func main() {
 	//router.InitializeRouter()
 
 	/* Serving Files */
-	serve.Serve_File()
 
 	/* MONGO COLLECTIONS */
 	//mongo.Get_User_Collection()
@@ -51,5 +41,7 @@ func main() {
 	//location.Update_Location(mongoURI, test_user_input_id)
 	//location.All_User_In_10km(mongoURI, test_user_input_id)
 	//location.Distance_Between_Two_Users(mongoURI, test_user_input_id, test_user_input_id2)
+
+	freel_api.Freel_Api()
 
 }

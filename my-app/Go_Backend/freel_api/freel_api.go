@@ -1,25 +1,18 @@
-package freel_api 
+package freel_api
+
+import (
+	"log"
+	"net/http"
 
 
-import(
-	"context"
-    "encoding/json"
-    "log"
-    "net/http"
-	"os"
 
-    "go.mongodb.org/mongo-driver/bson"
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/mongo/options"
-
-
+	"Freel.com/freel_api/delete"
 	"Freel.com/freel_api/get"
 	"Freel.com/freel_api/post"
 	"Freel.com/freel_api/put"
-	"Freel.com/freel_api/delete"
 
-    "github.com/gorilla/mux"
-    "gorm.io/gorm"
+	"github.com/gorilla/mux"
+	"gorm.io/gorm"
 )
 
 type Post struct {
@@ -31,7 +24,6 @@ type Post struct {
 	Image string   `json:"image"`
 }
 
-
 type User struct {
 	gorm.Model
 	Name           string `json:"name"`
@@ -40,28 +32,32 @@ type User struct {
 	Posts          []Post `json:"posts"`
 }
 
+func Freel_Api() {
+
+	// Set up the Gorilla Mux router and define your API routes
+	r := mux.NewRouter()
+
+	r.HandleFunc("/api/users/get", get.Get_Users).Methods("GET")
+
+	r.HandleFunc("/api/users/{id}/get", get.Get_User).Methods("GET")
+
+	r.HandleFunc("/api/users/{id}/post", post.CreateUser).Methods("POST")
+
+	r.HandleFunc("/api/users/{id}/put", put.UpdateUser).Methods("PUT")
+
+	r.HandleFunc("/api/users/{id}/delete", delete.DeleteUser).Methods("DELETE")
+
+    r.HandleFunc("/api/user/create", post.Create_Fake_Account).Methods("GET")
 
 
-var client *mongo.Client
 
 
-func freel_api() {
 
-	
-    // Set up the Gorilla Mux router and define your API routes
-    r := mux.NewRouter()
+    r.HandleFunc("/api/photos", get.Get_Photos).Methods("GET")
 
-    r.HandleFunc("/api/users", get_users).Methods("GET")
-    r.HandleFunc("/api/users/{id}", getUser).Methods("GET")
-    r.HandleFunc("/api/users", createUser).Methods("POST")
-    r.HandleFunc("/api/users/{id}", updateUser).Methods("PUT")
-    r.HandleFunc("/api/users/{id}", deleteUser).Methods("DELETE")
-
-    // Start the server
-    log.Println("Starting server on :8080")
-    log.Fatal(http.ListenAndServe(":8080", r))
+	// Start the server
+	log.Println("Starting server on :8080")
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
-func getUser(){
 
-}

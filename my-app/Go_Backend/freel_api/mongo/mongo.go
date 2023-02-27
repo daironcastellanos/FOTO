@@ -1,21 +1,18 @@
-package mongo 
+package mongo
 
-
-import(
+import (
 	"context"
-    "encoding/json"
-    "log"
-    "net/http"
+	"log"
 	"os"
 
-    "go.mongodb.org/mongo-driver/bson"
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
-    "github.com/gorilla/mux"
-    "gorm.io/gorm"
-    "go.mongodb.org/mongo-driver/mongo/gridfs"
+	
 
+	"go.mongodb.org/mongo-driver/mongo/gridfs"
+	"gorm.io/gorm"
+    "github.com/joho/godotenv"
 )
 
 type Post struct {
@@ -27,61 +24,73 @@ type Post struct {
 	Image string   `json:"image"`
 }
 
+type Location struct {
+	Type        string    `bson:"type,omitempty" json:"type"`
+	Coordinates []float64 `bson:"coordinates,omitempty" json:"coordinates"`
+}
 
 type User struct {
-	gorm.Model
-	Name           string `json:"name"`
-	Bio            string `json:"bio"`
-	ProfilePicture string `json:"profilepicture"`
-	Posts          []Post `json:"posts"`
+	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Name           string             `bson:"name,omitempty" json:"name"`
+	Bio            string             `bson:"bio,omitempty" json:"bio"`
+	ProfilePicture string             `bson:"profilepicture,omitempty" json:"profilepicture"`
+	Posts          []Post             `bson:"posts,omitempty" json:"posts"`
+	Location       Location           `bson:"location,omitempty" json:"location"`
 }
-
 
 func GetMongoClient() *mongo.Client {
-    mongo_uri := os.Getenv("MONGODB_URI")
-
-    // Set up a connection to MongoDB
-    clientOptions := options.Client().ApplyURI(mongo_uri)
-    client, err := mongo.Connect(context.Background(), clientOptions)
-    if err != nil {
-        log.Fatal(err)
+    if err := godotenv.Load(); err != nil {
+        log.Fatalf("Error loading .env file: %v", err)
     }
+	mongo_uri := os.Getenv("MONGODB_URI")
 
-    // Check the connection
-    err = client.Ping(context.Background(), nil)
-    if err != nil {
-        log.Fatal(err)
-    }
+	
 
-    return client
+	//log.Printf("MongoDB URI: %s", mongo_uri)
+
+	// Set up a connection to MongoDB
+	clientOptions := options.Client().ApplyURI(mongo_uri)
+	client, err := mongo.Connect(context.Background(), clientOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Check the connection
+	err = client.Ping(context.Background(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return client
 }
 
+func Get_Freel_DataBase() *mongo.Database {
 
-func Get_Mongo_Data_Base(){
+	mongo_client := GetMongoClient()
+	mongo_Database := mongo_client.Database("freel")
 
-    mongo_client := GetMongoClient()
-    mongo_Database = client.Database("freel")
-    return (mongo_Database)
+	return (mongo_Database)
 }
 
-func GetMongoCollection(coll_name string){
+func Get_User_Collection() *mongo.Collection {
 
-    mongo_collection := Get_Mongo_Data_Base().Collection(coll_name);
+	mongo_client := GetMongoClient()
+	mongo_Database := mongo_client.Database("freel").Collection("users")
 
-    return(mongo_collection);
+	return (mongo_Database)
 }
 
+func Get_Photo_Bucket() (*gridfs.Bucket, error) {
 
-func Get_Photo_Bucket(){
+	client := GetMongoClient()
 
-    client := GetMongoClient()
-
-    bucket, err := gridfs.NewBucket(
+	bucket, err := gridfs.NewBucket(
 		client.Database("freel"),
 		options.GridFSBucket().SetName("photos"),
 	)
 	if err != nil {
 		return nil, err
 	}
-}
 
+	return bucket, nil
+}

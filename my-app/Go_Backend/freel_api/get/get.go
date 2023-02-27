@@ -3,7 +3,6 @@ package get
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -13,11 +12,9 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/gridfs"
-	"go.mongodb.org/mongo-driver/mongo/options"
-)
 
+)
 
 type Post struct {
 	gorm.Model
@@ -28,92 +25,84 @@ type Post struct {
 	Image string   `json:"image"`
 }
 
+type Location struct {
+	Type        string    `bson:"type,omitempty" json:"type"`
+	Coordinates []float64 `bson:"coordinates,omitempty" json:"coordinates"`
+}
 
 type User struct {
-	gorm.Model
-	Name           string `json:"name"`
-	Bio            string `json:"bio"`
-	ProfilePicture string `json:"profilepicture"`
-	Posts          []Post `json:"posts"`
+	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Name           string             `bson:"name,omitempty" json:"name"`
+	Bio            string             `bson:"bio,omitempty" json:"bio"`
+	ProfilePicture string             `bson:"profilepicture,omitempty" json:"profilepicture"`
+	Posts          []Post             `bson:"posts,omitempty" json:"posts"`
+	Location       Location           `bson:"location,omitempty" json:"location"`
 }
 
+func Get_Users(w http.ResponseWriter, r *http.Request) {
 
-func Get_Users(w http.ResponseWriter, r *http.Request){
-
-	client := mongo.GetMongoClient()
-	collection := client.Database("freel").Collection("users")
+	collection := mongo.Get_User_Collection()
 
 	var users []User
-    cursor, err := collection.Find(context.Background(), nil)
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer cursor.Close(context.Background())
-    for cursor.Next(context.Background()) {
-        var user User
-        err := cursor.Decode(&user)
-        if err != nil {
-            log.Fatal(err)
-        }
-        users = append(users, user)
-    }
-    if err := cursor.Err(); err != nil {
-        log.Fatal(err)
-    }
-
-    // Print the users to the console
-    fmt.Println(users)
-
-	//return users
-}
-
-
-
-
-
-func Get_User(w http.ResponseWriter, r *http.Request){
-
-	client := mongo.GetMongoClient()
-	collection := client.Database("freel").Collection("users")
-
-	 // Get the user ID from the URL parameter and query the collection
-	 params := mux.Vars(r)
-	 var user User
-	 err := collection.FindOne(context.Background(), bson.M{"_id": params["id"]}).Decode(&user)
-	 if err != nil {
-		 log.Println(err)
-		 return
-	 }
- 
-	 // Return the user as JSON
-	 if err := json.NewEncoder(w).Encode(user); err != nil {
-		 log.Println(err)
-		 return
-	 }
-
-}
-
-
-
-func Get_Photos(w http.ResponseWriter, r *http.Request){
-
-	client := mongo.GetMongoClient()
-	
-
-	// Open a GridFS bucket named "photos"
-	bucket, err := gridfs.NewBucket(
-		client.Database("freel"),
-		options.GridFSBucket().SetName("photos"),
-	)
+	cursor, err := collection.Find(context.Background(), nil)
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
+	}
+	defer cursor.Close(context.Background())
+	for cursor.Next(context.Background()) {
+		var user User
+		err := cursor.Decode(&user)
+		if err != nil {
+			log.Fatal(err)
+		}
+		users = append(users, user)
+	}
+	if err := cursor.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	// Return the users as JSON
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(users); err != nil {
+		log.Println(err)
+		return
+	}
+}
+
+func Get_User(w http.ResponseWriter, r *http.Request) {
+
+	collection := mongo.Get_User_Collection()
+
+	// Get the user ID from the URL parameter and query the collection
+	params := mux.Vars(r)
+	var user User
+	err := collection.FindOne(context.Background(), bson.M{"_id": params["id"]}).Decode(&user)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	// Return the user as JSON
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(user); err != nil {
+		log.Println(err)
+		return
+	}
+}
+
+func Get_Photos(w http.ResponseWriter, r *http.Request) {
+
+	bucket,error := mongo.Get_Photo_Bucket()
+	if(error != nil){
+		log.Println(error)
 	}
 
 	// Get all the files in the bucket
 	filter := bson.M{}
 	cursor, err := bucket.Find(filter)
+
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
 	defer cursor.Close(context.Background())
 
@@ -135,34 +124,22 @@ func Get_Photos(w http.ResponseWriter, r *http.Request){
 		defer downloadStream.Close()
 
 		// Read the file data into a byte slice
-		data := make([]byte, fileInfo.Length)
+		data :=
+		make([]byte, fileInfo.Length)
 		_, err = downloadStream.Read(data)
 		if err != nil {
 			log.Fatal(err)
 		}
-
+	
 		// Append the photo data to the slice of byte slices
 		photos = append(photos, data)
 	}
-
-	if err := cursor.Err(); err != nil {
-		return nil, err
+	
+	// Return the photos as JSON
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(photos); err != nil {
+		log.Println(err)
+		return
 	}
 
-	//return photos, nil
 }
-
-
-
-
-
-
-
-
-func Get_User_Location(w http.ResponseWriter, r *http.Request){
-
-
-}
-
-
-
