@@ -1,20 +1,23 @@
 package main
 
 import (
+	"os"
+
 	"Freel.com/functions/serve"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 
 	/*Loads the .env file*/
-	/*
+	
 		err := godotenv.Load()
 		if err != nil { 			fmt.Println("Error loading .env file") 		}
 
-	*/
+	
 
 	/* Loads the MONGO_URI_ From the .env file */
-	//mongoURI := os.Getenv("MONGODB_URI")
+	mongoURI := os.Getenv("MONGODB_URI")
 
 	/* User object id string used to test the function that search via specific user ID */
 	//test_user_input_id := "63f565f8df6db2c34aed8997"
