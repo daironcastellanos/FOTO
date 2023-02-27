@@ -51,7 +51,7 @@ func freel_api() {
     // Set up the Gorilla Mux router and define your API routes
     r := mux.NewRouter()
 
-    r.HandleFunc("/api/users", get.get_users).Methods("GET")
+    r.HandleFunc("/api/users", get_users).Methods("GET")
     r.HandleFunc("/api/users/{id}", getUser).Methods("GET")
     r.HandleFunc("/api/users", createUser).Methods("POST")
     r.HandleFunc("/api/users/{id}", updateUser).Methods("PUT")

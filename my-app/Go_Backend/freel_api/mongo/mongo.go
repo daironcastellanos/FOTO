@@ -1,4 +1,4 @@
-package Mongo 
+package mongo 
 
 
 import(
@@ -72,7 +72,7 @@ func GetMongoCollection(coll_name string){
 }
 
 
-func GetPhotoBucket(){
+func Get_Photo_Bucket(){
 
     client := GetMongoClient()
 

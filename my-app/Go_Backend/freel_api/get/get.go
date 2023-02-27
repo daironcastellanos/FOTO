@@ -64,7 +64,7 @@ func Get_Users(w http.ResponseWriter, r *http.Request){
     // Print the users to the console
     fmt.Println(users)
 
-	return users
+	//return users
 }
 
 
@@ -149,7 +149,7 @@ func Get_Photos(w http.ResponseWriter, r *http.Request){
 		return nil, err
 	}
 
-	return photos, nil
+	//return photos, nil
 }
 
 
@@ -159,7 +159,7 @@ func Get_Photos(w http.ResponseWriter, r *http.Request){
 
 
 
-func get_user_location(w http.ResponseWriter, r *http.Request){
+func Get_User_Location(w http.ResponseWriter, r *http.Request){
 
 
 }

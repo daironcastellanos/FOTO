@@ -30,27 +30,15 @@ type User struct {
 
 
 
-func delete_account(){
+func Delete_Account(){
 	client := mongo.GetMongoClient()
 
 
-
-
 }
 
 
 
-func delete_profile_info(){
-	
-
-
-}
-
-
-
-func delete_pic(){
-
-
+func Delete_Profile_Info(){
 
 
 
@@ -58,8 +46,18 @@ func delete_pic(){
 
 
 
+func Delete_Pic(){
 
-func delete_user_location(){
+
+
+
+
+}
+
+
+
+
+func Delete_User_Location(){
 
 
 
