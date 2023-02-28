@@ -94,7 +94,7 @@ func Get_User_Collection() {
 	fmt.Println(string(body))
 }
 
-/* This Function accesses the Database freel and conects to the Content collection successfully currently no data🤬*/
+/* This Function accesses the Database freel and connects to the Content collection successfully currently no data🤬*/
 func Get_Content_Collection() {
 
 	url := "https://us-east-1.aws.data.mongodb-api.com/app/data-vufcj/endpoint/data/v1/action/findOne"
