@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	
 )
 
 type User struct {
@@ -27,12 +28,7 @@ type Post struct {
 
 func Insert_User(user User, URI_ string) error {
 	// Set up a MongoDB client and connect to the database
-	clientOptions := options.Client().ApplyURI(URI_)
-	client, err := mongo.Connect(context.Background(), clientOptions)
-	if err != nil {
-		return err
-	}
-	defer client.Disconnect(context.Background())
+	
 
 	// Insert the user profile document into the "users" collection
 	collection := client.Database("freel").Collection("users")
