@@ -1,21 +1,18 @@
 package post
 
 import (
+
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
-	"log"
+
 	"net/http"
-	"os"
-	"path/filepath"
+
 
 	"Freel.com/freel_api/mongo"
-	"github.com/gorilla/mux"
-	"go.mongodb.org/mongo-driver/bson"
+	
+	
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/gridfs"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"gorm.io/gorm"
 )
 
@@ -148,7 +145,7 @@ func Create_Fake_Account(w http.ResponseWriter, r *http.Request) {
 	Create_Account(test_user)
 }
 
-
+/*
 func Upload_Photo(w http.ResponseWriter, r *http.Request) {
 	// Get the photo file from the request body
 	file, header, err := r.FormFile("photo")
@@ -215,7 +212,9 @@ func Upload_Photo(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Photo uploaded successfully")
 }
 
+*/
 
+/*
 
 func Add_Post(w http.ResponseWriter, r *http.Request) {
 	// Decode the request body into a Post object
@@ -294,3 +293,4 @@ func Add_Post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+*/
