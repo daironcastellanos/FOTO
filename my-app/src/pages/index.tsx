@@ -19,9 +19,9 @@ export default function Home() {
         <title>Freel</title>
       </Head>
 
-      {/* Login*/}
+       <HomePage/>
       
-      <Profile/>
+     { /*Profile*/}
       
       {/* Feed*/}
       {/* Modal*/}
