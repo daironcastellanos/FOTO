@@ -53,9 +53,11 @@ func Freel_Api() {
 	r.HandleFunc("/api/users/get", get.Get_Users).Methods("GET")
 	r.HandleFunc("/api/users/{id}/get", get.Get_User).Methods("GET")
 
-	r.HandleFunc("/api/users/{id}/photos/get", get.).Methods("GET")
+	r.HandleFunc("/api/users/{id}/photos/get", get.GetUserPosts_Help).Methods("GET")
 
+	r.HandleFunc("/api/users/{id}/photos/posts/new", post.Upload_Photo).Methods("GET")
 
+	
 	/* create fake account Or create real account with post */
 	r.HandleFunc("/api/user/create", post.Create_Fake_Account).Methods("GET")
 	r.HandleFunc("/api/users/create_user/post", post.CreateUser).Methods("POST")
@@ -77,6 +79,7 @@ func Freel_Api() {
 	/* gets all photos*/
 	r.HandleFunc("/api/photos", get.Serve_Pics).Methods("GET")
 
+	
 	/* Gets photo by ID */
 	//r.HandleFunc("/api/photos/{id}", get.Get_Photo).Methods("GET")
 

@@ -3,10 +3,6 @@ package _add_to_mongo
 import (
 	"context"
 	"fmt"
-
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-
 	"Freel.com/freel_api/mongo"
 )
 

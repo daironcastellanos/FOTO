@@ -14,13 +14,26 @@ import (
     "github.com/joho/godotenv"
 )
 
+type Like struct {
+    Username string `bson:"username,omitempty" json:"username"`
+    Date     string `bson:"date,omitempty" json:"date"`
+}
+
+type Comment struct {
+    Username string `bson:"username,omitempty" json:"username"`
+    Date     string `bson:"date,omitempty" json:"date"`
+    Comment  string `bson:"comment,omitempty" json:"comment"`
+}
+
 type Post struct {
-	gorm.Model
-	Title string   `json:"title"`
-	Body  string   `json:"body"`
-	Tags  []string `json:"tags"`
-	Date  string   `json:"date"`
-	Image string   `json:"image"`
+    gorm.Model
+    Title    string     `json:"title"`
+    Body     string     `json:"body"`
+    Tags     []string   `json:"tags"`
+    Date     string     `json:"date"`
+    Image    string     `json:"image"`
+    Likes    []Like     `bson:"likes,omitempty" json:"likes"`
+    Comments []Comment  `bson:"comments,omitempty" json:"comments"`
 }
 
 type Location struct {
@@ -29,12 +42,13 @@ type Location struct {
 }
 
 type User struct {
-	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	Name           string             `bson:"name,omitempty" json:"name"`
-	Bio            string             `bson:"bio,omitempty" json:"bio"`
-	ProfilePicture string             `bson:"profilepicture,omitempty" json:"profilepicture"`
-	Posts          []Post             `bson:"posts,omitempty" json:"posts"`
-	Location       Location           `bson:"location,omitempty" json:"location"`
+    ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+    Name           string             `bson:"name,omitempty" json:"name"`
+    Bio            string             `bson:"bio,omitempty" json:"bio"`
+    ProfilePicture string             `bson:"profilepicture,omitempty" json:"profilepicture"`
+    Posts          []Post             `bson:"posts,omitempty" json:"posts"`
+    Location       Location           `bson:"location,omitempty" json:"location"`
+    SavedPosts     []Post             `bson:"saved_post,omitempty" json:"saved_post"`
 }
 
 func GetMongoClient() *mongo.Client {

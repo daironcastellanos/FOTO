@@ -3,10 +3,8 @@ package create_mongo
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"Freel.com/freel_api/mongo"
@@ -28,8 +26,9 @@ func CreateDatabase( databaseName string) error {
 	return nil
 }
 
-func CreateCollection(client *mongo.Client, dbName string, collectionName string) error {
+func CreateCollection(dbName string, collectionName string) error {
 	// Create the collection
+	client := mongo.GetMongoClient()
 	err := client.Database(dbName).CreateCollection(context.Background(), collectionName)
 	if err != nil {
 		return err
@@ -42,19 +41,7 @@ func CreateCollection(client *mongo.Client, dbName string, collectionName string
 
 func AddFieldToCollection(uri string, dbName string, collectionName string, fieldName string, fieldValue interface{}) error {
 	// Set client options
-	clientOptions := options.Client().ApplyURI(uri)
-
-	// Connect to MongoDB
-	client, err := mongo.Connect(context.Background(), clientOptions)
-	if err != nil {
-		return err
-	}
-
-	// Check the connection
-	err = client.Ping(context.Background(), nil)
-	if err != nil {
-		return err
-	}
+	client := mongo.GetMongoClient()
 
 	// Update all documents in the collection to include the new field
 	update := bson.M{"$set": bson.M{fieldName: fieldValue}}

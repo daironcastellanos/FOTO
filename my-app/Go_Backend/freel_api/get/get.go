@@ -3,7 +3,6 @@ package get
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"io/ioutil"
@@ -22,13 +21,26 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+type Like struct {
+    Username string `bson:"username,omitempty" json:"username"`
+    Date     string `bson:"date,omitempty" json:"date"`
+}
+
+type Comment struct {
+    Username string `bson:"username,omitempty" json:"username"`
+    Date     string `bson:"date,omitempty" json:"date"`
+    Comment  string `bson:"comment,omitempty" json:"comment"`
+}
+
 type Post struct {
-	gorm.Model
-	Title string   `json:"title"`
-	Body  string   `json:"body"`
-	Tags  []string `json:"tags"`
-	Date  string   `json:"date"`
-	Image string   `json:"image"`
+    gorm.Model
+    Title    string     `json:"title"`
+    Body     string     `json:"body"`
+    Tags     []string   `json:"tags"`
+    Date     string     `json:"date"`
+    Image    string     `json:"image"`
+    Likes    []Like     `bson:"likes,omitempty" json:"likes"`
+    Comments []Comment  `bson:"comments,omitempty" json:"comments"`
 }
 
 type Location struct {
@@ -37,12 +49,13 @@ type Location struct {
 }
 
 type User struct {
-	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	Name           string             `bson:"name,omitempty" json:"name"`
-	Bio            string             `bson:"bio,omitempty" json:"bio"`
-	ProfilePicture string             `bson:"profilepicture,omitempty" json:"profilepicture"`
-	Posts          []Post             `bson:"posts,omitempty" json:"posts"`
-	Location       Location           `bson:"location,omitempty" json:"location"`
+    ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+    Name           string             `bson:"name,omitempty" json:"name"`
+    Bio            string             `bson:"bio,omitempty" json:"bio"`
+    ProfilePicture string             `bson:"profilepicture,omitempty" json:"profilepicture"`
+    Posts          []Post             `bson:"posts,omitempty" json:"posts"`
+    Location       Location           `bson:"location,omitempty" json:"location"`
+    SavedPosts     []Post             `bson:"saved_post,omitempty" json:"saved_post"`
 }
 
 func Get_Users(w http.ResponseWriter, r *http.Request) {
@@ -239,20 +252,16 @@ func Serve_Pics(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*
 
-
-func GetUserPosts(w http.ResponseWriter, r *http.Request) ([]map[string]interface{}, error) {
+func GetUserPost(w http.ResponseWriter, r *http.Request, userID string) ([]map[string]interface{}, error) {
 	
 	
-	params := mux.Vars(r)
-	userID, err := primitive.ObjectIDFromHex(params["id"])
-	if err != nil {
-		http.Error(w, "Invalid ID", http.StatusBadRequest)
-		
-	}
+	
 
 	// Get the MongoDB client and the "users" collection
 	client := mongo.GetMongoClient()
+
 	collection := client.Database("freel").Collection("users")
 
 	// Find the user document with the specified ID
@@ -269,10 +278,43 @@ func GetUserPosts(w http.ResponseWriter, r *http.Request) ([]map[string]interfac
 		return nil, errors.New("posts field is not an array of maps")
 	}
 	
-	return posts, nil
+	return posts
 
 
 
 }
 
+*/
 
+func GetUserPosts_Help(w http.ResponseWriter, r *http.Request){
+	/*
+	params := mux.Vars(r)
+	userID, err := primitive.ObjectIDFromHex(params["id"])
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		
+	}
+
+	results, error := GetUserPost(w , r, userID);
+	*/
+
+}
+
+
+
+
+func Update_Many(){
+
+	client := mongo.GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	// Add the `saved_post` field to all documents in the collection
+	filter := bson.M{}
+	update := bson.M{"$set": bson.M{"saved_post": []Post{}}}
+	result, err := collection.UpdateMany(context.Background(), filter, update)
+	if err != nil {
+    log.Fatal(err)
+	}
+	fmt.Printf("Updated %v documents\n", result.ModifiedCount)
+
+}

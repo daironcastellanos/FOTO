@@ -4,20 +4,41 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"Freel.com/freel_api/mongo"
+	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/gridfs"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"gorm.io/gorm"
 )
 
+type Like struct {
+    Username string `bson:"username,omitempty" json:"username"`
+    Date     string `bson:"date,omitempty" json:"date"`
+}
+
+type Comment struct {
+    Username string `bson:"username,omitempty" json:"username"`
+    Date     string `bson:"date,omitempty" json:"date"`
+    Comment  string `bson:"comment,omitempty" json:"comment"`
+}
+
 type Post struct {
-	gorm.Model
-	Title string   `json:"title"`
-	Body  string   `json:"body"`
-	Tags  []string `json:"tags"`
-	Date  string   `json:"date"`
-	Image string   `json:"image"`
+    gorm.Model
+    Title    string     `json:"title"`
+    Body     string     `json:"body"`
+    Tags     []string   `json:"tags"`
+    Date     string     `json:"date"`
+    Image    string     `json:"image"`
+    Likes    []Like     `bson:"likes,omitempty" json:"likes"`
+    Comments []Comment  `bson:"comments,omitempty" json:"comments"`
 }
 
 type Location struct {
@@ -26,14 +47,14 @@ type Location struct {
 }
 
 type User struct {
-	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	Name           string             `bson:"name,omitempty" json:"name"`
-	Bio            string             `bson:"bio,omitempty" json:"bio"`
-	ProfilePicture string             `bson:"profilepicture,omitempty" json:"profilepicture"`
-	Posts          []Post             `bson:"posts,omitempty" json:"posts"`
-	Location       Location           `bson:"location,omitempty" json:"location"`
+    ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+    Name           string             `bson:"name,omitempty" json:"name"`
+    Bio            string             `bson:"bio,omitempty" json:"bio"`
+    ProfilePicture string             `bson:"profilepicture,omitempty" json:"profilepicture"`
+    Posts          []Post             `bson:"posts,omitempty" json:"posts"`
+    Location       Location           `bson:"location,omitempty" json:"location"`
+    SavedPosts     []Post             `bson:"saved_post,omitempty" json:"saved_post"`
 }
-
 
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
@@ -96,6 +117,7 @@ func post_picture(){
 	//client := mongo.GetMongoClient()
 
 
+
 }
 
 func Create_Fake_Account(w http.ResponseWriter, r *http.Request) {
@@ -124,4 +146,151 @@ func Create_Fake_Account(w http.ResponseWriter, r *http.Request) {
 	}
 
 	Create_Account(test_user)
+}
+
+
+func Upload_Photo(w http.ResponseWriter, r *http.Request) {
+	// Get the photo file from the request body
+	file, header, err := r.FormFile("photo")
+	if err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	// Get the MongoDB client and the GridFS bucket for photos
+	client := mongo.GetMongoClient()
+	bucket, err := gridfs.NewBucket(
+		client.Database("freel"),
+		options.GridFSBucket().SetName("photos"),
+	)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Upload the file to the bucket
+	uploadStream, err := bucket.OpenUploadStream(header.Filename)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	defer uploadStream.Close()
+
+	_, err = io.Copy(uploadStream, file)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Get the ObjectID of the uploaded photo
+	photoID := uploadStream.FileID()
+
+	// Get the user ID from the URL parameter and convert it to an ObjectID
+	params := mux.Vars(r)
+	userID, err := primitive.ObjectIDFromHex(params["id"])
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
+	// Get the MongoDB client and the users collection
+	userCollection := client.Database("freel").Collection("users")
+
+	// Find the user and update their profile picture
+	filter := bson.M{"_id": userID}
+	update := bson.M{"$set": bson.M{"profilepicture": photoID.Hex()}}
+	_, err = userCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Return a success message
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Photo uploaded successfully")
+}
+
+
+
+func Add_Post(w http.ResponseWriter, r *http.Request) {
+	// Decode the request body into a Post object
+	var post Post
+	err := json.NewDecoder(r.Body).Decode(&post)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Generate an ID for the post
+	post.ID = primitive.NewObjectID()
+
+	// Add the post to the "posts" collection in MongoDB
+	client := mongo.GetMongoClient()
+	collection := client.Database("freel").Collection("posts")
+	_, err = collection.InsertOne(context.Background(), post)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Add the post ID to the user's "posts" array in MongoDB
+	userID := filepath.Base(r.URL.Path)
+	objectID, err := primitive.ObjectIDFromHex(userID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	userCollection := client.Database("freel").Collection("users")
+	_, err = userCollection.UpdateOne(
+		context.Background(),
+		bson.M{"_id": objectID},
+		bson.M{"$push": bson.M{"posts": post.ID, "saved_posts": post}},
+	)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Save the image to the "photos" GridFS bucket in MongoDB
+	bucket, err := gridfs.NewBucket(
+		client.Database("freel"),
+		options.GridFSBucket().SetName("photos"),
+	)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	fileID := primitive.NewObjectID()
+	_, err = bucket.UploadFromStreamWithID(
+		fileID,
+		post.Image,
+		bytes.NewBuffer([]byte{}),
+	)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Update the post object in the "posts" collection with the file ID
+	_, err = collection.UpdateOne(
+		context.Background(),
+		bson.M{"_id": post.ID},
+		bson.M{"$set": bson.M{"image": fileID}},
+	)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Return the post as JSON
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(post); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }

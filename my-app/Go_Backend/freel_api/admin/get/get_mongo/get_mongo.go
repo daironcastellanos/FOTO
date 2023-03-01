@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"Freel.com/freel_api/mongo"
 )
 
@@ -96,13 +95,6 @@ func ReadCollectionToJson( dbName string, collectionName string) ([]byte, error)
 func QueryMongoDB( databaseName, collectionName string, query bson.M) ([]bson.M, error) {
 	// Set client options
 	client := mongo.GetMongoClient()
-
-	// Check the connection
-	err = client.Ping(context.Background(), nil)
-	if err != nil {
-		return nil, err
-	}
-
 	// Get the collection
 	collection := client.Database(databaseName).Collection(collectionName)
 
