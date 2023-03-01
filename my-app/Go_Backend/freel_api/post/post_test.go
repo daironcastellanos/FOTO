@@ -47,36 +47,6 @@ type User struct {
 	SavedPosts     []Post             `bson:"saved_post,omitempty" json:"saved_post"`
 }
 
-/*
-	func CreateUser(w http.ResponseWriter, r *http.Request) {
-		// Decode the JSON request body into a User struct
-
-		if err := json.NewDecoder(r.Body).Decode(&User); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		client := mongo.GetMongoClient()
-
-		userCollection := client.Database("freel").Collection("users")
-
-		// Insert the user into the collection
-		result, err := userCollection.InsertOne(context.Background(), User)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		// Encode the inserted user's ID as JSON and write it to the response
-		w.Header().Set("Content-Type", "application/json")
-		id := result.InsertedID.(primitive.ObjectID)
-		if err := json.NewEncoder(w).Encode(id.Hex()); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	}
-*/
-
 func Create_Account(user User) {
 
 	client := mongo.GetMongoClient()
