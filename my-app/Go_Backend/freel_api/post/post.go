@@ -137,7 +137,7 @@ func Create_Fake_Account(w http.ResponseWriter, r *http.Request) {
     }
 
     test_user := User{
-        Name:           "John Doe",
+        Name:           "Eric fake",
         Bio:            "I'm a software engineer and hobbyist photographer.",
         ProfilePicture: "https://example.com/profile.jpg",
         Posts: []Post{
