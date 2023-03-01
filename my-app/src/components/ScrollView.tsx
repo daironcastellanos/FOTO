@@ -20,12 +20,18 @@ const ScrollingView = () => {
     fetchImages();
   }, []);
 
+  const getRandomId = () => Math.floor(Math.random() * 1000);
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="flex flex-col items-center justify-center min-h-screen py-2">
       {images.map((image) => (
-        <div key={image.id}>
-          <Image src={image.url} alt={image.caption} width={800} height={200} />
-          <p>{image.caption}</p>
+        <div key={image.id} className="w-full max-w-2xl mb-4">
+          <Image src={`https://picsum.photos/id/${getRandomId()}/800/600`} alt={image.caption} width={800} height={600} />
+          <div className="bg-gray-200 p-4">
+            <p className="font-bold">{`Username: ${image.id}`}</p>
+            <p>{image.caption}</p>
+            <p>{'This is the caption for the picture'}</p>
+          </div>
         </div>
       ))}
     </div>

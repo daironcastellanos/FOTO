@@ -37,7 +37,7 @@ const Profile: React.FC = () => {
       },
       {
         id: '3',
-        url: 'https://placekitten.com/200/200',
+        url: 'https://placekitten.com/300/300?image=3',
       },
       {
         id: '4',
@@ -70,6 +70,11 @@ const Profile: React.FC = () => {
     router.back();
   };
 
+  const userPictures = userProfile.pictures.filter(
+    (picture) => picture.id.startsWith(userProfile.id)
+  );
+
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <div className="w-36 h-36 relative rounded-full overflow-hidden">
@@ -96,18 +101,17 @@ const Profile: React.FC = () => {
         followers={100} // Replace with the actual number of followers
         following={100} // Replace with the actual number of following users
       />
-      <div className="grid grid-cols-3 gap-4 mt-4">
-        {userProfile.pictures.map((picture) => (
-          <div key={picture.id} className="relative overflow-hidden aspect-w-1 aspect-h-1">
-            <Image
-              src={picture.url}
-              layout="fill"
-              objectFit="cover"
-              alt="Posted picture"
-            />
-          </div>
-        ))}
-      </div>
+     <div className="grid grid-cols-3 gap-4 mt-4">
+  {userProfile.pictures.map((picture) => (
+    <div key={picture.id} className="relative overflow-hidden aspect-w-1 aspect-h-1">
+      <img
+        src={picture.url}
+        className="object-cover"
+        alt="Posted picture"
+      />
+    </div>
+  ))}
+</div>
     </div>
   );
 };
