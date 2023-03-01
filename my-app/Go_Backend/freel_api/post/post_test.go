@@ -5,9 +5,10 @@ import (
 	"fmt"
 
 	"Freel.com/freel_api/mongo"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"gorm.io/gorm"
+
+    "testing"
 )
 
 type Like struct {
@@ -62,7 +63,8 @@ func Create_Account(user User) {
 
 }
 
-func Create_Fake_Account() {
+
+func Create_Fake_Account(t *testing.T) {
 	fmt.Println("Creating sample data to insert into mongo since no data was given")
 
 	post1 := Post{
@@ -99,5 +101,4 @@ func Create_Fake_Account() {
 	}
 
 	Create_Account(test_user)
-
 }
