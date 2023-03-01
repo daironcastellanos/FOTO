@@ -8,31 +8,16 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+
+	"Freel.com/freel_api/mongo"
 )
 
-func Connect(uri string) (*mongo.Client, error) {
-	// Set client options
-	clientOptions := options.Client().ApplyURI(uri)
 
-	// Connect to MongoDB
-	client, err := mongo.Connect(context.Background(), clientOptions)
-	if err != nil {
-		return nil, err
-	}
 
-	// Check the connection
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	err = client.Ping(ctx, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return client, nil
-}
-
-func CreateDatabase(client *mongo.Client, databaseName string) error {
+func CreateDatabase( databaseName string) error {
 	// Create the database
+	client := mongo.GetMongoClient()
+
 	err := client.Database(databaseName).CreateCollection(context.Background(), "dummy")
 	if err != nil {
 		return err

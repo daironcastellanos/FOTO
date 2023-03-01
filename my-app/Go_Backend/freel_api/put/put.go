@@ -37,83 +37,88 @@ type User struct {
 }
 
 
-var userCollection = mongo.Get_User_Collection()
-
-
 
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
-    // Get the user ID from the URL parameter
-    params := mux.Vars(r)
-    id, err := primitive.ObjectIDFromHex(params["id"])
-    if err != nil {
-        http.Error(w, "Invalid ID", http.StatusBadRequest)
-        return
-    }
+	// Get the user ID from the URL parameter
+	params := mux.Vars(r)
+	id, err := primitive.ObjectIDFromHex(params["id"])
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
 
 	var user User
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-    http.Error(w, err.Error(), http.StatusBadRequest)
-    return
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
+	client := mongo.GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+	
 
-// Update the user with the given ID in the collection
+	// Update the user with the given ID in the collection
 	update := bson.M{
-    "$set": bson.M{
-        "name":            user.Name,
-        "bio":             user.Bio,
-        "profilepicture":  user.ProfilePicture,
-        "posts":           user.Posts,
-    },
+		"$set": bson.M{
+			"name":           user.Name,
+			"bio":            user.Bio,
+			"profilepicture": user.ProfilePicture,
+			"posts":          user.Posts,
+		},
 	}
-	if _, err := userCollection.UpdateOne(context.Background(), bson.M{"_id": id}, update); err != nil {
-    http.Error(w, "User not found", http.StatusNotFound)
-    return
+	if _, err := collection.UpdateOne(context.Background(), bson.M{"_id": id}, update); err != nil {
+		http.Error(w, "User not found", http.StatusNotFound)
+		return
 	}
 
 	// Encode the updated user as JSON and write it to the response
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(user); err != nil {
-    http.Error(w, err.Error(), http.StatusInternalServerError)
-    return
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 }
 
-func Update_Bio(userID string, newBio string){
-	collection := mongo.Get_User_Collection()
+type UserUpdate struct {
+	Bio string `json:"bio"`
+}
 
-	// Find the user with the specified ObjectID and update their bio
-	objectID, err := primitive.ObjectIDFromHex(userID)
+func Update_Bio(w http.ResponseWriter, r *http.Request) {
+	// Get the user ID from the URL parameter
+	params := mux.Vars(r)
+	objectID, err := primitive.ObjectIDFromHex(params["id"])
 	if err != nil {
-		//return err
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
 	}
 
+	// Parse the request body to get the new bio
+	var userUpdate UserUpdate
+	err = json.NewDecoder(r.Body).Decode(&userUpdate)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Update the user's bio in the database
+	client := mongo.GetMongoClient()
+	collection := client.Database("freel").Collection("users")
 	filter := bson.M{"_id": objectID}
-	update := bson.M{"$set": bson.M{"bio": newBio}}
+	update := bson.M{"$set": bson.M{"bio": userUpdate.Bio}}
 	_, err = collection.UpdateOne(context.Background(), filter, update)
-
 	if err != nil {
-		//return err
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
-	fmt.Printf("User with ID %s updated successfully\n", userID)
-	//return nil
+	fmt.Fprintf(w, "User with ID %s updated successfully\n", params["id"])
+}
+
+func update_post() {
 
 }
 
+ 
 
 
 
-func update_post(){
-
-}
-
-
-
-
-
-func update_location(){
-
-
-
-}

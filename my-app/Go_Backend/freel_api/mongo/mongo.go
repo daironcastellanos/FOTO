@@ -7,10 +7,9 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-
-	
-
 	"go.mongodb.org/mongo-driver/mongo/gridfs"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	
 	"gorm.io/gorm"
     "github.com/joho/godotenv"
 )

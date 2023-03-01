@@ -3,36 +3,19 @@ package delete_mongo
 import (
 	"context"
 	"fmt"
-	"time"
+	
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	
+	
+
+	"Freel.com/freel_api/mongo"
 )
 
-func Connect(uri string) (*mongo.Client, error) {
-	// Set client options
-	clientOptions := options.Client().ApplyURI(uri)
 
-	// Connect to MongoDB
-	client, err := mongo.Connect(context.Background(), clientOptions)
-	if err != nil {
-		return nil, err
-	}
-
-	// Check the connection
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	err = client.Ping(ctx, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return client, nil
-}
-
-func DeleteDatabase(client *mongo.Client, databaseName string) error {
+func DeleteDatabase( databaseName string) error {
 	// Delete the database
+	client := mongo.GetMongoClient()
 	err := client.Database(databaseName).Drop(context.Background())
 	if err != nil {
 		return err
@@ -43,8 +26,9 @@ func DeleteDatabase(client *mongo.Client, databaseName string) error {
 	return nil
 }
 
-func DeleteCollection(client *mongo.Client, dbName string, collectionName string) error {
-	// Delete the collection
+func DeleteCollection( dbName string, collectionName string) error {
+	// Delete the 
+	client := mongo.GetMongoClient()
 	err := client.Database(dbName).Collection(collectionName).Drop(context.Background())
 	if err != nil {
 		return err
@@ -55,8 +39,9 @@ func DeleteCollection(client *mongo.Client, dbName string, collectionName string
 	return nil
 }
 
-func DeleteDocuments(client *mongo.Client, dbName string, collectionName string, filter bson.M) error {
+func DeleteDocuments( dbName string, collectionName string, filter bson.M) error {
 	// Delete the documents that match the filter
+	client := mongo.GetMongoClient()
 	result, err := client.Database(dbName).Collection(collectionName).DeleteMany(context.Background(), filter)
 	if err != nil {
 		return err

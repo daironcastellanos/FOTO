@@ -4,35 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"time"
-
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"Freel.com/freel_api/mongo"
 )
 
-func Connect(uri string) (*mongo.Client, error) {
-	// Set client options
-	clientOptions := options.Client().ApplyURI(uri)
 
-	// Connect to MongoDB
-	client, err := mongo.Connect(context.Background(), clientOptions)
-	if err != nil {
-		return nil, err
-	}
 
-	// Check the connection
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	err = client.Ping(ctx, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return client, nil
-}
-
-func GetDatabaseNames(client *mongo.Client) ([]string, error) {
+func GetDatabaseNames() ([]string, error) {
+	client := mongo.GetMongoClient()
 	// Get the list of database names
 	databases, err := client.ListDatabaseNames(context.Background(), bson.M{})
 	if err != nil {
@@ -42,7 +22,8 @@ func GetDatabaseNames(client *mongo.Client) ([]string, error) {
 	return databases, nil
 }
 
-func GetCollectionNames(client *mongo.Client, dbName string) ([]string, error) {
+func GetCollectionNames( dbName string) ([]string, error) {
+	client := mongo.GetMongoClient()
 	// Get the list of collection names in the specified database
 	collections, err := client.Database(dbName).ListCollectionNames(context.Background(), bson.M{})
 	if err != nil {
@@ -52,7 +33,8 @@ func GetCollectionNames(client *mongo.Client, dbName string) ([]string, error) {
 	return collections, nil
 }
 
-func GetDocuments(client *mongo.Client, dbName string, collectionName string, filter bson.M) ([]bson.M, error) {
+func GetDocuments(dbName string, collectionName string, filter bson.M) ([]bson.M, error) {
+	client := mongo.GetMongoClient()
 	// Get the documents that match the filter
 	cur, err := client.Database(dbName).Collection(collectionName).Find(context.Background(), filter)
 	if err != nil {
@@ -77,8 +59,9 @@ func GetDocuments(client *mongo.Client, dbName string, collectionName string, fi
 	return results, nil
 }
 
-func ReadCollectionToJson(client *mongo.Client, dbName string, collectionName string) ([]byte, error) {
+func ReadCollectionToJson( dbName string, collectionName string) ([]byte, error) {
 	// Get the collection
+	client := mongo.GetMongoClient()
 	collection := client.Database(dbName).Collection(collectionName)
 
 	// Find all documents in the collection
@@ -110,16 +93,9 @@ func ReadCollectionToJson(client *mongo.Client, dbName string, collectionName st
 	return jsonBytes, nil
 }
 
-func QueryMongoDB(uri, databaseName, collectionName string, query bson.M) ([]bson.M, error) {
+func QueryMongoDB( databaseName, collectionName string, query bson.M) ([]bson.M, error) {
 	// Set client options
-	clientOptions := options.Client().ApplyURI(uri)
-
-	// Connect to MongoDB
-	client, err := mongo.Connect(context.Background(), clientOptions)
-	if err != nil {
-		return nil, err
-	}
-	defer client.Disconnect(context.Background())
+	client := mongo.GetMongoClient()
 
 	// Check the connection
 	err = client.Ping(context.Background(), nil)

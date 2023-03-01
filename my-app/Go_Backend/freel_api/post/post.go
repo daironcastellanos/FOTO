@@ -34,7 +34,7 @@ type User struct {
 	Location       Location           `bson:"location,omitempty" json:"location"`
 }
 
-var userCollection = mongo.Get_User_Collection()
+
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	// Decode the JSON request body into a User struct
@@ -43,6 +43,10 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	client := mongo.GetMongoClient()
+
+	userCollection := client.Database("freel").Collection("users")
 
 	// Insert the user into the collection
 	result, err := userCollection.InsertOne(context.Background(), user)
@@ -62,7 +66,9 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 func Create_Account(user User) {
 
-	collection := mongo.Get_User_Collection()
+	client := mongo.GetMongoClient()
+
+	collection := client.Database("freel").Collection("users")
 
 	_, err := collection.InsertOne(context.Background(), user)
 	if err != nil {
@@ -74,10 +80,21 @@ func Create_Account(user User) {
 }
 
 func add_info() {
+	//client := mongo.GetMongoClient()
 
 }
 
+
+
 func add_location() {
+	//client := mongo.GetMongoClient()
+
+}
+
+
+func post_picture(){
+	//client := mongo.GetMongoClient()
+
 
 }
 

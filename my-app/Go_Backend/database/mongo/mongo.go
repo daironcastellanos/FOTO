@@ -8,9 +8,10 @@ import (
 	"net/http"
 	"strings"
 
+	"Freel.com/freel_api/mongo"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/gridfs"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -34,26 +35,6 @@ type User struct {
 
 /* This is a function that can be used to initilize the mongo client for future functions*/
 /* Returns mongo 🧞‍♂️ client */
-func InitiateMongoClient(URI_ string) *mongo.Client {
-	var err error
-	var client *mongo.Client
-	uri := URI_
-	opts := options.Client()
-	opts.ApplyURI(uri)
-	opts.SetMaxPoolSize(5)
-	if client, err = mongo.Connect(context.Background(), opts); err != nil {
-		fmt.Println(err.Error())
-	}
-
-	err = client.Ping(context.Background(), nil)
-	if err != nil {
-		fmt.Println("Error:", err)
-	} else {
-		fmt.Println("Pinged mongo")
-	}
-
-	return client
-}
 
 /* This Function accesses the Database freel and conects to the user collection successfully */
 func Get_User_Collection() {
@@ -133,25 +114,9 @@ func Get_Content_Collection() {
 }
 
 /* Function to upload pic to database freel and photo bucket "photos" 👌 */
-func Upload_Pic(URI_ string) {
+func Upload_Pic() {
 	// Set client options
-	clientOptions := options.Client().ApplyURI(URI_)
-
-	// Connect to MongoDB
-	client, err := mongo.Connect(context.Background(), clientOptions)
-	if err != nil {
-		fmt.Println("Error connecting to MongoDB:", err)
-		return
-	}
-
-	// Check the connection
-	err = client.Ping(context.Background(), nil)
-	if err != nil {
-		fmt.Println("Error connecting to MongoDB:", err)
-		return
-	}
-
-	// Open the file
+	client := mongo.GetMongoClient()
 
 	file, err := ioutil.ReadFile("database/test_photo/photo1.jpg")
 	if err != nil {
@@ -186,14 +151,9 @@ func Upload_Pic(URI_ string) {
 	fmt.Println("File uploaded successfully.")
 }
 
-func Get_All_Photos(URI_ string) ([]byte, error) {
+func Get_All_Photos() ([]byte, error) {
 	// Set up a MongoDB client and connect to the database
-	clientOptions := options.Client().ApplyURI(URI_)
-	client, err := mongo.Connect(context.Background(), clientOptions)
-	if err != nil {
-		return nil, err
-	}
-	defer client.Disconnect(context.Background())
+	client := mongo.GetMongoClient()
 
 	// Open a GridFS bucket named "photos"
 	bucket, err := gridfs.NewBucket(
@@ -227,15 +187,9 @@ func Get_All_Photos(URI_ string) ([]byte, error) {
 }
 
 /* function to Download a photo currently referenced through the name of photo but should be photoid 🧞‍♂️ */
-func Download_Photo(URI_ string) {
+func Download_Photo() {
 	// Set up a MongoDB client and connect to the database
-	clientOptions := options.Client().ApplyURI(URI_)
-	client, err := mongo.Connect(context.Background(), clientOptions)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer client.Disconnect(context.Background())
-
+	client := mongo.GetMongoClient()
 	// Open a GridFS bucket named "photos"
 	bucket, err := gridfs.NewBucket(
 		client.Database("freel"),
@@ -268,15 +222,10 @@ func Download_Photo(URI_ string) {
 	fmt.Printf("Photo downloaded and saved to %s\n", filename)
 }
 
-func Delete_Photo(Photo_ID string, URI_ string) error {
+func Delete_Photo(Photo_ID string) error {
 	// Set up a MongoDB client and connect to the database
-	clientOptions := options.Client().ApplyURI(URI_)
-	client, err := mongo.Connect(context.Background(), clientOptions)
-	if err != nil {
-		return err
-	}
-	defer client.Disconnect(context.Background())
-
+	
+	client := mongo.GetMongoClient()
 	// Open a GridFS bucket named "photos"
 	bucket, err := gridfs.NewBucket(
 		client.Database("freel"),
@@ -303,14 +252,9 @@ func Delete_Photo(Photo_ID string, URI_ string) error {
 
 
 /*This function takes in user mongo Id and returns all user data */
-func Find_User_By_ID(userID string, URI_ string) (*User, error) {
+func Find_User_By_ID(userID string) (*User, error) {
 	// Set up a MongoDB client and connect to the database
-	clientOptions := options.Client().ApplyURI(URI_)
-	client, err := mongo.Connect(context.Background(), clientOptions)
-	if err != nil {
-		return nil, err
-	}
-	defer client.Disconnect(context.Background())
+	client := mongo.GetMongoClient()
 
 	// Find the user with the specified ObjectID and return their data
 	objectID, err := primitive.ObjectIDFromHex(userID)

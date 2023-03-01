@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
+	
 
 	/* My Modules */
 	"Freel.com/database/data/user"
@@ -13,22 +13,15 @@ import (
 
 	/*Additional go packages */
 	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
-	"gorm.io/gorm"
+	
 
 )
 
 func serve_pics(w http.ResponseWriter, r *http.Request) {
 	// Load the MONGO_URI from the .env file
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Println("Error loading .env file")
-	}
-
-	mongoURI := os.Getenv("MONGODB_URI")
 
 	// Get the image data (e.g. from a file or database)
-	data, err := mongo.Get_All_Photos(mongoURI)
+	data, err := mongo.Get_All_Photos()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -47,14 +40,7 @@ func serve_pics(w http.ResponseWriter, r *http.Request) {
 func serve_user_id(w http.ResponseWriter, r *http.Request) {
 	test_user_input_id := "63f565f8df6db2c34aed8997"
 	//test_user_input_id2 := "63f5687adcf9b9a96ad516a4"
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Println("Error loading .env file")
-	}
-
-	mongoURI := os.Getenv("MONGODB_URI")
-
-	usr_data, err := mongo.Find_User_By_ID(test_user_input_id, mongoURI)
+	usr_data, err := mongo.Find_User_By_ID(test_user_input_id)
 	if err != nil {
 		return
 	}

@@ -3,8 +3,14 @@ package get
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
+
+	"io/ioutil"
 	"log"
 	"net/http"
+
+	"bytes"
 
 	"Freel.com/freel_api/mongo"
 	"github.com/gorilla/mux"
@@ -13,7 +19,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/gridfs"
-
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Post struct {
@@ -40,15 +46,25 @@ type User struct {
 }
 
 func Get_Users(w http.ResponseWriter, r *http.Request) {
+	client := mongo.GetMongoClient()
+	collection := client.Database("freel").Collection("users")
 
-	collection := mongo.Get_User_Collection()
+	// Get the total number of documents in the collection
+	total, err := collection.CountDocuments(context.Background(), bson.M{})
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	var users []User
-	cursor, err := collection.Find(context.Background(), nil)
+	log.Printf("Total number of documents: %d", total)
+
+	// Query the collection to get all the users
+	cursor, err := collection.Find(context.Background(), bson.M{})
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer cursor.Close(context.Background())
+
+	var users []User
 	for cursor.Next(context.Background()) {
 		var user User
 		err := cursor.Decode(&user)
@@ -57,6 +73,7 @@ func Get_Users(w http.ResponseWriter, r *http.Request) {
 		}
 		users = append(users, user)
 	}
+
 	if err := cursor.Err(); err != nil {
 		log.Fatal(err)
 	}
@@ -70,13 +87,18 @@ func Get_Users(w http.ResponseWriter, r *http.Request) {
 }
 
 func Get_User(w http.ResponseWriter, r *http.Request) {
-
-	collection := mongo.Get_User_Collection()
-
-	// Get the user ID from the URL parameter and query the collection
+	// Get the user ID from the URL parameter and convert it to a primitive.ObjectID
 	params := mux.Vars(r)
+	id, err := primitive.ObjectIDFromHex(params["id"])
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	// Query the collection for the user with the given ID
+	collection := mongo.Get_User_Collection()
 	var user User
-	err := collection.FindOne(context.Background(), bson.M{"_id": params["id"]}).Decode(&user)
+	err = collection.FindOne(context.Background(), bson.M{"_id": id}).Decode(&user)
 	if err != nil {
 		log.Println(err)
 		return
@@ -90,12 +112,15 @@ func Get_User(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Get_Photos(w http.ResponseWriter, r *http.Request) {
+func Get_Photos(w http.ResponseWriter, r *http.Request)([][]byte) {
 
-	bucket,error := mongo.Get_Photo_Bucket()
-	if(error != nil){
-		log.Println(error)
-	}
+	client := mongo.GetMongoClient()
+
+	bucket, err := gridfs.NewBucket(
+		client.Database("freel"),
+		options.GridFSBucket().SetName("photos"),
+	)
+	
 
 	// Get all the files in the bucket
 	filter := bson.M{}
@@ -125,21 +150,129 @@ func Get_Photos(w http.ResponseWriter, r *http.Request) {
 
 		// Read the file data into a byte slice
 		data :=
-		make([]byte, fileInfo.Length)
+			make([]byte, fileInfo.Length)
 		_, err = downloadStream.Read(data)
 		if err != nil {
 			log.Fatal(err)
 		}
-	
+
 		// Append the photo data to the slice of byte slices
 		photos = append(photos, data)
 	}
-	
+
 	// Return the photos as JSON
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(photos); err != nil {
 		log.Println(err)
-		return
+		
 	}
 
+	return photos
+
 }
+
+func Get_Photo(w http.ResponseWriter, r *http.Request) ([]byte, error) {
+	// Get the photo ID from the URL parameter and convert it to an ObjectID
+	params := mux.Vars(r)
+	photoID, err := primitive.ObjectIDFromHex(params["id"])
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		
+	}
+
+	// Get the MongoDB client and the GridFS bucket for photos
+	client := mongo.GetMongoClient()
+
+	bucket, err := gridfs.NewBucket(
+		client.Database("freel"),
+		options.GridFSBucket().SetName("photos"),
+	)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		
+	}
+
+	// Find the file in the bucket and open a download stream for it
+	file, err := bucket.OpenDownloadStream(photoID)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		
+	}
+	defer file.Close()
+
+	// Set the content type header based on the file's metadata
+	
+	// Read the photo data into a byte slice
+	data, err := ioutil.ReadAll(file)
+	
+
+	// Print the length of the data to confirm that we have read the file
+	fmt.Printf("Read %d bytes\n", len(data))
+
+	return data, err
+}
+
+
+
+func Serve_Pics(w http.ResponseWriter, r *http.Request) {
+	// Load the MONGO_URI from the .env file
+
+	// Get the image data (e.g. from a file or database)
+	data := Get_Photos(w, r)
+	
+	// Concatenate the byte slices into a single byte slice
+	var buf bytes.Buffer
+	for _, b := range data {
+		buf.Write(b)
+	}
+	imgData := buf.Bytes()
+
+	// Set the Content-Type header to indicate that this is an image
+	w.Header().Set("Content-Type", "image/jpeg")
+
+	// Write the image data to the response
+	if _, err := w.Write(imgData); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+
+
+func GetUserPosts(w http.ResponseWriter, r *http.Request) ([]map[string]interface{}, error) {
+	
+	
+	params := mux.Vars(r)
+	userID, err := primitive.ObjectIDFromHex(params["id"])
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		
+	}
+
+	// Get the MongoDB client and the "users" collection
+	client := mongo.GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	// Find the user document with the specified ID
+	filter := bson.M{"_id": userID}
+	var user map[string]interface{}
+	err = collection.FindOne(context.Background(), filter).Decode(&user)
+	if err != nil {
+		return nil, err
+	}
+
+	// Extract the "posts" field from the user document and return it as an array of maps
+	posts, ok := user["posts"].([]map[string]interface{})
+	if !ok {
+		return nil, errors.New("posts field is not an array of maps")
+	}
+	
+	return posts, nil
+
+
+
+}
+
+

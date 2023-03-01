@@ -7,7 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	
+
+	"Freel.com/freel_api/mongo"
 	
 )
 
@@ -29,7 +31,7 @@ type Post struct {
 func Insert_User(user User, URI_ string) error {
 	// Set up a MongoDB client and connect to the database
 	
-
+	client := mongo.GetMongoClient()
 	// Insert the user profile document into the "users" collection
 	collection := client.Database("freel").Collection("users")
 	_, err = collection.InsertOne(context.Background(), user)
@@ -71,13 +73,8 @@ func Create_Test_User(URI_ string) {
 }
 
 func Update_User_Bio(newBio string, URI_ string, userID string) error {
+	client := mongo.GetMongoClient()
 	// Set up a MongoDB client and connect to the database
-	clientOptions := options.Client().ApplyURI(URI_)
-	client, err := mongo.Connect(context.Background(), clientOptions)
-	if err != nil {
-		return err
-	}
-	defer client.Disconnect(context.Background())
 
 	// Find the user with the specified ObjectID and update their bio
 	objectID, err := primitive.ObjectIDFromHex(userID)
