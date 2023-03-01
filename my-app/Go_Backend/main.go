@@ -1,9 +1,13 @@
 package main
 
 import (
-	
+	"flag"
+	"os"
+	"testing"
+
+	"Freel.com/freel_api/delete"
+	"Freel.com/freel_api/get"
 	"Freel.com/freel_api/post"
-	
 )
 
 func main() {
@@ -49,4 +53,23 @@ func main() {
 	//freel_api.Freel_Api()
 
 	//post.Create_Fake_Account()
+}
+
+
+func TestMain(t *testing.T) {
+    flag.Parse()
+
+    // Run integration tests if the "-integration" flag is provided
+    if *integration {
+        result := m.Run()
+        os.Exit(result)
+    }
+
+    // Run all other tests
+    // Call the test modules here
+    result := 0
+    result += get_test.TestGetUser(t)
+    result += post_test.TestCreatePost(t)
+    result += delete_test.TestDeleteUser(t)
+    os.Exit(result)
 }
