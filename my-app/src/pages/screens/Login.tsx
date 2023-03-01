@@ -57,9 +57,9 @@ const Login = () => {
         <div className="fixed top-0 left-0 h-screen w-screen flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg">
 
-            <Link href="./screens/Login">
+            <div>
                 <img src="./images/Logo.png" alt="" width="249" height="107"/>
-            </Link>
+            </div>
                 <h1 className="text-2xl font-medium mb-4 text-purple-600 ">Welcome to Freel</h1>
       
                 
