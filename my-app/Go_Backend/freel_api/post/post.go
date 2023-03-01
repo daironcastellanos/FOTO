@@ -118,32 +118,44 @@ func post_picture(){
 }
 
 func Create_Fake_Account(w http.ResponseWriter, r *http.Request) {
+    fmt.Println("Creating sample data to insert into mongo since no data was given")
 
-	fmt.Println("Creating sample data to insert into mongo since no data was given")
-	test_user := User{
-		Name:           "John Doe",
-		Bio:            "I'm a software engineer and hobbyist photographer.",
-		ProfilePicture: "https://example.com/profile.jpg",
-		Posts: []Post{
-			{
-				Title: "My First Post",
-				Body:  "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-				Tags:  []string{"programming", "photography"},
-				Date:  "2022-01-01T12:00:00Z",
-				Image: "https://example.com/post1.jpg",
-			},
-			{
-				Title: "My Second Post",
-				Body:  "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-				Tags:  []string{"travel", "food"},
-				Date:  "2022-01-05T12:00:00Z",
-				Image: "https://example.com/post2.jpg",
-			},
-		},
-	}
+    post1 := Post{
+        Title: "My First Post",
+        Body:  "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        Tags:  []string{"programming", "photography"},
+        Date:  "2022-01-01T12:00:00Z",
+        Image: "https://example.com/post1.jpg",
+    }
 
-	Create_Account(test_user)
+    post2 := Post{
+        Title: "My Second Post",
+        Body:  "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        Tags:  []string{"travel", "food"},
+        Date:  "2022-01-05T12:00:00Z",
+        Image: "https://example.com/post2.jpg",
+    }
+
+    test_user := User{
+        Name:           "John Doe",
+        Bio:            "I'm a software engineer and hobbyist photographer.",
+        ProfilePicture: "https://example.com/profile.jpg",
+        Posts: []Post{
+            post1,
+            post2,
+        },
+        Location: Location{
+            Type:        "Point",
+            Coordinates: []float64{-122.4194, 37.7749},
+        },
+        SavedPosts: []Post{
+            post1,
+        },
+    }
+
+    Create_Account(test_user)
 }
+
 
 /*
 func Upload_Photo(w http.ResponseWriter, r *http.Request) {
