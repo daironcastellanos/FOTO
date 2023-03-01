@@ -51,6 +51,7 @@ func Freel_Api() {
 
 	/* Gets all users or specific user with unique id */
 	r.HandleFunc("/api/users/get", get.Get_Users).Methods("GET")
+	
 	r.HandleFunc("/api/users/{id}/get", get.Get_User).Methods("GET")
 
 	r.HandleFunc("/api/users/{id}/photos/get", get.GetUserPosts_Help).Methods("GET")
