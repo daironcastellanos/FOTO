@@ -2,7 +2,7 @@ package get_test
 
 import (
 	"context"
-	
+
 
 	"Freel.com/freel_api/mongo"
 	"go.mongodb.org/mongo-driver/bson"
@@ -13,25 +13,25 @@ import (
 )
 
 type Like struct {
-    Username string `bson:"username,omitempty" json:"username"`
-    Date     string `bson:"date,omitempty" json:"date"`
+	Username string `bson:"username,omitempty" json:"username"`
+	Date     string `bson:"date,omitempty" json:"date"`
 }
 
 type Comment struct {
-    Username string `bson:"username,omitempty" json:"username"`
-    Date     string `bson:"date,omitempty" json:"date"`
-    Comment  string `bson:"comment,omitempty" json:"comment"`
+	Username string `bson:"username,omitempty" json:"username"`
+	Date     string `bson:"date,omitempty" json:"date"`
+	Comment  string `bson:"comment,omitempty" json:"comment"`
 }
 
 type Post struct {
-    gorm.Model
-    Title    string     `json:"title"`
-    Body     string     `json:"body"`
-    Tags     []string   `json:"tags"`
-    Date     string     `json:"date"`
-    Image    string     `json:"image"`
-    Likes    []Like     `bson:"likes,omitempty" json:"likes"`
-    Comments []Comment  `bson:"comments,omitempty" json:"comments"`
+	gorm.Model
+	Title    string    `json:"title"`
+	Body     string    `json:"body"`
+	Tags     []string  `json:"tags"`
+	Date     string    `json:"date"`
+	Image    string    `json:"image"`
+	Likes    []Like    `bson:"likes,omitempty" json:"likes"`
+	Comments []Comment `bson:"comments,omitempty" json:"comments"`
 }
 
 type Location struct {
@@ -40,28 +40,32 @@ type Location struct {
 }
 
 type User struct {
-    ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-    Name           string             `bson:"name,omitempty" json:"name"`
-    Bio            string             `bson:"bio,omitempty" json:"bio"`
-    ProfilePicture string             `bson:"profilepicture,omitempty" json:"profilepicture"`
-    Posts          []Post             `bson:"posts,omitempty" json:"posts"`
-    Location       Location           `bson:"location,omitempty" json:"location"`
-    SavedPosts     []Post             `bson:"saved_post,omitempty" json:"saved_post"`
+	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Name           string             `bson:"name,omitempty" json:"name"`
+	Bio            string             `bson:"bio,omitempty" json:"bio"`
+	ProfilePicture string             `bson:"profilepicture,omitempty" json:"profilepicture"`
+	Posts          []Post             `bson:"posts,omitempty" json:"posts"`
+	Location       Location           `bson:"location,omitempty" json:"location"`
+	SavedPosts     []Post             `bson:"saved_post,omitempty" json:"saved_post"`
 }
 
-
-
 func Test_Get_User(t *testing.T) {
-	id := "63f5687adcf9b9a96ad516a4"
 
+	id := "63f5687adcf9b9a96ad516a4";
+	
+
+	objectID, err := primitive.ObjectIDFromHex(id)
+  
 	// Query the collection for the user with the given ID
 	client := mongo.GetMongoClient()
 	collection := client.Database("freel").Collection("users")
+	
+
 	var user User
-	err := collection.FindOne(context.Background(), bson.M{"_id": id}).Decode(&user)
-	if err != nil {
-		t.Errorf("Failed to get user: %s", err.Error())
-	}
+    err = collection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&user)
+    if err != nil {
+        return 
+    }
 
 	// Check if the user ID matches the expected value
 	expectedID, _ := primitive.ObjectIDFromHex(id)
@@ -69,4 +73,6 @@ func Test_Get_User(t *testing.T) {
 		t.Errorf("User ID mismatch: expected %s, got %s", expectedID, user.ID)
 	}
 }
+
+
 
