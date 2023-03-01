@@ -7,7 +7,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/gridfs"
+
 	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/joho/godotenv"
@@ -57,10 +57,6 @@ func GetMongoClient() *mongo.Client {
 	}
 	mongo_uri := os.Getenv("MONGODB_URI")
 
-	log.Println(mongo_uri)
-
-	//log.Printf("MongoDB URI: %s", mongo_uri)
-
 	// Set up a connection to MongoDB
 	clientOptions := options.Client().ApplyURI(mongo_uri)
 	client, err := mongo.Connect(context.Background(), clientOptions)
@@ -91,19 +87,4 @@ func Get_User_Collection() *mongo.Collection {
 	mongo_Database := mongo_client.Database("freel").Collection("users")
 
 	return (mongo_Database)
-}
-
-func Get_Photo_Bucket() (*gridfs.Bucket, error) {
-
-	client := GetMongoClient()
-
-	bucket, err := gridfs.NewBucket(
-		client.Database("freel"),
-		options.GridFSBucket().SetName("photos"),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	return bucket, nil
 }

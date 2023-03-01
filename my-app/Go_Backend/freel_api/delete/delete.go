@@ -3,7 +3,6 @@ package delete
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -82,7 +81,7 @@ func Delete_User(w http.ResponseWriter, r *http.Request) {
 	
 
 
-
+/*
 func Delete_Pic(w http.ResponseWriter, r *http.Request) {
 	// Get the photo ID from the URL parameter and convert it to a primitive.ObjectID
 	params := mux.Vars(r)
@@ -112,7 +111,7 @@ func Delete_Pic(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-
+*/
 
 
 func Delete_User_Location(){
