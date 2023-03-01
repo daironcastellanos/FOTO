@@ -48,43 +48,35 @@ func Freel_Api() {
 	/* Serves application */
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("../public")))
 
-
 	/* Gets all users or specific user with unique id */
 	r.HandleFunc("/api/users/get", get.Get_Users).Methods("GET")
-	
+
 	r.HandleFunc("/api/users/{id}/get", get.Get_User).Methods("GET")
 
 	r.HandleFunc("/api/users/{id}/photos/get", get.GetUserPosts_Help).Methods("GET")
 
-
 	//r.HandleFunc("/api/users/{id}/photos/posts/new", post.Upload_Photo).Methods("GET")
 
-
 	/* create fake account Or create real account with post */
-	r.HandleFunc("/api/user/create", post.Create_Fake_Account).Methods("GET")
-	r.HandleFunc("/api/users/create_user/post", post.CreateUser).Methods("POST")
+	r.HandleFunc("/api/user/create", post.Create_Fake_Account).Methods("POST")
 
+	r.HandleFunc("/api/users/create_user/post", post.CreateUser).Methods("POST")
 
 	/* update bio or update entire PRofile */
 	r.HandleFunc("/api/users/{id}/update/bio", put.Update_Bio).Methods("PUT")
 	r.HandleFunc("/api/users/{id}/update/profile/put", put.UpdateUser).Methods("PUT")
 
-
 	/* deletes a specific user */
 	r.HandleFunc("/api/users/{id}/delete", delete.Delete_User).Methods("DELETE")
-
 
 	/* deletes a specific photo */
 	r.HandleFunc("/api/photo/{id}/delete", delete.Delete_Pic).Methods("DELETE")
 
-
 	/* gets all photos*/
 	r.HandleFunc("/api/photos", get.Serve_Pics).Methods("GET")
 
-	
 	/* Gets photo by ID */
 	//r.HandleFunc("/api/photos/{id}", get.Get_Photo).Methods("GET")
-
 
 	/* Gets nearby users */
 	r.HandleFunc("/api/nearby_users/{id}", location.Get_Nearby_users).Methods("GET")

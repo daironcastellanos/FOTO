@@ -43,4 +43,6 @@ func main() {
 	//location.Distance_Between_Two_Users(mongoURI, test_user_input_id, test_user_input_id2)
 
 	freel_api.Freel_Api()
+
+	//post.Create_Fake_Account()
 }
