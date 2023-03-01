@@ -1,4 +1,5 @@
-package user
+package post_test
+
 
 import (
 	"context"
@@ -9,6 +10,7 @@ import (
 	
 
 	"Freel.com/freel_api/mongo"
+	"Freel.com/freel_api/post"
 	
 )
 
