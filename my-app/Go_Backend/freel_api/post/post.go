@@ -8,6 +8,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"gorm.io/gorm"
+	"testing"
 )
 
 type Like struct {
@@ -281,3 +282,43 @@ func Add_Post(w http.ResponseWriter, r *http.Request) {
 	}
 }
 */
+
+
+func Test_Create_Fake_Account(t *testing.T) {
+	fmt.Println("Creating sample data to insert into mongo since no data was given")
+
+	post1 := Post{
+		Title: "My First Post",
+		Body:  "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		Tags:  []string{"programming", "photography"},
+		Date:  "2022-01-01T12:00:00Z",
+		Image: "https://example.com/post1.jpg",
+	}
+
+	post2 := Post{
+		Title: "My Second Post",
+		Body:  "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+		Tags:  []string{"travel", "food"},
+		Date:  "2022-01-05T12:00:00Z",
+		Image: "https://example.com/post2.jpg",
+	}
+
+	test_user := User{
+		Name:           "Eric fake",
+		Bio:            "I'm a software engineer and hobbyist photographer.",
+		ProfilePicture: "https://example.com/profile.jpg",
+		Posts: []Post{
+			post1,
+			post2,
+		},
+		Location: Location{
+			Type:        "Point",
+			Coordinates: []float64{-122.4194, 37.7749},
+		},
+		SavedPosts: []Post{
+			post1,
+		},
+	}
+
+	Create_Account(test_user)
+}

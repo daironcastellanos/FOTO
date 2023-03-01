@@ -10,7 +10,7 @@ import (
 )
 
 
-func DeleteUser(t *testing.T) error {
+func Test_DeleteUser(t *testing.T) error {
 
 	id := "63f5687adcf9b9a96ad516a4"
     // Convert the ID string to a MongoDB ObjectID

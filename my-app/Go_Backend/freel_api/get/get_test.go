@@ -49,7 +49,7 @@ type User struct {
 	SavedPosts     []Post             `bson:"saved_post,omitempty" json:"saved_post"`
 }
 
-func Test_Get_User(t *testing.T) {
+func TestGet_User(t *testing.T) {
 
 	id := "63f5687adcf9b9a96ad516a4";
 	

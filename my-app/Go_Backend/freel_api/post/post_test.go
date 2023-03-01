@@ -64,7 +64,7 @@ func Create_Account(user User) {
 }
 
 
-func Create_Fake_Account(t *testing.T) {
+func Test_Create_Fake_Account(t *testing.T) {
 	fmt.Println("Creating sample data to insert into mongo since no data was given")
 
 	post1 := Post{

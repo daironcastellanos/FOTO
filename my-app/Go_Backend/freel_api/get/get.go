@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"testing"
 
 	"io/ioutil"
 	"log"
@@ -317,4 +318,54 @@ func Update_Many(){
 	}
 	fmt.Printf("Updated %v documents\n", result.ModifiedCount)
 
+}
+
+func Test_Get_User(t *testing.T) {
+
+	id := "63f5687adcf9b9a96ad516a4";
+	
+
+	objectID, err := primitive.ObjectIDFromHex(id)
+  
+	// Query the collection for the user with the given ID
+	client := mongo.GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+	
+
+	var user User
+    err = collection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&user)
+    if err != nil {
+        return 
+    }
+
+	// Check if the user ID matches the expected value
+	expectedID, _ := primitive.ObjectIDFromHex(id)
+	if user.ID != expectedID {
+		t.Errorf("User ID mismatch: expected %s, got %s", expectedID, user.ID)
+	}
+}
+
+func TestGet_User(t *testing.T) {
+
+	id := "63f5687adcf9b9a96ad516a4";
+	
+
+	objectID, err := primitive.ObjectIDFromHex(id)
+  
+	// Query the collection for the user with the given ID
+	client := mongo.GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+	
+
+	var user User
+    err = collection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&user)
+    if err != nil {
+        return 
+    }
+
+	// Check if the user ID matches the expected value
+	expectedID, _ := primitive.ObjectIDFromHex(id)
+	if user.ID != expectedID {
+		t.Errorf("User ID mismatch: expected %s, got %s", expectedID, user.ID)
+	}
 }
