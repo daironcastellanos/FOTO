@@ -90,9 +90,11 @@ const Login = () => {
                             required 
                         />
                     </div>
+                    <Link href="/screens/HomePage">
                     <button className="bg-indigo-500 text-white py-2 px-8 rounded-lg hover:bg-indigo-600">
                         Log in
                     </button>
+                    </Link>
                     <Link href="/screens/SignUpForm">
                     <button  className="block mt-4 text-center text-indigo-500">
                         Don't have an account? Sign up

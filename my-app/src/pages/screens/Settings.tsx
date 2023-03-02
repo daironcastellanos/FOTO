@@ -76,12 +76,14 @@ const SettingsPage = () => {
             Back
           </Link>
         </div>
+        <Link href="/">
         <button
           onClick={handleLogOut}
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
         >
           Log Out
         </button>
+        </Link>
       </div>
       <h1 className="text-2xl font-bold mb-4">Settings</h1>
       <form onSubmit={handleSubmit} className="w-full max-w-md">
