@@ -35,19 +35,19 @@ This documentation explains how to use the GET, POST, and DELETE methods to impl
 
 ### How to use it
 Some helpful commands when you start using the Go_Backend directory are:
-'''
+```
 go mod tidy
 go install
-'''
+```
 to make sure all the packages are installed.
 Also you can run the unit tests with  
-'''
+```
 go test
-'''
+```
 Finally you can run the backend application with
-'''
+```
 go run main.go
-'''
+```
 
 ### Getting Started
 To use the GET, POST, and DELETE methods in the backend API, we did the following:
