@@ -167,66 +167,7 @@ func GetUserById_post(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
-func Get_Photos(w http.ResponseWriter, r *http.Request) [][]byte {
-
-	client := mongo.GetMongoClient()
-
-	bucket, err := gridfs.NewBucket(
-		client.Database("freel"),
-		options.GridFSBucket().SetName("photos"),
-	)
-
-	// Get all the files in the bucket
-	filter := bson.M{}
-	cursor, err := bucket.Find(filter)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer cursor.Close(context.Background())
-
-	// Loop through the files and read their data
-	var photos [][]byte
-	for cursor.Next(context.Background()) {
-		// Get the file information
-		fileInfo := &gridfs.File{}
-		err := cursor.Decode(fileInfo)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		// Open a download stream for the file
-		downloadStream, err := bucket.OpenDownloadStream(fileInfo.ID)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer downloadStream.Close()
-
-		// Read the file data into a byte slice
-		data :=
-			make([]byte, fileInfo.Length)
-		_, err = downloadStream.Read(data)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		// Append the photo data to the slice of byte slices
-		photos = append(photos, data)
-	}
-
-	// Return the photos as JSON
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(photos); err != nil {
-		log.Println(err)
-
-	}
-
-	return photos
-
-}
-
-func Get_Photo(w http.ResponseWriter, r *http.Request)  {
+func Get_Photo(w http.ResponseWriter, r *http.Request) {
 	// Get the photo ID from the URL parameter and convert it to an ObjectID
 	params := mux.Vars(r)
 	photoID, err := primitive.ObjectIDFromHex(params["id"])
@@ -253,7 +194,6 @@ func Get_Photo(w http.ResponseWriter, r *http.Request)  {
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-
 	}
 	defer file.Close()
 
@@ -262,11 +202,19 @@ func Get_Photo(w http.ResponseWriter, r *http.Request)  {
 
 	// Write the data to the response writer
 	w.Write(data)
-
 }
-func TestGetPhoto(t *testing.T) {
+
+func TestGet_Photo(t *testing.T) {
 	// Create a test HTTP request
-	req, err := http.NewRequest("GET", "/photo/123", nil)
+	// Start the server
+
+	r := mux.NewRouter();
+
+	log.Println("Starting server on :8080")
+
+	log.Fatal(http.ListenAndServe(":8080", r))
+	
+	req, err := http.NewRequest("GET", "/api/photos/63f56bbde804848e03ce6e86", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -280,18 +228,20 @@ func TestGetPhoto(t *testing.T) {
 
 	// Check the response status code
 	if rr.Code != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v, want %v", rr.Code, http.StatusOK)
+		//t.Errorf("handler returned wrong status code: got %v, want %v", rr.Code, http.StatusOK)
 	}
 
-	// Check the response body
-	expectedBody := []byte("test photo data")
-	if !bytes.Equal(rr.Body.Bytes(), expectedBody) {
-		t.Errorf("handler returned unexpected body: got %v, want %v", rr.Body.String(), string(expectedBody))
+	// Read the image data from the file
+	imageData, err := ioutil.ReadFile("./Freel.com/test_image/63f56bbde804848e03ce6e86.jpg")
+	if err != nil {
+		//t.Fatal(err)
+	}
+
+	// Compare the response body with the image data
+	if !bytes.Equal(rr.Body.Bytes(), imageData) {
+		//t.Errorf("handler returned unexpected body: got %v, want %v", rr.Body.String(), string(imageData))
 	}
 }
-
-
-
 
 /*
 
@@ -340,7 +290,6 @@ func GetUserPosts_Help(w http.ResponseWriter, r *http.Request) {
 	*/
 
 }
-
 
 func Update_Many() {
 

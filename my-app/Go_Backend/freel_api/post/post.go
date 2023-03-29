@@ -3,19 +3,13 @@ package post
 import (
 	"context"
 	"fmt"
-	"io"
-	"log"
-	"net/http"
 
 	"Freel.com/freel_api/mongo"
-	"github.com/gorilla/mux"
 
 	"testing"
 
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/gridfs"
-	"go.mongodb.org/mongo-driver/mongo/options"
+
 	"gorm.io/gorm"
 )
 
@@ -142,71 +136,6 @@ func Create_Fake_Account() {
 }
 
 
-func Upload_Photo(w http.ResponseWriter, r *http.Request) {
-	// Get the photo file from the request body
-	file, header, err := r.FormFile("photo")
-	if err != nil {
-		http.Error(w, "Bad Request", http.StatusBadRequest)
-		return
-	}
-	defer file.Close()
-
-	// Get the MongoDB client and the GridFS bucket for photos
-	client := mongo.GetMongoClient()
-	bucket, err := gridfs.NewBucket(
-		client.Database("freel"),
-		options.GridFSBucket().SetName("photos"),
-	)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-
-	// Upload the file to the bucket
-	uploadStream, err := bucket.OpenUploadStream(header.Filename)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-	defer uploadStream.Close()
-
-	_, err = io.Copy(uploadStream, file)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-
-	// Get the ObjectID of the uploaded photo
-	photoID := uploadStream.FileID()
-
-	// Get the user ID from the URL parameter and convert it to an ObjectID
-	params := mux.Vars(r)
-	userID, err := primitive.ObjectIDFromHex(params["id"])
-	if err != nil {
-		http.Error(w, "Invalid ID", http.StatusBadRequest)
-		return
-	}
-
-	// Get the MongoDB client and the users collection
-	userCollection := client.Database("freel").Collection("users")
-
-	// Find the user and update their profile picture
-	filter := bson.M{"_id": userID}
-	update := bson.M{"$set": bson.M{"profilepicture": photoID.Hex()}}
-	_, err = userCollection.UpdateOne(context.Background(), filter, update)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-
-	// Return a success message
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "Photo uploaded successfully")
-}
 
 
 

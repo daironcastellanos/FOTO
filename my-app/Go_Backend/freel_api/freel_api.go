@@ -49,9 +49,10 @@ func Freel_Api() {
 	r.HandleFunc("/api/users/get", get.GetAllUsers).Methods("GET")
 	r.HandleFunc("/api/users/{id}/get", get.GetUserById).Methods("GET")
 	r.HandleFunc("/api/users/{id}/post/get", get.GetUserById_post).Methods("GET")
+
 	r.HandleFunc("/api/random_pic/get", mongo.GetRandomImage).Methods("GET")
 	r.HandleFunc("/api/photos/{id}", get.Get_Photo).Methods("GET")
-
+	
 	r.HandleFunc("/api/users/{id}/update/profile/put", put.Post_Pic).Methods("PUT")
 	r.HandleFunc("/api/users/{id}/{bio}", put.Update_Bio).Methods("PUT")
 	
