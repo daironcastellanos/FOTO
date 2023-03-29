@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"Freel.com/freel_api/delete"
 	"Freel.com/freel_api/get"
 	"Freel.com/freel_api/mongo"
 	"Freel.com/freel_api/post"
@@ -21,7 +22,6 @@ func TestAll(t *testing.T) {
 	get.TestGet_User(t)
 	fmt.Println()
 
-<<<<<<< HEAD
 
 
 	fmt.Println("Deleting Fake Account ")
@@ -29,9 +29,11 @@ func TestAll(t *testing.T) {
 	fmt.Println()
 
 
-=======
 	fmt.Println("Testing mongo file and random function")
 	mongo.TestGetRandomImage(t)
 	fmt.Println()	
->>>>>>> 10dd0d00853a2f83ed915b301f65612e7645b1b2
+
+	fmt.Println("Testing get file and Get_Photo function")
+	get.TestGetPhoto(t)
+	fmt.Println()	
 }
