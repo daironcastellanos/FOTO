@@ -98,7 +98,7 @@ type UserUpdate struct {
 }
 
 func Update_Bio(w http.ResponseWriter, r *http.Request) {
-	// Get the user ID from the URL parameter
+	// Get the user ID and bio string from the URL parameters
 	params := mux.Vars(r)
 	objectID, err := primitive.ObjectIDFromHex(params["id"])
 	if err != nil {
@@ -106,19 +106,13 @@ func Update_Bio(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Parse the request body to get the new bio
-	var userUpdate UserUpdate
-	err = json.NewDecoder(r.Body).Decode(&userUpdate)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
+	bio := params["bio"]
 
 	// Update the user's bio in the database
 	client := mongo.GetMongoClient()
 	collection := client.Database("freel").Collection("users")
 	filter := bson.M{"_id": objectID}
-	update := bson.M{"$set": bson.M{"bio": userUpdate.Bio}}
+	update := bson.M{"$set": bson.M{"bio": bio}}
 	_, err = collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -128,10 +122,10 @@ func Update_Bio(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "User with ID %s updated successfully\n", params["id"])
 }
 
-func update_post() {
 
+func Post_Pic(w http.ResponseWriter, r *http.Request){
+	
 }
-
  
 
 

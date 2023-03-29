@@ -3,12 +3,20 @@ package post
 import (
 	"context"
 	"fmt"
+	"io"
+	"log"
+	"net/http"
 
 	"Freel.com/freel_api/mongo"
+	"github.com/gorilla/mux"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"gorm.io/gorm"
 	"testing"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/gridfs"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"gorm.io/gorm"
 )
 
 type Like struct {
@@ -133,7 +141,7 @@ func Create_Fake_Account() {
 
 }
 
-/*
+
 func Upload_Photo(w http.ResponseWriter, r *http.Request) {
 	// Get the photo file from the request body
 	file, header, err := r.FormFile("photo")
@@ -200,7 +208,7 @@ func Upload_Photo(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Photo uploaded successfully")
 }
 
-*/
+
 
 /*
 

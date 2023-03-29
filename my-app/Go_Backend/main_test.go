@@ -13,7 +13,6 @@ func TestAll(t *testing.T) {
 
 
 	fmt.Println("Starting Test")
-
 	fmt.Println("Creating Fake Account ")
 	post.Test_Create_Fake_Account(t)
 	fmt.Println()
@@ -30,10 +29,5 @@ func TestAll(t *testing.T) {
 	delete.Test_DeleteUser(t)
 	fmt.Println()
 
-	
-
-
-
-	
 
 }

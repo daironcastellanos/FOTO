@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 
-	"bytes"
 
 	"Freel.com/freel_api/mongo"
 	"github.com/gorilla/mux"
@@ -134,6 +133,40 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GetUserById_post(w http.ResponseWriter, r *http.Request) {
+	// Get the user ID from the URL parameter and convert it to a primitive.ObjectID
+	params := mux.Vars(r)
+	id, err := primitive.ObjectIDFromHex(params["id"])
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
+	// Get a MongoDB client and collection
+	client := mongo.GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	// Query the collection for the user with the given ID
+	var user User
+	err = collection.FindOne(context.Background(), bson.M{"_id": id}).Decode(&user)
+	if err != nil {
+		log.Printf("Error finding document: %v", err)
+		http.Error(w, "Error finding document", http.StatusInternalServerError)
+		return
+	}
+
+	// Return the user's posts as JSON
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(user.Posts)
+	if err != nil {
+		log.Printf("Error encoding response: %v", err)
+		http.Error(w, "Error encoding response", http.StatusInternalServerError)
+		return
+	}
+}
+
+
 func Get_Photos(w http.ResponseWriter, r *http.Request) [][]byte {
 
 	client := mongo.GetMongoClient()
@@ -192,7 +225,7 @@ func Get_Photos(w http.ResponseWriter, r *http.Request) [][]byte {
 
 }
 
-func Get_Photo(w http.ResponseWriter, r *http.Request) ([]byte, error) {
+func Get_Photo(w http.ResponseWriter, r *http.Request)  {
 	// Get the photo ID from the URL parameter and convert it to an ObjectID
 	params := mux.Vars(r)
 	photoID, err := primitive.ObjectIDFromHex(params["id"])
@@ -223,39 +256,15 @@ func Get_Photo(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	}
 	defer file.Close()
 
-	// Set the content type header based on the file's metadata
-
 	// Read the photo data into a byte slice
 	data, err := ioutil.ReadAll(file)
 
-	// Print the length of the data to confirm that we have read the file
-	fmt.Printf("Read %d bytes\n", len(data))
+	// Write the data to the response writer
+	w.Write(data)
 
-	return data, err
 }
 
-func Serve_Pics(w http.ResponseWriter, r *http.Request) {
-	// Load the MONGO_URI from the .env file
 
-	// Get the image data (e.g. from a file or database)
-	data := Get_Photos(w, r)
-
-	// Concatenate the byte slices into a single byte slice
-	var buf bytes.Buffer
-	for _, b := range data {
-		buf.Write(b)
-	}
-	imgData := buf.Bytes()
-
-	// Set the Content-Type header to indicate that this is an image
-	w.Header().Set("Content-Type", "image/jpeg")
-
-	// Write the image data to the response
-	if _, err := w.Write(imgData); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
 
 /*
 

@@ -3,12 +3,14 @@ package freel_api
 import (
 	"log"
 	"net/http"
-	"Freel.com/freel_api/get"
 
-	"Freel.com/freel_api/mongo"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"Freel.com/freel_api/get"
+	"Freel.com/freel_api/put"
+
 	"Freel.com/freel_api/admin/location"
+	"Freel.com/freel_api/mongo"
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"gorm.io/gorm"
 )
 
@@ -45,17 +47,21 @@ func Freel_Api() {
 	/* Gets all users or specific user with unique id */
 
 	r.HandleFunc("/api/users/get", get.GetAllUsers).Methods("GET")
-
-	r.HandleFunc("/api/users/{id}/", get.GetUserById).Methods("GET")
+	r.HandleFunc("/api/users/{id}/get", get.GetUserById).Methods("GET")
+	r.HandleFunc("/api/users/{id}/post/get", get.GetUserById_post).Methods("GET")
 
 	r.HandleFunc("/api/random_pic/get", mongo.GetRandomImage).Methods("GET")
+	r.HandleFunc("/api/photos/{id}", get.Get_Photo).Methods("GET")
+
+	r.HandleFunc("/api/users/{id}/{bio}", put.Update_Bio).Methods("PUT")
+	r.HandleFunc("/api/users/{id}/update/profile/put", put.Post_Pic).Methods("PUT")
+
 
 	//r.HandleFunc("/api/users/{id}/photos/get", get.GetUserPosts_Help).Methods("GET")
 	//r.HandleFunc("/api/users/{id}/photos/posts/new", post.Upload_Photo).Methods("GET")
 	/* create fake account Or create real account with post */
 	//r.HandleFunc("/api/user/create", post.Create_Fake_Account).Methods("POST")
 	//r.HandleFunc("/api/users/create_user/post", post.CreateUser).Methods("POST")
-
 	/* update bio or update entire PRofile */
 	//r.HandleFunc("/api/users/{id}/update/bio", put.Update_Bio).Methods("PUT")
 	//r.HandleFunc("/api/users/{id}/update/profile/put", put.UpdateUser).Methods("PUT")
