@@ -266,7 +266,7 @@ func Get_Photo(w http.ResponseWriter, r *http.Request)  {
 }
 func TestGetPhoto(t *testing.T) {
 	// Create a test HTTP request
-	req, err := http.NewRequest("GET", "/photo/123", nil)
+	req, err := http.NewRequest("GET", "/api/photos/63f56bbde804848e03ce6e86", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
