@@ -2,6 +2,8 @@ package mongo
 
 import (
 	"context"
+	"testing"
+
 	//"encoding/json"
 	"io"
 	"log"
@@ -14,6 +16,7 @@ import (
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
+	"net/http/httptest"
 	"path/filepath"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -256,4 +259,34 @@ func GetRandomImage(w http.ResponseWriter, r *http.Request) {
 	// Serve the image data to the browser
 	w.Header().Set("Content-Type", "image/webp")
 	w.Write(randomImage.Data)
+}
+
+func TestGetRandomImage(t *testing.T) {
+	req, err := http.NewRequest("GET", "/random-image", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(GetRandomImage)
+
+	handler.ServeHTTP(rr, req)
+
+	// Check the status code
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
+	}
+
+	// Check the content type
+	expectedContentType := "image/webp"
+	if contentType := rr.Header().Get("Content-Type"); contentType != expectedContentType {
+		t.Errorf("handler returned unexpected content type: got %v want %v",
+			contentType, expectedContentType)
+	}
+
+	// Check if the response body is not empty
+	if rr.Body.Len() == 0 {
+		t.Error("handler returned empty response body")
+	}
 }
