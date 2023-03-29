@@ -4,12 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"Freel.com/freel_api/mongo"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/gridfs"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"gorm.io/gorm"
 )
 
@@ -97,6 +100,9 @@ type UserUpdate struct {
 	Bio string `json:"bio"`
 }
 
+
+
+
 func Update_Bio(w http.ResponseWriter, r *http.Request) {
 	// Get the user ID and bio string from the URL parameters
 	params := mux.Vars(r)
@@ -122,9 +128,56 @@ func Update_Bio(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "User with ID %s updated successfully\n", params["id"])
 }
 
+func Upload_Photo(data []byte) (primitive.ObjectID, error) {
+	// Get the MongoDB client and the GridFS bucket for photos
+	client := mongo.GetMongoClient()
+	bucket, err := gridfs.NewBucket(
+		client.Database("freel"),
+		options.GridFSBucket().SetName("images"),
+	)
+	if err != nil {
+		log.Println(err)
+		return primitive.NilObjectID, err
+	}
+
+	// Upload the image data to the bucket
+	uploadStream, err := bucket.OpenUploadStream("photo")
+	if err != nil {
+		log.Println(err)
+		return primitive.NilObjectID, err
+	}
+	defer uploadStream.Close()
+
+	_, err = uploadStream.Write(data)
+	if err != nil {
+		log.Println(err)
+		return primitive.NilObjectID, err
+	}
+
+	// Get the ObjectID of the uploaded photo
+	photoID, ok := uploadStream.FileID.(primitive.ObjectID)
+	if !ok {
+		log.Println("Error asserting FileID to primitive.ObjectID")
+		return primitive.NilObjectID, fmt.Errorf("Error asserting FileID to primitive.ObjectID")
+	}
+
+	// Return the photo ID
+	return photoID, nil
+}
 
 func Post_Pic(w http.ResponseWriter, r *http.Request){
-	
+
+	// Get the user ID from the URL parameter
+
+	// Upload photo to GridFS
+
+	// Get the photo ID from the GridFS upload
+
+	// if user has no postedd_pics array, create one
+	// Create a new array in users called posteddd_pics
+	// else add the photo ID to the array
+
+	// Update the user's posts array with the ID of the photo
 }
  
 
