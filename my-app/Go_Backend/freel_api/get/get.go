@@ -1,6 +1,7 @@
 package get
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-
+	"net/http/httptest"
 
 	"Freel.com/freel_api/mongo"
 	"github.com/gorilla/mux"
@@ -263,6 +264,32 @@ func Get_Photo(w http.ResponseWriter, r *http.Request)  {
 	w.Write(data)
 
 }
+func TestGetPhoto(t *testing.T) {
+	// Create a test HTTP request
+	req, err := http.NewRequest("GET", "/photo/123", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Create a test HTTP response recorder
+	rr := httptest.NewRecorder()
+
+	// Call the handler function
+	handler := http.HandlerFunc(Get_Photo)
+	handler.ServeHTTP(rr, req)
+
+	// Check the response status code
+	if rr.Code != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v, want %v", rr.Code, http.StatusOK)
+	}
+
+	// Check the response body
+	expectedBody := []byte("test photo data")
+	if !bytes.Equal(rr.Body.Bytes(), expectedBody) {
+		t.Errorf("handler returned unexpected body: got %v, want %v", rr.Body.String(), string(expectedBody))
+	}
+}
+
 
 
 
