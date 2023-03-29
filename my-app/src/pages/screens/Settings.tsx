@@ -72,7 +72,7 @@ const SettingsPage = () => {
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <div className="flex w-full justify-between items-center mb-4">
         <div>
-          <Link href="/">
+          <Link href="/screens/HomePage">
             Back
           </Link>
         </div>
