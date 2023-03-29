@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -166,20 +167,45 @@ func Upload_Photo(data []byte) (primitive.ObjectID, error) {
 }
 
 func Post_Pic(w http.ResponseWriter, r *http.Request){
-
 	// Get the user ID from the URL parameter
+	params := mux.Vars(r)
+	userID, err := primitive.ObjectIDFromHex(params["id"])
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
+	// Get the image data from the request body
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
 
 	// Upload photo to GridFS
+	photoID, err := Upload_Photo(data)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
 
-	// Get the photo ID from the GridFS upload
+	// Get the MongoDB client and the users collection
+	client := mongo.GetMongoClient()
+	userCollection := client.Database("freel").Collection("users")
 
-	// if user has no postedd_pics array, create one
-	// Create a new array in users called posteddd_pics
-	// else add the photo ID to the array
+	// Find the user and update their posts array with the photo ID
+	filter := bson.M{"_id": userID}
+	update := bson.M{"$addToSet": bson.M{"posted_pics": photoID}}
+	_, err = userCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
 
-	// Update the user's posts array with the ID of the photo
+	// Return a success message
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Post added successfully")
 }
- 
-
 
 
