@@ -4,11 +4,13 @@ go 1.19
 
 require (
 	github.com/gorilla/mux v1.8.0
+	github.com/tebeka/selenium v0.9.9
 	go.mongodb.org/mongo-driver v1.10.2
 	gorm.io/gorm v1.24.5
 )
 
 require (
+	github.com/blang/semver v3.5.1+incompatible // indirect
 	github.com/google/go-cmp v0.5.5 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect

@@ -5,7 +5,9 @@ import (
 	"net/http"
 
 	//"Freel.com/freel_api/delete"
+	
 	"Freel.com/freel_api/get"
+	"Freel.com/freel_api/mongo"
 
 	//"Freel.com/freel_api/post"
 	//"Freel.com/freel_api/put"
@@ -50,10 +52,12 @@ func Freel_Api() {
 	//r.PathPrefix("/").Handler(http.FileServer(http.Dir("../public")))
 
 	/* Gets all users or specific user with unique id */
+
 	r.HandleFunc("/api/users/get", get.GetAllUsers).Methods("GET")
 
 	r.HandleFunc("/api/users/{id}/", get.GetUserById).Methods("GET")
 
+	r.HandleFunc("/api/random_pic/get", mongo.GetRandom).Methods("GET")
 
 	//r.HandleFunc("/api/users/{id}/photos/get", get.GetUserPosts_Help).Methods("GET")
 

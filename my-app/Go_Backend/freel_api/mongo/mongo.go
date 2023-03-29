@@ -2,9 +2,21 @@ package mongo
 
 import (
 	"context"
+	//"encoding/json"
+	"io"
 	"log"
+	"math/rand"
 	"os"
+	"time"
 
+	"bytes"
+	"fmt"
+	"io/ioutil"
+	"mime/multipart"
+	"net/http"
+	"path/filepath"
+
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -73,6 +85,28 @@ func GetMongoClient() *mongo.Client {
 	return client
 }
 
+func GetMongoClient_() (*mongo.Client, error) {
+	if err := godotenv.Load(); err != nil {
+		return nil, fmt.Errorf("Error loading .env file: %v", err)
+	}
+	mongo_uri := os.Getenv("MONGODB_URI")
+
+	// Set up a connection to MongoDB
+	clientOptions := options.Client().ApplyURI(mongo_uri)
+	client, err := mongo.Connect(context.Background(), clientOptions)
+	if err != nil {
+		return nil, fmt.Errorf("Error connecting to MongoDB: %v", err)
+	}
+
+	// Check the connection
+	err = client.Ping(context.Background(), nil)
+	if err != nil {
+		return nil, fmt.Errorf("Error pinging MongoDB: %v", err)
+	}
+
+	return client, nil
+}
+
 func Get_Freel_DataBase() *mongo.Database {
 
 	mongo_client := GetMongoClient()
@@ -84,7 +118,150 @@ func Get_Freel_DataBase() *mongo.Database {
 func Get_User_Collection() *mongo.Collection {
 
 	mongo_client := GetMongoClient()
-	mongo_Database := mongo_client.Database("freel").Collection("users")
+	mongo_Database := mongo_client.Database("freel").Collection("test_data")
 
 	return (mongo_Database)
+}
+
+func UploadImagesToPhotoBucket(bucketName, imageFolderPath string) {
+	imageFiles, err := ioutil.ReadDir(imageFolderPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, imageFile := range imageFiles {
+		if filepath.Ext(imageFile.Name()) == ".webp" {
+			imagePath := filepath.Join(imageFolderPath, imageFile.Name())
+			uploadImageToBucket_client(bucketName, imagePath)
+		}
+	}
+}
+
+func uploadImageToBucket(bucketName, imagePath string) {
+	file, err := os.Open(imagePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	part, err := writer.CreateFormFile("image", filepath.Base(imagePath))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = io.Copy(part, file)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = writer.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	uploadEndpoint := fmt.Sprintf("https://api.example.com/buckets/%s/upload", bucketName)
+	request, err := http.NewRequest("POST", uploadEndpoint, body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	request.Header.Set("Content-Type", writer.FormDataContentType())
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		body := &bytes.Buffer{}
+		_, err := body.ReadFrom(response.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+		response.Body.Close()
+		fmt.Println("Image uploaded:", imagePath)
+	}
+}
+
+func uploadImageToBucket_client(bucketName, imagePath string) {
+	file, err := os.Open(imagePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	client := GetMongoClient()
+	defer client.Disconnect(context.Background())
+
+	// Get a handle for your database
+	db := client.Database(bucketName)
+
+	// Get a handle for your collection
+	coll := db.Collection("test_images")
+
+	// Create an io.Reader from the file
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Insert the image into the collection
+	_, err = coll.InsertOne(context.Background(), bson.M{
+		"filename": filepath.Base(imagePath),
+		"data":     fileBytes,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Image uploaded:", imagePath)
+}
+
+// Image represents an image in the collection
+type Image struct {
+	ID   string `json:"_id,omitempty" bson:"_id,omitempty"`
+	URL  string `json:"url,omitempty" bson:"url,omitempty"`
+	Name string `json:"name,omitempty" bson:"name,omitempty"`
+	Data []byte `json:"data,omitempty" bson:"data,omitempty"`
+}
+
+func GetRandom(w http.ResponseWriter, r *http.Request) {
+	client, err := GetMongoClient_()
+	if err != nil {
+		log.Fatal(err)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	err = client.Connect(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer client.Disconnect(ctx)
+
+	collection := client.Database("freel").Collection("test_images")
+
+	// Get the count of documents in the collection
+	count, err := collection.CountDocuments(ctx, bson.M{})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// Generate a random index
+	rand.Seed(time.Now().UnixNano())
+	randomIndex := rand.Int63n(count)
+
+	// Get the random image
+	var randomImage Image
+	opts := options.FindOne().SetSkip(randomIndex)
+	err = collection.FindOne(ctx, bson.M{}, opts).Decode(&randomImage)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Serve the image data to the browser
+	w.Header().Set("Content-Type", "image/webp")
+	w.Write(randomImage.Data)
 }

@@ -305,6 +305,7 @@ func GetUserPosts_Help(w http.ResponseWriter, r *http.Request) {
 
 }
 
+
 func Update_Many() {
 
 	client := mongo.GetMongoClient()

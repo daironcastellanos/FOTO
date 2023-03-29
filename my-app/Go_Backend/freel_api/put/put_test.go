@@ -5,6 +5,7 @@ import (
 
 	"Freel.com/freel_api/mongo"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"gorm.io/gorm"
 )
 
 type Like struct {

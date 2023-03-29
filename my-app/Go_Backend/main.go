@@ -2,7 +2,7 @@ package main
 
 import (
 	"Freel.com/freel_api"
-
+	"Freel.com/freel_api/mongo"
 )
 
 func main() {
@@ -45,9 +45,12 @@ func main() {
 
 	//post.Create_Fake_Account()
 
-	freel_api.Freel_Api()
+	//freel_api.Freel_Api()
 
 	//post.Create_Fake_Account()
+
+	//mongo.UploadImagesToPhotoBucket("images", "WEBP/")
+	//mongo.UploadImagesToPhotoBucket("freel", "WEBP/")
+
+	freel_api.Freel_Api()
 }
-
-
