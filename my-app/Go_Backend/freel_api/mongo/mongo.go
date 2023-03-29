@@ -217,8 +217,6 @@ func uploadImageToBucket_client(bucketName, imagePath string) {
 
 	fmt.Println("Image uploaded:", imagePath)
 }
-
-// Image represents an image in the collection
 type Image struct {
 	ID   string `json:"_id,omitempty" bson:"_id,omitempty"`
 	URL  string `json:"url,omitempty" bson:"url,omitempty"`
@@ -226,21 +224,15 @@ type Image struct {
 	Data []byte `json:"data,omitempty" bson:"data,omitempty"`
 }
 
-func GetRandom(w http.ResponseWriter, r *http.Request) {
+func GetRandomImage(w http.ResponseWriter, r *http.Request) {
 	client, err := GetMongoClient_()
 	if err != nil {
 		log.Fatal(err)
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 40*time.Second)
 	defer cancel()
 
-	err = client.Connect(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer client.Disconnect(ctx)
-
-	collection := client.Database("freel").Collection("test_images")
+	collection := client.Database("freel").Collection("images")
 
 	// Get the count of documents in the collection
 	count, err := collection.CountDocuments(ctx, bson.M{})

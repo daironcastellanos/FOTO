@@ -2,7 +2,6 @@ package main
 
 import (
 	"Freel.com/freel_api"
-	"Freel.com/freel_api/mongo"
 )
 
 func main() {
