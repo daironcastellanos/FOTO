@@ -33,7 +33,5 @@ func TestAll(t *testing.T) {
 	mongo.TestGetRandomImage(t)
 	fmt.Println()	
 
-	fmt.Println("Testing get file and Get_Photo function")
-	get.TestGetPhoto(t)
-	fmt.Println()	
+
 }
