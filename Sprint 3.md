@@ -79,7 +79,7 @@ Wrote test cases for your handler function that verify that it is working correc
 Here are some additional functions that have been added to the backend API:
 
 Get_Photo
-This function retrieves a photo from the MongoDB database using the specified photo ID. The function reads the photo data into a byte slice and writes it to the HTTP response writer.
+This function retrieves a photo from the MongoDB database using the specified photo ID. The function reads the photo data into a byte slice and writes it to the HTTP response writer. We are continue working on the unit testing of this function.
 
 Get_Random_Picture
 This function retrieves a random picture from the MongoDB database. The function uses the math/rand package to generate a random number, and then uses the number to select a picture from the database.
