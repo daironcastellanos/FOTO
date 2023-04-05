@@ -9,6 +9,26 @@ interface Picture {
   url: string;
 }
 
+interface Post {
+  title: string;
+  body: string;
+  tags: string[];
+  date: string;
+  image: string;
+}
+
+
+
+interface MongoProfile {
+  _id: string;
+  name: string;
+  bio: string;
+  profilepicture: string;
+  posts: Post[];
+  location: Location;
+  saved_post: Post[];
+}
+
 interface UserProfile {
   id: string;
   name: string;
@@ -22,13 +42,14 @@ const Profile: React.FC = () => {
   const { id } = router.query;
 
   const [userProfile, setUserProfile] = React.useState<UserProfile>({
-    id: '1',
+ 
+    id: '63f565f8df6db2c34aed8997',
     name: 'Gatico',
     bio: 'Bio',
     profilePictureUrl: 'https://placekitten.com/200/200',
     pictures: [
       {
-        id: '1',
+        id: '63f565f8df6db2c34aed8997',
         url: 'https://placekitten.com/200/200',
       },
       {
@@ -66,15 +87,25 @@ const Profile: React.FC = () => {
     ],
   });
 
-  
+  const [mongoProfile, setMongoProfile] = React.useState<MongoProfile | null>(null);
+
   React.useEffect(() => {
-    if (id) {
-      fetch(`/api/users/${id}/get`)
+    //console.log("before")
+    if (userProfile.id) {
+      //console.log('after')
+      fetch(`http://localhost:8080/api/users/${userProfile.id}/get`)
         .then((response) => response.json())
-        .then((data) => setUserProfile(data))
+        .then((data) => setMongoProfile(data))
         .catch((error) => console.error('Error fetching user data:', error));
+        
     }
-  }, [id]);
+  }, []);
+  
+  useEffect(() => {
+    //console.log("mongo profile update ")
+    console.log(mongoProfile)
+
+  }, [mongoProfile]);
 
 
   const handleBackButtonClick = () => {
