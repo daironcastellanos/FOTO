@@ -66,6 +66,7 @@ const Profile: React.FC = () => {
     ],
   });
 
+  
   React.useEffect(() => {
     if (id) {
       fetch(`/api/users/${id}/get`)
@@ -75,11 +76,10 @@ const Profile: React.FC = () => {
     }
   }, [id]);
 
+
   const handleBackButtonClick = () => {
     router.back();
   };
-
-
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
