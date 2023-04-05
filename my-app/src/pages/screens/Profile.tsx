@@ -17,8 +17,6 @@ interface Post {
   image: string;
 }
 
-
-
 interface MongoProfile {
   _id: string;
   name: string;
@@ -90,21 +88,16 @@ const Profile: React.FC = () => {
   const [mongoProfile, setMongoProfile] = React.useState<MongoProfile | null>(null);
 
   React.useEffect(() => {
-    //console.log("before")
     if (userProfile.id) {
-      //console.log('after')
       fetch(`http://localhost:8080/api/users/${userProfile.id}/get`)
         .then((response) => response.json())
         .then((data) => setMongoProfile(data))
         .catch((error) => console.error('Error fetching user data:', error));
-        
     }
   }, []);
   
   useEffect(() => {
-    //console.log("mongo profile update ")
     console.log(mongoProfile)
-
   }, [mongoProfile]);
 
 
