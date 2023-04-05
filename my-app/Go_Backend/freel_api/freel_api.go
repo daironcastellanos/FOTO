@@ -1,7 +1,9 @@
 package freel_api
 
 import (
+	"github.com/gorilla/handlers"
 	"log"
+	
 	"net/http"
 
 	"Freel.com/freel_api/get"
@@ -42,19 +44,23 @@ func Freel_Api() {
 	// Set up the Gorilla Mux router and define your API routes
 	r := mux.NewRouter()
 
+	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+    methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"})
+    origins := handlers.AllowedOrigins([]string{"*"})
+
 	/* Serves application */
 	//r.PathPrefix("/").Handler(http.FileServer(http.Dir("../public")))
 	/* Gets all users or specific user with unique id */
 
 	r.HandleFunc("/api/users/get", get.GetAllUsers).Methods("GET")
 	r.HandleFunc("/api/users/{id}/get", get.GetUserById).Methods("GET")
+	
 	r.HandleFunc("/api/users/{id}/post/get", get.GetUserById_post).Methods("GET")
-
 	r.HandleFunc("/api/random_pic/get", mongo.GetRandomImage).Methods("GET")
 	r.HandleFunc("/api/photos/{id}", get.Get_Photo).Methods("GET")
 	
-	r.HandleFunc("/api/users/{id}/update/profile/put", put.Post_Pic).Methods("PUT")
-	r.HandleFunc("/api/users/{id}/{bio}", put.Update_Bio).Methods("PUT")
+	r.HandleFunc("/api/users/{id}/update/profile/put", put.Post_Pic).Methods("POST")
+	r.HandleFunc("/api/users/{id}/{bio}", put.Update_Bio).Methods("POST")
 	
 
 
@@ -63,7 +69,7 @@ func Freel_Api() {
 	/* create fake account Or create real account with post */
 	//r.HandleFunc("/api/user/create", post.Create_Fake_Account).Methods("POST")
 	//r.HandleFunc("/api/users/create_user/post", post.CreateUser).Methods("POST")
-	/* update bio or update entire PRofile */
+	/* update bio or update entire Profile */
 	//r.HandleFunc("/api/users/{id}/update/bio", put.Update_Bio).Methods("PUT")
 	//r.HandleFunc("/api/users/{id}/update/profile/put", put.UpdateUser).Methods("PUT")
 
@@ -81,9 +87,55 @@ func Freel_Api() {
 
 	/* Gets nearby users */
 	r.HandleFunc("/api/nearby_users/{id}", location.Get_Nearby_users).Methods("GET")
+	r.HandleFunc("/upload", mongo.UploadImage).Methods("POST")
 
 	// Start the server
 	log.Println("Starting server on :8080")
 
-	log.Fatal(http.ListenAndServe(":8080", r))
+	log.Fatal(http.ListenAndServe(":8080",handlers.CORS(headers, methods, origins)(r)))
 }
+
+
+/*
+
+
+
+	imageCollection := client.Database("test").Collection("images")
+
+	http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		file, _, err := r.FormFile("file")
+		if err != nil {
+			http.Error(w, "Failed to read file", http.StatusBadRequest)
+			return
+		}
+		defer file.Close()
+
+		data, err := ioutil.ReadAll(file)
+		if err != nil {
+			http.Error(w, "Failed to read file", http.StatusBadRequest)
+			return
+		}
+
+		encoded := base64.StdEncoding.EncodeToString(data)
+		image := Image{Data: encoded}
+
+		res, err := imageCollection.InsertOne(ctx, image)
+		if err != nil {
+			http.Error(w, "Failed to save image", http.StatusInternalServerError)
+			return
+		}
+
+		id := res.InsertedID.(string)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{"id": id})
+	})
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+*/

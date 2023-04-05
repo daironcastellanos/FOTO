@@ -208,16 +208,18 @@ func TestGet_Photo(t *testing.T) {
 	// Create a test HTTP request
 	// Start the server
 
-	r := mux.NewRouter();
-
 	log.Println("Starting server on :8080")
 
-	log.Fatal(http.ListenAndServe(":8080", r))
-	
-	req, err := http.NewRequest("GET", "/api/photos/63f56bbde804848e03ce6e86", nil)
+	//log.Fatal(http.ListenAndServe(":8080", r)
+
+	fmt.Print("1")
+
+	req, err := http.NewRequest("GET", "http://localhost:8080/api/photos/63f56bbde804848e03ce6e86", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	fmt.Print("1")
 
 	// Create a test HTTP response recorder
 	rr := httptest.NewRecorder()
@@ -226,21 +228,24 @@ func TestGet_Photo(t *testing.T) {
 	handler := http.HandlerFunc(Get_Photo)
 	handler.ServeHTTP(rr, req)
 
-	// Check the response status code
-	if rr.Code != http.StatusOK {
-		//t.Errorf("handler returned wrong status code: got %v, want %v", rr.Code, http.StatusOK)
-	}
+	fmt.Print("1")
 
 	// Read the image data from the file
-	imageData, err := ioutil.ReadFile("./Freel.com/test_image/63f56bbde804848e03ce6e86.jpg")
+	imageData, err := ioutil.ReadFile("../../test_image/63f56bbde804848e03ce6e86.jpg")
 	if err != nil {
-		//t.Fatal(err)
+		t.Fatal(err)
 	}
+
+	fmt.Print("1")
+
 
 	// Compare the response body with the image data
 	if !bytes.Equal(rr.Body.Bytes(), imageData) {
-		//t.Errorf("handler returned unexpected body: got %v, want %v", rr.Body.String(), string(imageData))
+		t.Errorf("handler returned unexpected body: got %v, want %v", rr.Body.String(), string(imageData))
 	}
+
+	fmt.Print("1")
+
 }
 
 /*

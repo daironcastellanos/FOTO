@@ -2,6 +2,8 @@ package mongo
 
 import (
 	"context"
+	//"encoding/base64"
+	"encoding/json"
 	"testing"
 
 	//"encoding/json"
@@ -289,4 +291,46 @@ func TestGetRandomImage(t *testing.T) {
 	if rr.Body.Len() == 0 {
 		t.Error("handler returned empty response body")
 	}
+}
+
+
+func UploadImage(w http.ResponseWriter, r *http.Request) {
+    client, err := GetMongoClient_()
+    if err != nil {
+        log.Fatal(err)
+    }
+    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+    defer cancel()
+    err = client.Connect(ctx)
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer client.Disconnect(ctx)
+
+    imageCollection := client.Database("freel").Collection("images")
+
+    file, _, err := r.FormFile("file")
+    if err != nil {
+        http.Error(w, "Failed to read file", http.StatusBadRequest)
+        return
+    }
+    defer file.Close()
+
+    data, err := ioutil.ReadAll(file)
+    if err != nil {
+        http.Error(w, "Failed to read file", http.StatusBadRequest)
+        return
+    }
+
+    image := Image{Data: data} // Use data directly
+
+    res, err := imageCollection.InsertOne(ctx, image)
+    if err != nil {
+        http.Error(w, "Failed to save image", http.StatusInternalServerError)
+        return
+    }
+
+    id := res.InsertedID.(primitive.ObjectID)
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(map[string]string{"id": id.Hex()})
 }

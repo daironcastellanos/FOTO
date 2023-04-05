@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
@@ -66,9 +66,20 @@ const Profile: React.FC = () => {
     ],
   });
 
+  React.useEffect(() => {
+    if (id) {
+      fetch(`/api/users/${id}/get`)
+        .then((response) => response.json())
+        .then((data) => setUserProfile(data))
+        .catch((error) => console.error('Error fetching user data:', error));
+    }
+  }, [id]);
+
   const handleBackButtonClick = () => {
     router.back();
   };
+
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">

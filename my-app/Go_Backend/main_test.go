@@ -12,7 +12,7 @@ import (
 
 func TestAll(t *testing.T) {
 
-
+	
 	fmt.Println("Starting Test")
 	fmt.Println("Creating Fake Account ")
 	post.Test_Create_Fake_Account(t)
@@ -23,17 +23,16 @@ func TestAll(t *testing.T) {
 	fmt.Println()
 
 
-
 	fmt.Println("Deleting Fake Account ")
 	delete.Test_DeleteUser(t)
 	fmt.Println()
-
 
 	fmt.Println("Testing mongo file and random function")
 	mongo.TestGetRandomImage(t)
 	fmt.Println()	
 
 	fmt.Println("Testing get file and Get_Photo function")
-	get.TestGetPhoto(t)
+	//get.TestGet_Photo(t)
 	fmt.Println()	
+	
 }

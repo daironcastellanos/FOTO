@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 BASE_URL = "https://www.bing.com/create?toWww=1&redig=30C04FC20A7A4BA08168CC7BB17EDFD6"
-SAVE_PATH = "C:/dev/school/Software_engineer/Freel/my-app/Go_Backend/generated"
+SAVE_PATH = "C:/Users/ericd/dev/school/Software_engineer\Freel\my-app/Go_Backend/generated"
 CHROME_DRIVER_PATH = "C:/path/to/chromedriver.exe"
 
 photo_prompts = [
@@ -39,13 +39,6 @@ image_xpaths = [
     '//*[@id="mmComponent_images_1"]/ul[2]/li[2]/div/div/a/div/img'
 ]
 
-
-image_xpaths = [
-    '//*[@id="mmComponent_images_1"]/ul[1]/li[1]/div/div/a/div/img',
-    '//*[@id="mmComponent_images_1"]/ul[1]/li[2]/div/div/a/div/img',
-    '//*[@id="mmComponent_images_1"]/ul[2]/li[1]/div/div/a/div/img',
-    '//*[@id="mmComponent_images_1"]/ul[2]/li[2]/div/div/a/div/img'
-]
 
 def main():
     with webdriver.Chrome(executable_path=CHROME_DRIVER_PATH) as driver:
