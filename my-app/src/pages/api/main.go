@@ -295,7 +295,6 @@ func Get_Photo(w http.ResponseWriter, r *http.Request) {
     }
 }
 
-
 func Freel_Api() {
 	
 	r := mux.NewRouter()
@@ -314,7 +313,6 @@ func Freel_Api() {
 
 	/* These work and have been added to test page */
 	
-
 	//r.HandleFunc("/api/users/{id}/post/get", get.GetUserById_post).Methods("GET")
 	
 	/* Gets nearby users */

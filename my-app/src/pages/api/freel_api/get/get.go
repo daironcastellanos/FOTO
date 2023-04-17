@@ -325,7 +325,6 @@ func GetUserByUsername(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("getting")
 
-
 	// Get the Username from the URL parameter
 	params := mux.Vars(r)
 	username := params["username"]
