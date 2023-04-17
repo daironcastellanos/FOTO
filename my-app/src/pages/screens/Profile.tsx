@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import Image from 'next/image';
 
 import UserStatistics from '@/components/userStats';
 
@@ -18,13 +19,17 @@ interface Post {
 }
 
 interface MongoProfile {
-  _id: string;
-  name: string;
-  bio: string;
-  profilepicture: string;
-  posts: Post[];
-  location: Location;
-  saved_post: Post[];
+  FireID: string;
+  FullName: string;
+  Username: string;
+  Email: string;
+  Bio: string;
+  Location: Location;
+  DOB: string;
+  Followers: string[]; // Assuming followers are represented by strings
+  Following: string[]; // Assuming following are represented by strings
+  MyPhotos: string[]; // Assuming photos are represented by strings
+  SavedPhotos: string[]; // Assuming saved photos are represented by strings
 }
 
 interface UserProfile {
@@ -38,9 +43,9 @@ interface UserProfile {
 const Profile: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
-
+  
+  if(getAuth().currentUser?.uid != id){
   const [userProfile, setUserProfile] = React.useState<UserProfile>({
- 
     id: '63f565f8df6db2c34aed8997',
     name: 'Gatico',
     bio: 'Bio',
@@ -84,17 +89,20 @@ const Profile: React.FC = () => {
       },
     ],
   });
+  }else{
 
   const [mongoProfile, setMongoProfile] = React.useState<MongoProfile | null>(null);
-
   React.useEffect(() => {
-    if (userProfile.id) {
+    const auth = getAuth();
+    if (auth) {
+      const uid = auth.currentUser?.uid;
       fetch(`http://localhost:8080/api/users/${userProfile.id}/get`)
         .then((response) => response.json())
         .then((data) => setMongoProfile(data))
         .catch((error) => console.error('Error fetching user data:', error));
     }
   }, []);
+  
   
   useEffect(() => {
     console.log(mongoProfile)

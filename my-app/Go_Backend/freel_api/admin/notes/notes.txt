@@ -1,4 +1,0 @@
-I created this general functions to add support to changing databse scheme
-
-I add template code to be able to create post edit get info from any mongo database or collection
-

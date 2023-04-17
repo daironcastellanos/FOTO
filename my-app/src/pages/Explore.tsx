@@ -1,1 +1,0 @@
-//page: where users can see their own posts and information, and also the posts of other users.

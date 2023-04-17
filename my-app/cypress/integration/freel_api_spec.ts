@@ -10,4 +10,4 @@ describe('GET /api/users/get', () => {
     });
   });
 
-  
+  export {};

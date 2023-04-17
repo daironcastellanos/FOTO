@@ -32,10 +32,11 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onUploadSuccess, onUpload
 
         onUploadSuccess(await response.json());
       } catch (error) {
-        onUploadError(error);
+        onUploadError(error as Error);
       }
     }
   };
+  
 
   return (
     <div>
