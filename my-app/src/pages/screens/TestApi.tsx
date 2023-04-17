@@ -213,6 +213,27 @@ const TestApi: React.FC = () => {
     }
   };
 
+  const search_username = async () => {
+    console.log("Trying to get user by username");
+    console.log("id", id)
+  
+    const username = id;
+  
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/users/${username}/get`
+      );
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(`Error fetching user with username ${username}:`, error);
+    }
+  };
+
+
   return (
       <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold">Test API Routes</h1>
@@ -231,6 +252,26 @@ const TestApi: React.FC = () => {
       >
         Get All Users
       </button>
+
+      <div className="flex mb-4">
+          <label htmlFor="search by username" className="mr-2">
+          </label>
+          <input
+            type="text"
+            id="photoId"
+            placeholder="Username"
+            onChange={handleIdChange}
+            className="border border-gray-400 p-2"
+          />
+        </div>
+
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+          onClick={search_username}
+        >
+          Seach User
+        </button>
+
 
 
       <div className="flex mb-4">
@@ -254,18 +295,6 @@ const TestApi: React.FC = () => {
         </button>
 
 
-
-
-
-
-
-
-
-
-      
-     
-
-
       {/* Render buttons for other routes */}
       <div className="mb-8">
         <h2 className="text-xl font-bold">Photo Routes</h2>
@@ -278,9 +307,6 @@ const TestApi: React.FC = () => {
         {randomPhotoUrl && (
           <ImageDisplay src={randomPhotoUrl} alt="Random Photo" />
         )}
-
-        
-        
 
         <div className="mb-8">
           <div className="flex mb-4">

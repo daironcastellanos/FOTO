@@ -20,6 +20,8 @@ import (
 	"time"
 	"math/rand"
 	"go.mongodb.org/mongo-driver/mongo/options"
+
+	"fmt"
 	
 )
 
@@ -315,5 +317,40 @@ func TestGet_User(t *testing.T) {
 	expectedID, _ := primitive.ObjectIDFromHex(id)
 	if user.ID != expectedID {
 		t.Errorf("User ID mismatch: expected %s, got %s", expectedID, user.ID)
+	}
+}
+
+
+func GetUserByUsername(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("getting")
+
+
+	// Get the Username from the URL parameter
+	params := mux.Vars(r)
+	username := params["username"]
+
+	fmt.Println("getting user", username)
+
+	// Get a MongoDB client and collection
+	client := mongo.GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	// Query the collection for the user with the given Username
+	var user bson.M
+	err := collection.FindOne(context.Background(), bson.M{"Username": username}).Decode(&user)
+	if err != nil {
+		log.Printf("Error finding document: %v", err)
+		http.Error(w, fmt.Sprintf(`{"error": "Error finding document: %v"}`, err), http.StatusInternalServerError)
+		return
+	}
+
+	// Return the user as JSON
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(user)
+	if err != nil {
+		log.Printf("Error encoding response: %v", err)
+		http.Error(w, "Error encoding response", http.StatusInternalServerError)
+		return
 	}
 }

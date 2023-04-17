@@ -304,6 +304,7 @@ func Freel_Api() {
 	r.HandleFunc("/api/upload/{fireID}", uploadPhotoHandler).Methods("POST")
 	r.HandleFunc("/api/create/user", CreateUser).Methods("POST")
 	r.HandleFunc("/api/users/{fireID}/get", get.GetUserByFireID).Methods("GET")
+	r.HandleFunc("/api/users/{username}/get", get.GetUserByUsername).Methods("GET")
 	r.HandleFunc("/api/users/get", get.GetAllUsers).Methods("GET")
 	r.HandleFunc("/api/random_pic/get", get.GetRandomImage).Methods("GET")
 	r.HandleFunc("/api/users/{fireID}/update_bio", Update_Bio).Methods("Post")
