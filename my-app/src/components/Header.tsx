@@ -67,10 +67,10 @@ const SigninHeader = () => {
         </div>
     
       <div className='flex items-center space-x-5 text-green-600'> 
-      <Link href="/signin">
+      <Link href="/screens/Login">
         <h3>Sign in</h3>
         </Link>
-        <Link href="/signup">
+        <Link href="/screens/SignUpForm">
         <h3 className='text-white bg-blue-600 px-4 py-3 rounded-full'>Get started</h3>
         </Link>
       </div>

@@ -48,7 +48,7 @@ export default function Home() {
                 </h1>
               </Link>
             ) : (
-              <Link href="/signup">
+              <Link href="/screens/SignUpForm">
                 <h1 className="text-3xl text-white bg-green-600 px-4 py-3 rounded text-center">
                   Get started
                 </h1>

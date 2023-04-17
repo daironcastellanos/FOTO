@@ -51,18 +51,17 @@ const Login = () => {
     };
     // Render the form
     return (
-        
-
-        // Use Tailwind CSS to style the form
-        <div className="fixed top-0 left-0 h-screen w-screen flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg">
-
-            <div>
-                <img src="./images/Logo.png" alt="" width="249" height="107"/>
+        <div className="fixed top-0 left-0 h-screen w-screen flex items-center justify-center bg-gradient-to-r from-blue-200 via-green-200 to-purple-200">
+          <Link href="/">
+            <h1 className="absolute top-3 left-3 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">
+              Back
+            </h1>
+          </Link>
+          <div className="bg-white p-8 rounded-xl shadow-md">
+            <div className="flex justify-center">
+              <img src="/images/Logo.png" alt="" width="249" height="107"/>
             </div>
-                <h1 className="text-2xl font-medium mb-4 text-purple-600 ">Welcome to Freel</h1>
-      
-                
+            <h1 className="text-3xl font-medium mb-6 text-purple-600 text-center">Welcome to Freel</h1> 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label className="block text-gray-700 font-medium mb-2" htmlFor="email">
@@ -90,30 +89,31 @@ const Login = () => {
                             required 
                         />
                     </div>
-                    <Link href="/screens/HomePage">
-                    <button className="bg-indigo-500 text-white py-2 px-8 rounded-lg hover:bg-indigo-600">
-                        Log in
-                    </button>
-                    </Link>
-                    <Link href="/screens/SignUpForm">
-                    <button  className="block mt-4 text-center text-indigo-500">
-                        Don't have an account? Sign up
-                    </button>
-                    </Link>
+                    <div className="flex justify-center mt-4">
+            <Link href="/screens/HomePage">
+              <button className="bg-indigo-500 text-white py-2 px-6 rounded-lg hover:bg-indigo-600">
+                Log in
+              </button>
+            </Link>
+          </div>
+          <div className="text-center mt-4">
+            <Link href="/screens/SignUpForm">
+              <button className="text-indigo-500">
+                Don't have an account? Sign up
+              </button>
+            </Link>
+          </div>
+          <div className="text-center mt-4">
+            <Link href="/screens/GoogleSignIn">
+              <button className="text-indigo-500">
+                Sign In with Google
+              </button>
+            </Link>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
-                    <Link href="/screens/GoogleSignIn">
-                    <button  className="block mt-4 text-center text-indigo-500">
-                        Sign In with Google
-                    </button>
-                    </Link>
-                </form>
-                
-            </div>
-        </div>
-    )
-}
-
-
-
-// Export the component
 export default Login;
