@@ -1,0 +1,19 @@
+{
+    "builds": [
+      {
+        "src": "pages/api/hello.go",
+        "use": "@vercel/go"
+      },
+      {
+        "src": "package.json",
+        "use": "@vercel/next"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "/api/$1"
+      }
+    ]
+  }
+  
