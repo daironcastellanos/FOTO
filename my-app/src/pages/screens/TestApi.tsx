@@ -214,7 +214,7 @@ const TestApi: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+      <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold">Test API Routes</h1>
       <p className="text-lg">Click the buttons below to test the API routes.</p>
 
@@ -231,15 +231,40 @@ const TestApi: React.FC = () => {
       >
         Get All Users
       </button>
-      <div className="mb-8">
-        <h2 className="text-xl font-bold">Location Routes</h2>
+
+
+      <div className="flex mb-4">
+          <label htmlFor="new bio" className="mr-2">
+            Update Bio:
+          </label>
+          <input
+            type="text"
+            id="photoId"
+            placeholder="Photo ID"
+            onChange={handleBioInputChange}
+            className="border border-gray-400 p-2"
+          />
+        </div>
+
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
-          onClick={getNearbyUsers}
+          onClick={updateBio}
         >
-          Get Nearby Users
+          Update Bio
         </button>
-      </div>
+
+
+
+
+
+
+
+
+
+
+      
+     
+
 
       {/* Render buttons for other routes */}
       <div className="mb-8">
@@ -253,6 +278,30 @@ const TestApi: React.FC = () => {
         {randomPhotoUrl && (
           <ImageDisplay src={randomPhotoUrl} alt="Random Photo" />
         )}
+
+        
+        
+
+        <div className="mb-8">
+          <div className="flex mb-4">
+            <label htmlFor="fileInput" className="mr-2">
+              Select a photo:
+            </label>
+            <input
+              type="file"
+              id="fileInput"
+              onChange={handleFileChange}
+              className="border border-gray-400 p-2"
+            />
+          </div>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+            onClick={uploadPhoto}
+          >
+            Upload photo
+          </button>
+        </div>
+
         <div className="flex mb-4">
           <label htmlFor="photoId" className="mr-2">
             Photo ID:
@@ -278,27 +327,19 @@ const TestApi: React.FC = () => {
         {/* Add inputs for other routes if required */}
 
         <div className="mb-8">
-          <h2 className="text-xl font-bold">Uploading a photo</h2>
-          <div className="flex mb-4">
-            <label htmlFor="fileInput" className="mr-2">
-              Select a photo:
-            </label>
-            <input
-              type="file"
-              id="fileInput"
-              onChange={handleFileChange}
-              className="border border-gray-400 p-2"
-            />
-          </div>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
-            onClick={uploadPhoto}
-          >
-            Upload photo
-          </button>
-        </div>
+        <h2 className="text-xl font-bold">Location Routes</h2>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+          onClick={getNearbyUsers}
+        >
+          Get Nearby Users
+        </button>
+      </div>
+
+       
 
         </div>
+      </div>
     );
 };
 export default TestApi;

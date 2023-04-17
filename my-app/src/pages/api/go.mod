@@ -5,15 +5,10 @@ go 1.20
 require (
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
-<<<<<<< HEAD:my-app/src/pages/api/go.mod
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/cors v1.9.0
-	go.mongodb.org/mongo-driver v1.11.4
-	gorm.io/gorm v1.25.0
-=======
 	go.mongodb.org/mongo-driver v1.10.2
 	gorm.io/gorm v1.24.5
->>>>>>> bfd700847b8c15c9fe2a739c703d86565542f847:my-app/Go_Backend/go.mod
 )
 
 require (

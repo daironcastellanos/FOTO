@@ -11,7 +11,6 @@ import (
 
 	"Freel.com/freel_api/get"
 	"Freel.com/freel_api/put"
-	"Freel.com/freel_api/admin/location"
 	"Freel.com/freel_api/mongo"
 )
 
