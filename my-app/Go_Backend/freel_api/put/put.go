@@ -4,12 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 
 	"Freel.com/freel_api/mongo"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/gridfs"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"gorm.io/gorm"
 )
 
@@ -97,8 +101,11 @@ type UserUpdate struct {
 	Bio string `json:"bio"`
 }
 
+
+
+
 func Update_Bio(w http.ResponseWriter, r *http.Request) {
-	// Get the user ID from the URL parameter
+	// Get the user ID and bio string from the URL parameters
 	params := mux.Vars(r)
 	objectID, err := primitive.ObjectIDFromHex(params["id"])
 	if err != nil {
@@ -106,19 +113,13 @@ func Update_Bio(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Parse the request body to get the new bio
-	var userUpdate UserUpdate
-	err = json.NewDecoder(r.Body).Decode(&userUpdate)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
+	bio := params["bio"]
 
 	// Update the user's bio in the database
 	client := mongo.GetMongoClient()
 	collection := client.Database("freel").Collection("users")
 	filter := bson.M{"_id": objectID}
-	update := bson.M{"$set": bson.M{"bio": userUpdate.Bio}}
+	update := bson.M{"$set": bson.M{"bio": bio}}
 	_, err = collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -128,11 +129,83 @@ func Update_Bio(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "User with ID %s updated successfully\n", params["id"])
 }
 
-func update_post() {
+func Upload_Photo(data []byte) (primitive.ObjectID, error) {
+	// Get the MongoDB client and the GridFS bucket for photos
+	client := mongo.GetMongoClient()
+	bucket, err := gridfs.NewBucket(
+		client.Database("freel"),
+		options.GridFSBucket().SetName("images"),
+	)
+	if err != nil {
+		log.Println(err)
+		return primitive.NilObjectID, err
+	}
 
+	// Upload the image data to the bucket
+	uploadStream, err := bucket.OpenUploadStream("photo")
+	if err != nil {
+		log.Println(err)
+		return primitive.NilObjectID, err
+	}
+	defer uploadStream.Close()
+
+	_, err = uploadStream.Write(data)
+	if err != nil {
+		log.Println(err)
+		return primitive.NilObjectID, err
+	}
+
+	// Get the ObjectID of the uploaded photo
+	photoID, ok := uploadStream.FileID.(primitive.ObjectID)
+	if !ok {
+		log.Println("Error asserting FileID to primitive.ObjectID")
+		return primitive.NilObjectID, fmt.Errorf("Error asserting FileID to primitive.ObjectID")
+	}
+
+	// Return the photo ID
+	return photoID, nil
 }
 
- 
+func Post_Pic(w http.ResponseWriter, r *http.Request){
+	// Get the user ID from the URL parameter
+	params := mux.Vars(r)
+	userID, err := primitive.ObjectIDFromHex(params["id"])
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
 
+	// Get the image data from the request body
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+
+	// Upload photo to GridFS
+	photoID, err := Upload_Photo(data)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Get the MongoDB client and the users collection
+	client := mongo.GetMongoClient()
+	userCollection := client.Database("freel").Collection("users")
+
+	// Find the user and update their posts array with the photo ID
+	filter := bson.M{"_id": userID}
+	update := bson.M{"$addToSet": bson.M{"posted_pics": photoID}}
+	_, err = userCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Return a success message
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Post added successfully")
+}
 
 

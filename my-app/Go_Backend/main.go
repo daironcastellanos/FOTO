@@ -1,9 +1,7 @@
 package main
 
 import (
-	
-	"Freel.com/freel_api/post"
-	
+	"Freel.com/freel_api"
 )
 
 func main() {
@@ -44,9 +42,15 @@ func main() {
 	//location.All_User_In_10km(mongoURI, test_user_input_id)
 	//location.Distance_Between_Two_Users(mongoURI, test_user_input_id, test_user_input_id2)
 
-	post.Create_Fake_Account()
+	//post.Create_Fake_Account()
 
 	//freel_api.Freel_Api()
 
 	//post.Create_Fake_Account()
+
+	//mongo.UploadImagesToPhotoBucket("images", "WEBP/")
+	//mongo.UploadImagesToPhotoBucket("freel", "WEBP/")
+	
+
+	freel_api.Freel_Api()
 }

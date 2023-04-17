@@ -5,8 +5,10 @@ import (
 	"fmt"
 
 	"Freel.com/freel_api/mongo"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
+
+	"testing"
+
 	"gorm.io/gorm"
 )
 
@@ -132,74 +134,8 @@ func Create_Fake_Account() {
 
 }
 
-/*
-func Upload_Photo(w http.ResponseWriter, r *http.Request) {
-	// Get the photo file from the request body
-	file, header, err := r.FormFile("photo")
-	if err != nil {
-		http.Error(w, "Bad Request", http.StatusBadRequest)
-		return
-	}
-	defer file.Close()
 
-	// Get the MongoDB client and the GridFS bucket for photos
-	client := mongo.GetMongoClient()
-	bucket, err := gridfs.NewBucket(
-		client.Database("freel"),
-		options.GridFSBucket().SetName("photos"),
-	)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
 
-	// Upload the file to the bucket
-	uploadStream, err := bucket.OpenUploadStream(header.Filename)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-	defer uploadStream.Close()
-
-	_, err = io.Copy(uploadStream, file)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-
-	// Get the ObjectID of the uploaded photo
-	photoID := uploadStream.FileID()
-
-	// Get the user ID from the URL parameter and convert it to an ObjectID
-	params := mux.Vars(r)
-	userID, err := primitive.ObjectIDFromHex(params["id"])
-	if err != nil {
-		http.Error(w, "Invalid ID", http.StatusBadRequest)
-		return
-	}
-
-	// Get the MongoDB client and the users collection
-	userCollection := client.Database("freel").Collection("users")
-
-	// Find the user and update their profile picture
-	filter := bson.M{"_id": userID}
-	update := bson.M{"$set": bson.M{"profilepicture": photoID.Hex()}}
-	_, err = userCollection.UpdateOne(context.Background(), filter, update)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-
-	// Return a success message
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "Photo uploaded successfully")
-}
-
-*/
 
 /*
 
@@ -281,3 +217,43 @@ func Add_Post(w http.ResponseWriter, r *http.Request) {
 	}
 }
 */
+
+
+func Test_Create_Fake_Account(t *testing.T) {
+	fmt.Println("Creating sample data to insert into mongo since no data was given")
+
+	post1 := Post{
+		Title: "My First Post",
+		Body:  "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		Tags:  []string{"programming", "photography"},
+		Date:  "2022-01-01T12:00:00Z",
+		Image: "https://example.com/post1.jpg",
+	}
+
+	post2 := Post{
+		Title: "My Second Post",
+		Body:  "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+		Tags:  []string{"travel", "food"},
+		Date:  "2022-01-05T12:00:00Z",
+		Image: "https://example.com/post2.jpg",
+	}
+
+	test_user := User{
+		Name:           "Eric fake",
+		Bio:            "I'm a software engineer and hobbyist photographer.",
+		ProfilePicture: "https://example.com/profile.jpg",
+		Posts: []Post{
+			post1,
+			post2,
+		},
+		Location: Location{
+			Type:        "Point",
+			Coordinates: []float64{-122.4194, 37.7749},
+		},
+		SavedPosts: []Post{
+			post1,
+		},
+	}
+
+	Create_Account(test_user)
+}
