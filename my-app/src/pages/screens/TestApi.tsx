@@ -298,29 +298,7 @@ const TestApi: React.FC = () => {
           </button>
         </div>
 
-        <div className="mb-8">
-          <h2 className="text-xl font-bold">Update Bio</h2>
-          <div className="flex mb-4">
-            <label htmlFor="bioInput" className="mr-2">
-              New Bio:
-            </label>
-            <input
-              type="text"
-              id="bioInput"
-              placeholder="New bio"
-              onChange={handleBioInputChange}
-              className="border border-gray-400 p-2"
-            />
-          </div>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
-            onClick={updateBio}
-          >
-            Update Bio
-          </button>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 export default TestApi;
