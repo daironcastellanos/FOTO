@@ -82,7 +82,7 @@ const Login = () => {
                         />
                     </div>
                     <div className="flex justify-center mt-4">
-            <Link href="/screens/HomePage">
+            <Link href="/Home">
               <button className="bg-indigo-500 text-white py-2 px-6 rounded-lg hover:bg-indigo-600">
                 Log in
               </button>
