@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import UserStatistics from '@/components/userStats';
 
@@ -86,11 +87,11 @@ const Profile: React.FC = () => {
         />
       </div>
       <div className="absolute top-4 left-4">
-        <button onClick={handleBackButtonClick}>
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
+      <Link href="/Home">
+            <h1 className="absolute top-3 left-3 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">
+              Back
+            </h1>
+          </Link>
       </div>
       <div className="text-center mt-2">
         <h2 className="text-2xl font-bold">{userProfile.name}</h2>

@@ -24,7 +24,7 @@ const Menu: React.FC = () => {
               <span>Home</span>
             </span>
           </Link>
-          <Link href="/profile">
+          <Link href="/Profile">
             <span className="menu-link text-gray-700 font-semibold text-xl hover:text-blue-600 text-center flex items-center justify-center space-x-2">
               <i className="fas fa-user"></i>
               <span>Profile</span>
@@ -36,7 +36,7 @@ const Menu: React.FC = () => {
               <span>Upload</span>
             </span>
           </Link>
-          <Link href="/settings">
+          <Link href="/Settings">
             <span className="menu-link text-gray-700 font-semibold text-xl hover:text-blue-600 text-center flex items-center justify-center space-x-2">
               <i className="fas fa-cog"></i>
               <span>Settings</span>
@@ -50,10 +50,12 @@ const Menu: React.FC = () => {
           </Link>
         </div>
         <div className="mb-4">
+        <Link href="/">
           <button className="text-gray-700 font-semibold text-xl hover:text-red-600 text-center flex items-center justify-center space-x-2">
             <i className="fas fa-sign-out-alt"></i>
             <span>Sign Out</span>
           </button>
+          </Link>
         </div>
         <style jsx>{`
         .menu-link {

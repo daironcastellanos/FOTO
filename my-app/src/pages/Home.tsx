@@ -3,7 +3,7 @@ import Link from 'next/link';
 import PhotoFeed from '@/components/Photofeed';
 import ScrollingView from '@/components/ScrollView';
 import Menu from '@/components/Menu';
-import SuggestedFollowers from '@/components/suggestedFollowers';
+import SuggestedFollowers from '@/components/SuggestedFollowers';
 import Header from '@/components/Header';
 
 
