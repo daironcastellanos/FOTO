@@ -578,6 +578,80 @@ func followUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(ResponseMessage{"User followed successfully."})
 }
 
+func removePhotoFromSaved(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	vars := mux.Vars(r)
+	fireId := vars["fireId"]
+
+	decoder := json.NewDecoder(r.Body)
+    var photoId string
+    err := decoder.Decode(&photoId)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ResponseMessage{"Error saving photo."})
+		return
+	}
+
+	client := GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	filter := bson.M{"FireID": fireId}
+    update := bson.M{"$pull": bson.M{"SavedPhotos": photoId}}
+
+	_, err = collection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Printf("Photo with ID '%s' removed successfully for user with FireID '%s'.\n", photoId, fireId)
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(ResponseMessage{"Photo removed successfully."})
+}
+
+func unfollowUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	vars := mux.Vars(r)
+	fireId := vars["fireId"]
+
+
+	decoder := json.NewDecoder(r.Body)
+    var targetFireId string
+    err := decoder.Decode(&targetFireId)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ResponseMessage{"Error following user."})
+		return
+	}
+
+	client := GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	filter := bson.M{"FireID": fireId}
+    update := bson.M{"$pull": bson.M{"Following": targetFireId}}
+    _, err = collection.UpdateOne(context.Background(), filter, update)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	filter = bson.M{"FireID": targetFireId}
+    update = bson.M{"$pull": bson.M{"Followers": fireId}}
+    _, err = collection.UpdateOne(context.Background(), filter, update)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Printf("User with FireID '%s' unfollowed user with FireID '%s'.\n", fireId, targetFireId)
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(ResponseMessage{"User unfollowed successfully."})
+}
+
 
 func Freel_Api() {
 	
@@ -594,7 +668,8 @@ func Freel_Api() {
 	r.HandleFunc("/api/users/{fireID}/uploadProfilePicture", uploadProfilePictureHandler).Methods("POST")
 	r.HandleFunc("/api/users/{fireID}/getProfilePicture", GetProfilePicture).Methods("GET")
 
-
+	r.HandleFunc("/api/users/{fireId}/removePhoto", removePhotoFromSaved).Methods("POST")
+    r.HandleFunc("/api/users/{fireId}/unfollow", unfollowUser).Methods("POST")
 
 	r.HandleFunc("/api/users/{fireId}/savePhoto", addPhotoToSaved).Methods("POST")
     r.HandleFunc("/api/users/{fireId}/follow", followUser).Methods("POST")

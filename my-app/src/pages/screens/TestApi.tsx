@@ -350,6 +350,55 @@ async function followUser() {
   }
 }
 
+// Remove photo from user's SavedPhotos array
+async function removePhotoFromSaved() {
+  const user = await getUser();
+  const fireID = user?.uid;
+  const photoId = savedphotoId;
+  try {
+    const response = await fetch(`http://localhost:8080/api/users/${fireID}/removePhoto`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(photoId)
+    });
+
+    if (response.ok) {
+      console.log("Photo removed successfully.");
+    } else {
+      console.log("Error removing photo.");
+    }
+  } catch (error) {
+    console.error("Error in removePhotoFromSaved:", error);
+  }
+}
+
+// Unfollow another user
+async function unfollowUser() {
+  const user = await getUser();
+  const fireID = user?.uid;
+  const targetFireId = followerId;
+  try {
+    const response = await fetch(`http://localhost:8080/api/users/${fireID}/unfollow`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(targetFireId)
+    });
+
+    if (response.ok) {
+      console.log("User unfollowed successfully.");
+    } else {
+      console.log("Error unfollowing user.");
+    }
+  } catch (error) {
+    console.error("Error in unfollowUser:", error);
+  }
+}
+
+
 
 
   return (
@@ -524,6 +573,12 @@ async function followUser() {
 >
   Save Photo
 </button>
+<button
+  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+  onClick={removePhotoFromSaved}
+>
+  Un Save Photo
+</button>
 
 
 
@@ -546,6 +601,12 @@ async function followUser() {
   Follow User
 </button>
 
+<button
+  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+  onClick={unfollowUser}
+>
+  UnFollow User
+</button>
 
 
 
