@@ -1,29 +1,72 @@
-import React, { useState, useRef, useContext } from 'react';
-import {app} from '../../firebase/firebase'
-import { getAuth } from '@firebase/auth';
+import React, { useState, useRef, useContext } from "react";
+import { app, db } from "../../firebase/firebase";
+import { getAuth } from "@firebase/auth";
+import { addDoc, collection } from "firebase/firestore";
 import Link from "next/link";
 import {auth} from '../../firebase/firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useRouter } from "next/router";
+import { CreateUserInMongo } from "@/call_bakend/working/backend";
 
 const Signup = () => {
-
     const auth = getAuth(app);
-    
-    const [fullName, setFullName] = useState('');
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [dob, setDOB] = useState('');
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // Handle form submission here, such as sending a request to your server's signup endpoint
-        if(email.length && password.length){
-        createUserWithEmailAndPassword(auth, email, password).then((res) => {             console.log(res.user)           })
-        setEmail(email)
-        setPassword(password)
+  
+    const [fullName, setFullName] = useState("");
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [dob, setDOB] = useState("");
+    const [bio, setBio] = useState("");
+    const [location, setLocation] = useState({ Coordinates: [0.0, 0.0] });
+    const router = useRouter();
+  
+    const handleSubmit = async (e: { preventDefault: () => void }) => {
+      e.preventDefault();
+  
+      if (email.length && password.length) {
+        console.log("Creating user with email and password...");
+        const { user } = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+  
+        const userData = {
+          FireID: user.uid,
+          FullName: fullName,
+          Username: username,
+          Email: email,
+          Bio: bio,
+          Location: location,
+          DOB: dob,
+          Followers: [],
+          Following: [],
+          MyPhotos: [],
+          SavedPhotos: [],
+        };
+  
+        // Send a request to your Go backend using Axios
+        if (await CreateUserInMongo(userData)) {
+          router.push("/screens/Login");
+        } else {
+          console.log("Error creating user in mongo");
         }
-    }
+      }
+    };
+  
+    const getLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) =>
+            setLocation({
+              Coordinates: [position.coords.latitude, position.coords.longitude],
+            }),
+          (error) => console.error("Error getting location:", error)
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+    };
         
 
        
