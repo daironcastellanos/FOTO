@@ -31,7 +31,7 @@ const Header = ({ isLoggedIn }: HeaderProps) => {
 
 const SigninHeader = () => {
   return (
-    <header className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 sticky top-0 z-10">
+    <header className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 sticky top-0 z-10">
       <nav className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
