@@ -238,6 +238,8 @@ func Get_Nearby_users(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	
+
 	// Find all users within a 10 km radius of the specified location
 	filter := bson.M{
 		"location": bson.M{
@@ -250,7 +252,6 @@ func Get_Nearby_users(w http.ResponseWriter, r *http.Request) {
 			},
 		},
 	}
-	
 
 	cursor, err := collection.Find(context.Background(), filter)
 	if err != nil {
@@ -272,6 +273,8 @@ func Get_Nearby_users(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+
 
 func Test_Get_User(t *testing.T) {
 

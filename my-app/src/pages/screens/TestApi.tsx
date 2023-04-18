@@ -87,7 +87,7 @@ const TestApi: React.FC = () => {
     const user = await getUser();
     const fireID = user?.uid;
 
-    console.log(fireID)
+    console.log(fireID);
 
     try {
       const response = await fetch(
@@ -155,6 +155,29 @@ const TestApi: React.FC = () => {
     }
   };
 
+
+  async function getProfilePicture() {
+    const user = await getUser();
+    const fireID = user?.uid;
+    try {
+      const response = await fetch(`http://localhost:8080/api/users/${fireID}/getProfilePicture`);
+      if (response.ok) {
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        setPhotoUrl(imageUrl);
+      } else {
+        console.error("Error fetching profile picture:", response.statusText);
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching profile picture:", error);
+      return null;
+    }
+  }
+  
+
+
+
   const uploadPhoto = async () => {
     if (!uploadedFile) {
       console.error("No file selected for upload");
@@ -189,6 +212,42 @@ const TestApi: React.FC = () => {
     }
   };
 
+
+  const uploadProfilePhoto = async () => {
+    if (!uploadedFile) {
+      console.error("No file selected for upload");
+      return;
+    } else {
+      const user = await getUser();
+      const fireID = user?.uid;
+  
+      const formData = new FormData();
+      formData.append("file", uploadedFile);
+  
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/users/${fireID}/uploadProfilePicture`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        if (
+          response.ok &&
+          response.headers.get("Content-Type")?.includes("application/json")
+        ) {
+          const data = await response.json();
+          console.log(data);
+        } else {
+          console.error("Error uploading photo:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error uploading photo:", error);
+      }
+    }
+  };
+  
+
   const updateBio = async () => {
     const user = await getUser();
     const fireID = user?.uid;
@@ -217,10 +276,10 @@ const TestApi: React.FC = () => {
 
   const search_username = async () => {
     console.log("Trying to get user by username");
-    console.log("id", id)
-  
+    console.log("id", id);
+
     const username = id;
-  
+
     try {
       const response = await fetch(
         `http://localhost:8080/api/username/${username}/get`
@@ -235,9 +294,8 @@ const TestApi: React.FC = () => {
     }
   };
 
-
   return (
-      <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold">Test API Routes</h1>
       <p className="text-lg">Click the buttons below to test the API routes.</p>
 
@@ -256,46 +314,42 @@ const TestApi: React.FC = () => {
       </button>
 
       <div className="flex mb-4">
-          <label htmlFor="search by username" className="mr-2">
-          </label>
-          <input
-            type="text"
-            id="photoId"
-            placeholder="Username"
-            onChange={handleIdChange}
-            className="border border-gray-400 p-2"
-          />
-        </div>
+        <label htmlFor="search by username" className="mr-2"></label>
+        <input
+          type="text"
+          id="photoId"
+          placeholder="Username"
+          onChange={handleIdChange}
+          className="border border-gray-400 p-2"
+        />
+      </div>
 
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
-          onClick={search_username}
-        >
-          Seach User
-        </button>
-
-
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+        onClick={search_username}
+      >
+        Seach User
+      </button>
 
       <div className="flex mb-4">
-          <label htmlFor="new bio" className="mr-2">
-            Update Bio:
-          </label>
-          <input
-            type="text"
-            id="photoId"
-            placeholder="Photo ID"
-            onChange={handleBioInputChange}
-            className="border border-gray-400 p-2"
-          />
-        </div>
+        <label htmlFor="new bio" className="mr-2">
+          Update Bio:
+        </label>
+        <input
+          type="text"
+          id="photoId"
+          placeholder="Photo ID"
+          onChange={handleBioInputChange}
+          className="border border-gray-400 p-2"
+        />
+      </div>
 
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
-          onClick={updateBio}
-        >
-          Update Bio
-        </button>
-
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+        onClick={updateBio}
+      >
+        Update Bio
+      </button>
 
       {/* Render buttons for other routes */}
       <div className="mb-8">
@@ -354,20 +408,45 @@ const TestApi: React.FC = () => {
 
         {/* Add inputs for other routes if required */}
 
+
         <div className="mb-8">
-        <h2 className="text-xl font-bold">Location Routes</h2>
+          <div className="flex mb-4">
+            <label htmlFor="fileInput" className="mr-2">
+              Chose profile picture 
+            </label>
+            <input
+              type="file"
+              id="fileInput"
+              onChange={handleFileChange}
+              className="border border-gray-400 p-2"
+            />
+          </div>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+            onClick={uploadProfilePhoto}
+          >
+            Upload Profile Picture
+          </button>
+        </div>
+
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
-          onClick={getNearbyUsers}
+          onClick={getProfilePicture}
         >
-          Get Nearby Users
+          Get Profile Photo
         </button>
-      </div>
 
-       
-
+        <div className="mb-8">
+          <h2 className="text-xl font-bold">Location Routes</h2>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+            onClick={getNearbyUsers}
+          >
+            Get Nearby Users
+          </button>
         </div>
       </div>
-    );
+    </div>
+  );
 };
 export default TestApi;

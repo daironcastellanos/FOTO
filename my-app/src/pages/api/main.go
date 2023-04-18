@@ -57,6 +57,7 @@ type User struct {
 	Following   []string           `bson:"Following" json:"Following"`
 	MyPhotos    []string           `bson:"MyPhotos" json:"MyPhotos"`
 	SavedPhotos []string           `bson:"SavedPhotos" json:"SavedPhotos"`
+	ProfilePicture string `bson:"ProfilePicture" json:"ProfilePicture"`
 }
 
 type Picture struct {
@@ -168,6 +169,8 @@ func Update_Bio(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "User with fireID %s updated successfully\n", FireID)
   }
 
+
+
 func uploadPhotoHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Uploading photo")
 	
@@ -257,6 +260,82 @@ func addUserPhoto(userID, photoID primitive.ObjectID) error {
 	return err
 }
 
+
+func AddProfilePictureFieldToAllUsers() {
+    // Get a MongoDB client and collection
+    client := GetMongoClient()
+    collection := client.Database("freel").Collection("users")
+
+    // Define the update to add the ProfilePicture field with an empty string
+    update := bson.M{
+        "$set": bson.M{
+            "ProfilePicture": "",
+        },
+    }
+
+    // Update all documents in the collection
+    result, err := collection.UpdateMany(context.Background(), bson.M{}, update)
+    if err != nil {
+        log.Printf("Error updating documents: %v", err)
+        return
+    }
+
+    log.Printf("Updated %d documents", result.ModifiedCount)
+}
+
+
+func uploadProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Uploading profile picture")
+	
+	vars := mux.Vars(r)
+	fireID := vars["fireID"]
+
+	user, err := findUserByFireID(fireID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	file, header, err := r.FormFile("file")
+	if err != nil {
+		http.Error(w, "Error retrieving file", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	photoID, err := uploadPhoto(file, header.Filename)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	err = updateUserProfilePicture(user.ID, photoID.Hex())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Profile picture uploaded successfully")
+}
+
+
+
+func updateUserProfilePicture(userID primitive.ObjectID, photoID string) error {
+	fmt.Println("Updating user's profile picture")
+	client := GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	filter := bson.M{"_id": userID}
+	update := bson.M{"$set": bson.M{"ProfilePicture": photoID}}
+
+	_, err := collection.UpdateOne(context.Background(), filter, update)
+
+	return err
+}
+
+
+
 func Get_Photo(w http.ResponseWriter, r *http.Request) {
     fmt.Println("Getting photo")
     params := mux.Vars(r)
@@ -295,9 +374,68 @@ func Get_Photo(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+func GetProfilePicture(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	fireID := params["fireID"]
+
+	fmt.Println("Getting profile picture for user with fireID: ", fireID)
+
+	// Get a MongoDB client and collection
+	client := GetMongoClient()
+	userCollection := client.Database("freel").Collection("users")
+
+	// Find the user with the specified FireID
+	var user User
+	err := userCollection.FindOne(context.Background(), bson.M{"FireID": fireID}).Decode(&user)
+	if err != nil {
+		log.Printf("Error finding user: %v", err)
+		http.Error(w, "Error finding user", http.StatusInternalServerError)
+		return
+	}
+
+	// Get the user's profile picture ID
+	photoID := user.ProfilePicture
+
+	// Convert the photoID string to an ObjectID
+    objectId, err := primitive.ObjectIDFromHex(photoID)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
+
+	fmt.Println("Profile picture ID: ", objectId)
+
+	// Find the picture with the specified ID
+	// Find the picture in the "pictures" collection
+    var picture Picture
+    err = client.Database("freel").Collection("pictures").FindOne(context.Background(), bson.M{"_id": objectId}).Decode(&picture)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusNotFound)
+        return
+    }
+
+    fmt.Println("Picture: ", picture)
+
+    // Set the content type header
+    w.Header().Set("Content-Type", "image/jpeg")
+
+    // Write the picture data to the response
+    _, err = w.Write(picture.Data)
+    if err != nil {
+        fmt.Println("Error writing picture data to response:", err)
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+}
+
+
+
+
 func Freel_Api() {
 	
+	
 	r := mux.NewRouter()
+	
 	r.HandleFunc("/api/photos/{photoId}", Get_Photo).Methods("GET")
 	r.HandleFunc("/api/upload/{fireID}", uploadPhotoHandler).Methods("POST")
 	r.HandleFunc("/api/create/user", CreateUser).Methods("POST")
@@ -306,6 +444,8 @@ func Freel_Api() {
 	r.HandleFunc("/api/users/get", get.GetAllUsers).Methods("GET")
 	r.HandleFunc("/api/random_pic/get", get.GetRandomImage).Methods("GET")
 	r.HandleFunc("/api/users/{fireID}/update_bio", Update_Bio).Methods("Post")
+	r.HandleFunc("/api/users/{fireID}/uploadProfilePicture", uploadProfilePictureHandler).Methods("POST")
+	r.HandleFunc("/api/users/{fireID}/getProfilePicture", GetProfilePicture).Methods("GET")
 
 	/* Serves application */
 	//r.PathPrefix("/").Handler(http.FileServer(http.Dir("../.next")))
