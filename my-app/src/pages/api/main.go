@@ -56,7 +56,9 @@ type Picture struct {
 	Data     []byte             `bson:"data"`
 }
 
-
+type ResponseMessage struct {
+	Message string `json:"message"`
+}
 
 func GetMongoClient() *mongo.Client {
 	fmt.Println("Getting mongo client")
@@ -418,11 +420,166 @@ func GetProfilePicture(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+func AddFollower(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	fireID := params["fireID"]
+	followerID := params["followerID"]
 
+	client := GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	filter := bson.M{"FireID": fireID}
+	update := bson.M{"$push": bson.M{"Followers": followerID}}
+
+	_, err := collection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Follower added successfully")
+}
+
+func RemoveFollower(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	fireID := params["fireID"]
+	followerID := params["followerID"]
+
+	client := GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	filter := bson.M{"FireID": fireID}
+	update := bson.M{"$pull": bson.M{"Followers": followerID}}
+
+	_, err := collection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Follower removed successfully")
+}
+
+func AddFollowing(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	fireID := params["fireID"]
+	followingID := params["followingID"]
+
+	client := GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	filter := bson.M{"FireID": fireID}
+	update := bson.M{"$push": bson.M{"Following": followingID}}
+
+	_, err := collection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Following added successfully")
+}
+
+func RemoveFollowing(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	fireID := params["fireID"]
+	followingID := params["followingID"]
+
+	client := GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	filter := bson.M{"FireID": fireID}
+	update := bson.M{"$pull": bson.M{"Following": followingID}}
+
+	_, err := collection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Following removed successfully")
+}
+
+func addPhotoToSaved(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	vars := mux.Vars(r)
+	fireId := vars["fireId"]
+
+	decoder := json.NewDecoder(r.Body)
+    var photoId string
+    err := decoder.Decode(&photoId)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ResponseMessage{"Error saving photo."})
+		return
+	}
+
+	client := GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	filter := bson.M{"FireID": fireId}
+	update := bson.M{"$push": bson.M{"SavedPhotos": photoId}}
+
+	_, err = collection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Printf("Photo with ID '%s' saved successfully for user with FireID '%s'.\n", photoId, fireId)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(ResponseMessage{"Photo saved successfully."})
+}
+
+func followUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	vars := mux.Vars(r)
+	fireId := vars["fireId"]
+
+
+	decoder := json.NewDecoder(r.Body)
+    var targetFireId string
+    err := decoder.Decode(&targetFireId)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ResponseMessage{"Error following user."})
+		return
+	}
+
+	client := GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	filter := bson.M{"FireID": fireId}
+	update := bson.M{"$push": bson.M{"Following": targetFireId}}
+	_, err = collection.UpdateOne(context.Background(), filter, update)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	filter = bson.M{"FireID": targetFireId}
+	update = bson.M{"$push": bson.M{"Followers": fireId}}
+	_, err = collection.UpdateOne(context.Background(), filter, update)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Printf("User with FireID '%s' followed user with FireID '%s'.\n", fireId, targetFireId)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(ResponseMessage{"User followed successfully."})
+}
 
 
 func Freel_Api() {
-	
 	
 	r := mux.NewRouter()
 	
@@ -436,6 +593,20 @@ func Freel_Api() {
 	r.HandleFunc("/api/users/{fireID}/update_bio", Update_Bio).Methods("Post")
 	r.HandleFunc("/api/users/{fireID}/uploadProfilePicture", uploadProfilePictureHandler).Methods("POST")
 	r.HandleFunc("/api/users/{fireID}/getProfilePicture", GetProfilePicture).Methods("GET")
+
+
+
+	r.HandleFunc("/api/users/{fireId}/savePhoto", addPhotoToSaved).Methods("POST")
+    r.HandleFunc("/api/users/{fireId}/follow", followUser).Methods("POST")
+	
+
+	/* Follower Functions to implement logic */
+	r.HandleFunc("/api/users/{fireID}/addFollower/{followerID}", AddFollower).Methods("POST")
+	r.HandleFunc("/api/users/{fireID}/removeFollower/{followerID}", RemoveFollower).Methods("POST")
+	r.HandleFunc("/api/users/{fireID}/addFollowing/{followingID}", AddFollowing).Methods("POST")
+	r.HandleFunc("/api/users/{fireID}/removeFollowing/{followingID}", RemoveFollowing).Methods("POST")
+
+
 	
 	/* Gets nearby users */
 	r.HandleFunc("/api/nearby_users/{fireID}", get.Get_Nearby_users).Methods("GET")

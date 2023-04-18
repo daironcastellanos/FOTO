@@ -42,6 +42,8 @@ const TestApi: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [nearbyId, setNearbyId] = useState("");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [savedphotoId, setsavedPhotoId] = useState("");
+  const [followerId, setFollowerId] = useState("");
 
   const [randomPhotoUrl, setRandomPhotoUrl] = useState<string | null>(null);
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
@@ -60,6 +62,12 @@ const TestApi: React.FC = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUploadedFile(e.target.files?.[0] || null);
   };
+
+  const handleFollowerIdChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFollowerId(e.target.value);
+
+  const handlesavedPhotoIdChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setsavedPhotoId(e.target.value);
 
   const getUser = async () => {
     const user = auth.currentUser;
@@ -294,6 +302,56 @@ const TestApi: React.FC = () => {
     }
   };
 
+// Add photo to user's SavedPhotos array
+async function addPhotoToSaved() {
+  const user = await getUser();
+  const fireID = user?.uid;
+  const photoId = savedphotoId;
+  try {
+    const response = await fetch(`http://localhost:8080/api/users/${fireID}/savePhoto`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(photoId)
+    });
+
+    if (response.ok) {
+      console.log("Photo saved successfully.");
+    } else {
+      console.log("Error saving photo.");
+    }
+  } catch (error) {
+    console.error("Error in addPhotoToSaved:", error);
+  }
+}
+
+// Follow another user
+async function followUser() {
+  const user = await getUser();
+  const fireID = user?.uid;
+  const targetFireId = followerId;
+  try {
+    const response = await fetch(`http://localhost:8080/api/users/${fireID}/follow`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(targetFireId)
+    });
+
+    if (response.ok) {
+      console.log("User followed successfully.");
+    } else {
+      console.log("Error following user.");
+    }
+  } catch (error) {
+    console.error("Error in followUser:", error);
+  }
+}
+
+
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold">Test API Routes</h1>
@@ -445,6 +503,52 @@ const TestApi: React.FC = () => {
             Get Nearby Users
           </button>
         </div>
+
+
+
+        <div className="flex mb-4">
+          <label htmlFor="photoId" className="mr-2">
+            Photo ID to add to saved
+          </label>
+          <input
+            type="text"
+            id="photoId"
+            placeholder="Saved Photo ID"
+            onChange={handlesavedPhotoIdChange}
+            className="border border-gray-400 p-2"
+          />
+        </div>
+<button
+  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+  onClick={addPhotoToSaved}
+>
+  Save Photo
+</button>
+
+
+
+<div className="flex mb-4">
+          <label htmlFor="photoId" className="mr-2">
+            Follower ID:
+          </label>
+          <input
+            type="text"
+            id="photoId"
+            placeholder="Follower ID"
+            onChange={handleFollowerIdChange}
+            className="border border-gray-400 p-2"
+          />
+        </div>
+<button
+  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+  onClick={followUser}
+>
+  Follow User
+</button>
+
+
+
+
       </div>
     </div>
   );
