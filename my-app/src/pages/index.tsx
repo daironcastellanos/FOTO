@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import logo from '../../public/images/justlogo.png';
+import Image from 'next/image';
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,6 +28,18 @@ export default function Home() {
       <hr className="border-t-2 border-gray-300" />
 
       <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 min-h-screen flex flex-col justify-center items-center text-white">
+      <div className="w-70 flex justify-center items-center">
+        <Image
+          className="object-contain"
+          src={logo.src}
+          alt="Logo"
+          width={150}
+          height={40}
+          layout="responsive"
+          style={{ width: '200px', height: '80px' }}
+        />
+      </div>
+
         <div className="text-center space-y-4">
           <h1 className="text-6xl font-serif">Welcome to FREEL</h1>
           <h2 className="text-2xl font-semibold">Find your perfect photographer</h2>
