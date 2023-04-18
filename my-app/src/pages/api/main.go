@@ -15,7 +15,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"gorm.io/gorm"
 
 	"go.mongodb.org/mongo-driver/bson"
 
@@ -28,15 +27,6 @@ import (
 	
 	"mime/multipart"
 )
-
-type Post struct {
-	gorm.Model
-	Title string   `json:"title"`
-	Body  string   `json:"body"`
-	Tags  []string `json:"tags"`
-	Date  string   `json:"date"`
-	Image string   `json:"image"`
-}
 
 type Location struct {
     Lat         float64   `bson:"lat" json:"lat"`
@@ -446,13 +436,6 @@ func Freel_Api() {
 	r.HandleFunc("/api/users/{fireID}/update_bio", Update_Bio).Methods("Post")
 	r.HandleFunc("/api/users/{fireID}/uploadProfilePicture", uploadProfilePictureHandler).Methods("POST")
 	r.HandleFunc("/api/users/{fireID}/getProfilePicture", GetProfilePicture).Methods("GET")
-
-	/* Serves application */
-	//r.PathPrefix("/").Handler(http.FileServer(http.Dir("../.next")))
-
-	/* These work and have been added to test page */
-	
-	//r.HandleFunc("/api/users/{id}/post/get", get.GetUserById_post).Methods("GET")
 	
 	/* Gets nearby users */
 	r.HandleFunc("/api/nearby_users/{fireID}", get.Get_Nearby_users).Methods("GET")

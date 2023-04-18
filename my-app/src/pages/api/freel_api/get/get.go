@@ -55,7 +55,9 @@ type Post struct {
 
 
 type Location struct {
-	Coordinates []float64 `bson:"coordinates" json:"coordinates"`
+    Lat         float64   `bson:"lat" json:"lat"`
+    Lng         float64   `bson:"lng" json:"lng"`
+    Coordinates []float64 `bson:"coordinates" json:"coordinates"`
 }
 
 type User struct {
@@ -71,7 +73,15 @@ type User struct {
 	Following   []string           `bson:"Following" json:"Following"`
 	MyPhotos    []string           `bson:"MyPhotos" json:"MyPhotos"`
 	SavedPhotos []string           `bson:"SavedPhotos" json:"SavedPhotos"`
+	ProfilePicture string `bson:"ProfilePicture" json:"ProfilePicture"`
 }
+
+type Picture struct {
+	ID       primitive.ObjectID `bson:"_id,omitempty"`
+	Filename string             `bson:"filename"`
+	Data     []byte             `bson:"data"`
+}
+
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	// Get a MongoDB client and collection
