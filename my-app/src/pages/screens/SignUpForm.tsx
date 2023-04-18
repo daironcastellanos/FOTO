@@ -105,11 +105,9 @@ const Signup = () => {
                             required 
                         />
                     </div>
-                    <div className="flex justify-between items-center mt-6">
-            <button className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600" onClick={() => window.history.back()}>
-              Back
-            </button>
-            <button className="bg-indigo-500 text-white py-2 px-6 rounded-lg  hover:bg-indigo-600">
+                    <div className="flex justify-center items-center mt-6">
+            
+            <button className="bg-indigo-500 text-white py-2 px-10 rounded-lg  hover:bg-indigo-600">
               Register
             </button>
           </div>
