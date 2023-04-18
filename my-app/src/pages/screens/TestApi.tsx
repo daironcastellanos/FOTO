@@ -111,7 +111,7 @@ const TestApi: React.FC = () => {
   const getNearbyUsers = async () => {
     const user = await getUser();
     const fireID = user?.uid;
-
+  
     try {
       const response = await fetch(
         `http://localhost:8080/api/nearby_users/${fireID}`
@@ -135,7 +135,7 @@ const TestApi: React.FC = () => {
         error
       );
     }
-  };
+  };  
 
   const getRandomPhoto = async () => {
     try {
@@ -399,6 +399,43 @@ async function unfollowUser() {
 }
 
 
+// Update user's location
+async function updateUserLocation() {
+  const user = await getUser();
+  const fireID = user?.uid;
+
+  if (!navigator.geolocation) {
+    console.error("Geolocation is not supported by your browser.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const location = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+      coordinates: [position.coords.latitude, position.coords.longitude],
+    };
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/users/${fireID}/updateLocation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(location),
+      });
+
+      if (response.ok) {
+        console.log("User location updated successfully.");
+      } else {
+        console.log("Error updating user location.");
+      }
+    } catch (error) {
+      console.error("Error in updateUserLocation:", error);
+    }
+  });
+}
+
 
 
   return (
@@ -543,6 +580,8 @@ async function unfollowUser() {
           Get Profile Photo
         </button>
 
+  
+
         <div className="mb-8">
           <h2 className="text-xl font-bold">Location Routes</h2>
           <button
@@ -552,6 +591,14 @@ async function unfollowUser() {
             Get Nearby Users
           </button>
         </div>
+
+              
+<button
+  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+  onClick={updateUserLocation}
+>
+  Update Users Location
+</button>
 
 
 

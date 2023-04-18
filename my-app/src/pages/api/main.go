@@ -651,40 +651,129 @@ func unfollowUser(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusOK)
     json.NewEncoder(w).Encode(ResponseMessage{"User unfollowed successfully."})
 }
+func updateUserLocation(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    vars := mux.Vars(r)
+    fireId := vars["fireId"]
+
+    var location Location
+    err := json.NewDecoder(r.Body).Decode(&location)
+    if err != nil {
+        w.WriteHeader(http.StatusBadRequest)
+        json.NewEncoder(w).Encode(ResponseMessage{"Error updating user location."})
+        return
+    }
+
+    client := GetMongoClient()
+    collection := client.Database("freel").Collection("users")
+
+    filter := bson.M{"FireID": fireId}
+    update := bson.M{"$set": bson.M{"Location": location}}
+
+    _, err = collection.UpdateOne(context.Background(), filter, update)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    fmt.Printf("User with FireID '%s' location updated successfully.\n", fireId)
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(ResponseMessage{"User location updated successfully."})
+}
+
+
+func Get_Nearby_users(w http.ResponseWriter, r *http.Request) {
+	fireID := mux.Vars(r)["fireID"]
+
+	client := GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	// Create the 2dsphere index on the Location field
+	indexModel := mongo.IndexModel{
+		Keys: bson.M{
+			"Location": "2dsphere",
+		},
+	}
+	_, err := collection.Indexes().CreateOne(context.Background(), indexModel)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	var user User
+	err = collection.FindOne(context.Background(), bson.M{"FireID": fireID}).Decode(&user)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	filter := bson.M{
+		"Location": bson.M{
+			"$near": bson.M{
+				"$geometry": bson.M{
+					"type":        "Point",
+					"coordinates": user.Location.Coordinates,
+				},
+				"$maxDistance": 10000, // 10 km radius
+			},
+		},
+	}
+
+	cursor, err := collection.Find(context.Background(), filter)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer cursor.Close(context.Background())
+
+	var nearbyUsers []User
+	if err := cursor.All(context.Background(), &nearbyUsers); err != nil {
+		log.Println(err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(nearbyUsers); err != nil {
+		log.Println(err)
+		return
+	}
+}
+
+
+
 
 
 func Freel_Api() {
 	
 	r := mux.NewRouter()
-	
+
+	// Photo endpoints
 	r.HandleFunc("/api/photos/{photoId}", Get_Photo).Methods("GET")
 	r.HandleFunc("/api/upload/{fireID}", uploadPhotoHandler).Methods("POST")
+	r.HandleFunc("/api/random_pic/get", get.GetRandomImage).Methods("GET")
+
+	// User endpoints
 	r.HandleFunc("/api/create/user", CreateUser).Methods("POST")
 	r.HandleFunc("/api/users/{fireID}/get", get.GetUserByFireID).Methods("GET")
 	r.HandleFunc("/api/username/{username}/get", get.GetUserByUsername).Methods("GET")
 	r.HandleFunc("/api/users/get", get.GetAllUsers).Methods("GET")
-	r.HandleFunc("/api/random_pic/get", get.GetRandomImage).Methods("GET")
-	r.HandleFunc("/api/users/{fireID}/update_bio", Update_Bio).Methods("Post")
+	r.HandleFunc("/api/users/{fireID}/update_bio", Update_Bio).Methods("POST")
 	r.HandleFunc("/api/users/{fireID}/uploadProfilePicture", uploadProfilePictureHandler).Methods("POST")
 	r.HandleFunc("/api/users/{fireID}/getProfilePicture", GetProfilePicture).Methods("GET")
-
-	r.HandleFunc("/api/users/{fireId}/removePhoto", removePhotoFromSaved).Methods("POST")
-    r.HandleFunc("/api/users/{fireId}/unfollow", unfollowUser).Methods("POST")
-
+	r.HandleFunc("/api/users/{fireId}/updateLocation", updateUserLocation).Methods("POST")
 	r.HandleFunc("/api/users/{fireId}/savePhoto", addPhotoToSaved).Methods("POST")
-    r.HandleFunc("/api/users/{fireId}/follow", followUser).Methods("POST")
-	
+	r.HandleFunc("/api/users/{fireId}/removePhoto", removePhotoFromSaved).Methods("POST")
+	r.HandleFunc("/api/users/{fireId}/follow", followUser).Methods("POST")
+	r.HandleFunc("/api/users/{fireId}/unfollow", unfollowUser).Methods("POST")
 
-	/* Follower Functions to implement logic */
+	// Follower and Following endpoints
 	r.HandleFunc("/api/users/{fireID}/addFollower/{followerID}", AddFollower).Methods("POST")
 	r.HandleFunc("/api/users/{fireID}/removeFollower/{followerID}", RemoveFollower).Methods("POST")
 	r.HandleFunc("/api/users/{fireID}/addFollowing/{followingID}", AddFollowing).Methods("POST")
 	r.HandleFunc("/api/users/{fireID}/removeFollowing/{followingID}", RemoveFollowing).Methods("POST")
 
-
-	
-	/* Gets nearby users */
-	r.HandleFunc("/api/nearby_users/{fireID}", get.Get_Nearby_users).Methods("GET")
+	// Nearby users endpoint
+	r.HandleFunc("/api/nearby_users/{fireID}", Get_Nearby_users).Methods("GET")
 	
 	// Start the server
 	log.Println("Starting server on :8080")
@@ -693,6 +782,7 @@ func Freel_Api() {
 
 	log.Fatal(http.ListenAndServe(":8080",handler))
 }
+
 
 func main() {
 	Freel_Api()

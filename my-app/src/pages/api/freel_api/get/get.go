@@ -232,57 +232,6 @@ func deg2rad(deg float64) float64 {
 	return deg * (math.Pi / 180)
 }
 
-func Get_Nearby_users(w http.ResponseWriter, r *http.Request) {
-	// Extract the user FireID from the URL path
-	fireID := mux.Vars(r)["fireID"]
-
-	// Set up a MongoDB client and connect to the database
-	client := mongo.GetMongoClient()
-	collection := client.Database("freel").Collection("users")
-
-	// Find the user with the specified FireID
-	var user User
-	err := collection.FindOne(context.Background(), bson.M{"FireID": fireID}).Decode(&user)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	
-
-	// Find all users within a 10 km radius of the specified location
-	filter := bson.M{
-		"location": bson.M{
-			"$near": bson.M{
-				"$geometry": bson.M{
-					"type":        "Point",
-					"coordinates": user.Location.Coordinates,
-				},
-				"$maxDistance": 10000000,
-			},
-		},
-	}
-
-	cursor, err := collection.Find(context.Background(), filter)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	defer cursor.Close(context.Background())
-
-	// Print the results
-	var nearbyUsers []User
-	if err := cursor.All(context.Background(), &nearbyUsers); err != nil {
-		log.Println(err)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(nearbyUsers); err != nil {
-		log.Println(err)
-		return
-	}
-}
 
 
 
