@@ -18,7 +18,7 @@ const Menu: React.FC = () => {
               layout="responsive"
             />
           </div>
-          <Link href="/">
+          <Link href="/Home">
             <span className="menu-link text-blue-600 font-semibold text-2xl hover:text-blue-500 text-center flex items-center justify-center space-x-2">
               <i className="fas fa-home"></i>
               <span>Home</span>
