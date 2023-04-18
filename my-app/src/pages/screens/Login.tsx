@@ -30,7 +30,6 @@ const Login = () => {
           if (userIsAuth) {
             console.log(userIsAuth);
             console.log('User is Authorized ');
-
             router.push('/screens/HomePage'); // Use Next.js router to go to the Profile screen
           } else {
             console.log('not authorized');
