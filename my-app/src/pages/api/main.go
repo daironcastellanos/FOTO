@@ -299,7 +299,6 @@ func Freel_Api() {
 	
 	r := mux.NewRouter()
 	r.HandleFunc("/api/photos/{photoId}", Get_Photo).Methods("GET")
-
 	r.HandleFunc("/api/upload/{fireID}", uploadPhotoHandler).Methods("POST")
 	r.HandleFunc("/api/create/user", CreateUser).Methods("POST")
 	r.HandleFunc("/api/users/{fireID}/get", get.GetUserByFireID).Methods("GET")

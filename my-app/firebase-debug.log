@@ -51,3 +51,161 @@ Before we get started, keep in mind:
 
   * You are initializing within an existing Firebase project directory
 
+[debug] [2023-04-18T02:33:55.357Z] ----------------------------------------------------------------------
+[debug] [2023-04-18T02:33:55.363Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2023-04-18T02:33:55.364Z] CLI Version:   11.26.0
+[debug] [2023-04-18T02:33:55.364Z] Platform:      win32
+[debug] [2023-04-18T02:33:55.364Z] Node Version:  v19.8.1
+[debug] [2023-04-18T02:33:55.364Z] Time:          Mon Apr 17 2023 22:33:55 GMT-0400 (Eastern Daylight Time)
+[debug] [2023-04-18T02:33:55.365Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-18T02:33:55.510Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-18T02:33:55.511Z] > authorizing via signed-in user (ericdequevedo@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\ericd\dev\school\Software_engineer\Freel\my-app
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2023-04-18T02:34:26.461Z] Using project from CLI flag: freel-376723
+[debug] [2023-04-18T02:34:26.463Z] > refreshing access token with scopes: []
+[debug] [2023-04-18T02:34:26.466Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-04-18T02:34:26.466Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-04-18T02:34:26.685Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-04-18T02:34:26.686Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-04-18T02:34:26.715Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/freel-376723 [none]
+[debug] [2023-04-18T02:34:27.034Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/freel-376723 200
+[debug] [2023-04-18T02:34:27.034Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/freel-376723 {"projectId":"freel-376723","projectNumber":"212725659815","displayName":"freel","name":"projects/freel-376723","resources":{"hostingSite":"freel-376723","realtimeDatabaseInstance":"freel-376723-default-rtdb"},"state":"ACTIVE","etag":"1_b5b65dee-5437-4511-821a-1b5e6ae73be9"}
+[info] i  Using project freel-376723 (freel) 
+[info] 
+=== Functions Setup
+[debug] [2023-04-18T02:34:27.042Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-18T02:34:27.043Z] > authorizing via signed-in user (ericdequevedo@gmail.com)
+[debug] [2023-04-18T02:34:27.043Z] [iam] checking project freel-376723 for permissions ["firebase.projects.get"]
+[debug] [2023-04-18T02:34:27.044Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/freel-376723:testIamPermissions [none]
+[debug] [2023-04-18T02:34:27.044Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/freel-376723:testIamPermissions x-goog-quota-user=projects/freel-376723
+[debug] [2023-04-18T02:34:27.044Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/freel-376723:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2023-04-18T02:34:27.270Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/freel-376723:testIamPermissions 200
+[debug] [2023-04-18T02:34:27.270Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/freel-376723:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2023-04-18T02:34:27.272Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/freel-376723/services/cloudfunctions.googleapis.com [none]
+[debug] [2023-04-18T02:34:27.272Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/freel-376723/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/freel-376723
+[debug] [2023-04-18T02:34:27.274Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/freel-376723/services/runtimeconfig.googleapis.com [none]
+[debug] [2023-04-18T02:34:27.274Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/freel-376723/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/freel-376723
+[debug] [2023-04-18T02:34:27.688Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/freel-376723/services/runtimeconfig.googleapis.com 200
+[debug] [2023-04-18T02:34:27.688Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/freel-376723/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2023-04-18T02:34:27.690Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/freel-376723/services/cloudfunctions.googleapis.com 200
+[debug] [2023-04-18T02:34:27.691Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/freel-376723/services/cloudfunctions.googleapis.com [omitted]
+[info] 
+Detected existing codebase(s): default, freelfire
+
+[info] Let's create a new codebase for your functions.
+[info] A directory corresponding to the codebase will be created in your project
+[info] with sample code pre-configured.
+
+[info] See https://firebase.google.com/docs/functions/organize-functions for
+[info] more information on organizing your functions using codebases.
+
+[info] Functions can be deployed with firebase deploy.
+
+[info] +  Wrote freeeel/package.json 
+[info] +  Wrote freeeel/.eslintrc.js 
+[info] +  Wrote freeeel/tsconfig.json 
+[info] +  Wrote freeeel/tsconfig.dev.json 
+[info] +  Wrote freeeel/src/index.ts 
+[info] +  Wrote freeeel/.gitignore 
+[info] 
+=== Hosting:github Setup
+[info] 
+[info] i  Detected a .git folder at C:\Users\ericd\dev\school\Software_engineer\Freel 
+[info] i  Authorizing with GitHub to upload your service account to a GitHub repository's secrets store. 
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://github.com/login/oauth/authorize?client_id=89cf50f02ac6aaed3484&state=411837176&redirect_uri=http%3A%2F%2Flocalhost%3A9005&scope=read%3Auser%20repo%20public_repo
+[info] 
+[info] Waiting for authentication...
+[debug] [2023-04-18T02:35:58.453Z] >>> [apiv2][query] POST https://github.com/login/oauth/access_token [none]
+[debug] [2023-04-18T02:35:58.454Z] >>> [apiv2][body] POST https://github.com/login/oauth/access_token [stream]
+[debug] [2023-04-18T02:35:58.689Z] <<< [apiv2][status] POST https://github.com/login/oauth/access_token 200
+[debug] [2023-04-18T02:35:58.690Z] <<< [apiv2][body] POST https://github.com/login/oauth/access_token {"access_token":"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","token_type":"bearer","scope":"read:user,repo"}
+[debug] [2023-04-18T02:35:58.718Z] >>> [apiv2][query] GET https://api.github.com/user [none]
+[debug] [2023-04-18T02:35:58.964Z] <<< [apiv2][status] GET https://api.github.com/user 200
+[debug] [2023-04-18T02:35:58.965Z] <<< [apiv2][body] GET https://api.github.com/user {"login":"ericdequ","id":58181424,"node_id":"MDQ6VXNlcjU4MTgxNDI0","avatar_url":"https://avatars.githubusercontent.com/u/58181424?v=4","gravatar_id":"","url":"https://api.github.com/users/ericdequ","html_url":"https://github.com/ericdequ","followers_url":"https://api.github.com/users/ericdequ/followers","following_url":"https://api.github.com/users/ericdequ/following{/other_user}","gists_url":"https://api.github.com/users/ericdequ/gists{/gist_id}","starred_url":"https://api.github.com/users/ericdequ/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ericdequ/subscriptions","organizations_url":"https://api.github.com/users/ericdequ/orgs","repos_url":"https://api.github.com/users/ericdequ/repos","events_url":"https://api.github.com/users/ericdequ/events{/privacy}","received_events_url":"https://api.github.com/users/ericdequ/received_events","type":"User","site_admin":false,"name":"Eric deQuevedo","company":null,"blog":"","location":null,"email":null,"hireable":null,"bio":"Aspiring Software developer","twitter_username":null,"public_repos":22,"public_gists":0,"followers":2,"following":0,"created_at":"2019-11-25T15:35:14Z","updated_at":"2023-03-27T00:10:49Z","private_gists":0,"total_private_repos":39,"owned_private_repos":39,"disk_usage":730116,"collaborators":1,"two_factor_authentication":false,"plan":{"name":"free","space":976562499,"collaborators":0,"private_repos":10000}}
+[info] 
+[info] +  Success! Logged into GitHub as ericdequ 
+[info] 
+[debug] [2023-04-18T02:36:09.987Z] >>> [apiv2][query] GET https://api.github.com/repos/n/actions/secrets/public-key type=owner
+[debug] [2023-04-18T02:36:10.229Z] <<< [apiv2][status] GET https://api.github.com/repos/n/actions/secrets/public-key 404
+[debug] [2023-04-18T02:36:10.229Z] <<< [apiv2][body] GET https://api.github.com/repos/n/actions/secrets/public-key {"message":"Not Found","documentation_url":"https://docs.github.com/rest"}
+[info] 
+[info] 
+[error] !  The provided authorization cannot be used with this repository. If this repository is in an organization, did you remember to grant access? 
+[info] 
+[info] i  Action required: Visit this URL to ensure access has been granted to the appropriate organization(s) for the Firebase CLI GitHub OAuth App: 
+[info] https://github.com/settings/connections/applications/89cf50f02ac6aaed3484
+[info] 
+[debug] [2023-04-18T02:36:12.080Z] >>> [apiv2][query] GET https://api.github.com/repos/n/actions/secrets/public-key type=owner
+[debug] [2023-04-18T02:36:12.166Z] <<< [apiv2][status] GET https://api.github.com/repos/n/actions/secrets/public-key 404
+[debug] [2023-04-18T02:36:12.166Z] <<< [apiv2][body] GET https://api.github.com/repos/n/actions/secrets/public-key {"message":"Not Found","documentation_url":"https://docs.github.com/rest"}
+[info] 
+[info] 
+[error] !  The provided authorization cannot be used with this repository. If this repository is in an organization, did you remember to grant access? 
+[info] 
+[info] i  Action required: Visit this URL to ensure access has been granted to the appropriate organization(s) for the Firebase CLI GitHub OAuth App: 
+[info] https://github.com/settings/connections/applications/89cf50f02ac6aaed3484
+[info] 
+[debug] [2023-04-18T02:36:13.375Z] >>> [apiv2][query] GET https://api.github.com/repos/n/actions/secrets/public-key type=owner
+[debug] [2023-04-18T02:36:13.452Z] <<< [apiv2][status] GET https://api.github.com/repos/n/actions/secrets/public-key 404
+[debug] [2023-04-18T02:36:13.452Z] <<< [apiv2][body] GET https://api.github.com/repos/n/actions/secrets/public-key {"message":"Not Found","documentation_url":"https://docs.github.com/rest"}
+[info] 
+[info] 
+[error] !  The provided authorization cannot be used with this repository. If this repository is in an organization, did you remember to grant access? 
+[info] 
+[info] i  Action required: Visit this URL to ensure access has been granted to the appropriate organization(s) for the Firebase CLI GitHub OAuth App: 
+[info] https://github.com/settings/connections/applications/89cf50f02ac6aaed3484
+[info] 
+[debug] [2023-04-18T02:36:13.644Z] >>> [apiv2][query] GET https://api.github.com/repos/n/actions/secrets/public-key type=owner
+[debug] [2023-04-18T02:36:13.715Z] <<< [apiv2][status] GET https://api.github.com/repos/n/actions/secrets/public-key 404
+[debug] [2023-04-18T02:36:13.715Z] <<< [apiv2][body] GET https://api.github.com/repos/n/actions/secrets/public-key {"message":"Not Found","documentation_url":"https://docs.github.com/rest"}
+[info] 
+[info] 
+[error] !  The provided authorization cannot be used with this repository. If this repository is in an organization, did you remember to grant access? 
+[info] 
+[info] i  Action required: Visit this URL to ensure access has been granted to the appropriate organization(s) for the Firebase CLI GitHub OAuth App: 
+[info] https://github.com/settings/connections/applications/89cf50f02ac6aaed3484
+[info] 
+[debug] [2023-04-18T02:36:13.846Z] >>> [apiv2][query] GET https://api.github.com/repos/n/actions/secrets/public-key type=owner
+[debug] [2023-04-18T02:36:13.928Z] <<< [apiv2][status] GET https://api.github.com/repos/n/actions/secrets/public-key 404
+[debug] [2023-04-18T02:36:13.928Z] <<< [apiv2][body] GET https://api.github.com/repos/n/actions/secrets/public-key {"message":"Not Found","documentation_url":"https://docs.github.com/rest"}
+[info] 
+[info] 
+[error] !  The provided authorization cannot be used with this repository. If this repository is in an organization, did you remember to grant access? 
+[info] 
+[info] i  Action required: Visit this URL to ensure access has been granted to the appropriate organization(s) for the Firebase CLI GitHub OAuth App: 
+[info] https://github.com/settings/connections/applications/89cf50f02ac6aaed3484
+[info] 
+[debug] [2023-04-18T02:36:15.318Z] >>> [apiv2][query] GET https://api.github.com/repos//actions/secrets/public-key type=owner
+[debug] [2023-04-18T02:36:15.387Z] <<< [apiv2][status] GET https://api.github.com/repos//actions/secrets/public-key 404
+[debug] [2023-04-18T02:36:15.387Z] <<< [apiv2][body] GET https://api.github.com/repos//actions/secrets/public-key {"message":"Not Found","documentation_url":"https://docs.github.com/rest"}
+[info] 
+[info] 
+[error] !  The provided authorization cannot be used with this repository. If this repository is in an organization, did you remember to grant access? 
+[info] 
+[info] i  Action required: Visit this URL to ensure access has been granted to the appropriate organization(s) for the Firebase CLI GitHub OAuth App: 
+[info] https://github.com/settings/connections/applications/89cf50f02ac6aaed3484
+[info] 

@@ -87,6 +87,8 @@ const TestApi: React.FC = () => {
     const user = await getUser();
     const fireID = user?.uid;
 
+    console.log(fireID)
+
     try {
       const response = await fetch(
         `http://localhost:8080/api/users/${fireID}/get`

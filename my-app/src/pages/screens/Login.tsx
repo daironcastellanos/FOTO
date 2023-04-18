@@ -1,53 +1,45 @@
-// This component is a simple login form that uses React hooks to manage its state
 import React, { useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import Link from "next/link";
-import {getAuth, signInWithEmailAndPassword} from 'firebase/auth'
-import {auth} from '../../firebase/firebase'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../../firebase/firebase'
+import Image from 'next/image';
 
 // Import the styles for this component
 const MENU_LIST = [
     { text: "Home", href: "/" },
     { text: "About Us", href: "/about" },
     { text: "Contact", href: "/contact" },
-  ];
+];
 
 const Login = () => {
-
+    const router = useRouter(); // Add this line to use Next.js router
     let userIsAuth = null;
-    // Use React hooks to manage the state of the form
     const [email, setEmail] = useState('');
-    // The second argument to useState is the function that will be used to update the state
     const [password, setPassword] = useState('');
-    // Handle form submission
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // Handle form submission here, such as sending a request to your server's login endpoint
-       
-        if(email.length && password.length){
-            try{
-                /* */
-                const userCredential = await signInWithEmailAndPassword(auth,email,password);
-                userIsAuth = userCredential.user;
-                setEmail("");
-                setPassword("");
-                //const userInfo = await getUser();
+  
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+      e.preventDefault();
+  
+      if (email.length && password.length) {
+        try {
+          const userCredential = await signInWithEmailAndPassword(auth, email, password);
+          userIsAuth = userCredential.user;
+          setEmail('');
+          setPassword('');
+          if (userIsAuth) {
+            console.log(userIsAuth);
+            console.log('User is Authorized ');
 
-
-                // Simple print to check authentication 
-                if(userIsAuth){
-                    console.log('User is Authorized ')
-
-                }else{
-                    console.log("not authorized")
-                }
-
-            }catch{
-                /* This is what executes when the login is invalid*/
-                console.log("error",(e));
-
-            }
+            router.push('/screens/HomePage'); // Use Next.js router to go to the Profile screen
+          } else {
+            console.log('not authorized');
+            router.push('/screens/SignupForm'); // Use Next.js router to go to the SignupForm screen
+          }
+        } catch {
+          console.log('error', e);
         }
+      }
     };
     // Render the form
     return (
