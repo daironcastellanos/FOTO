@@ -10,7 +10,6 @@ import ScrollingView from '@/components/ScrollView';
 import TopBar from '@/components/topbar';
 
 
-
 function HomePage() {
   return (
     <div>

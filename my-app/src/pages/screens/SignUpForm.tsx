@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext } from 'react';
 import {app} from '../../firebase/firebase'
 import { getAuth } from '@firebase/auth';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from "next/link";
 import {auth} from '../../firebase/firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
@@ -30,11 +30,16 @@ const Signup = () => {
 
 
     return (
-        <div className="fixed top-0 left-0 h-screen w-screen flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg">
-                <h1 className="text-2xl font-medium mb-4 text-purple-600">Sign up for Freel</h1>
-
-                <form onSubmit={handleSubmit}>
+        <div className="fixed top-0 left-0 h-screen w-screen flex items-center justify-center bg-gradient-to-r from-blue-200 via-green-200 to-purple-200">
+          <Link href="/">
+            <h1 className="absolute top-3 left-3 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">
+              Back
+            </h1>
+          </Link>
+          <div className="bg-white p-8 rounded-xl shadow-md">
+            <h1 className="text-3xl font-medium mb-6 text-purple-600">Sign up for Freel</h1>
+    
+            <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label className="block text-gray-700 font-medium mb-2" htmlFor="fullName">
                             Full Name
@@ -100,26 +105,19 @@ const Signup = () => {
                             required 
                         />
                     </div>
-                    <div className='space-x-2'>
-                    <button className="bg-red-200 text-gray-800 py-2 px-7 rounded-lg hover:bg-indigo-600" onClick={() => window.history.back()}>
-                        Back   
-                    </button>
-                    <button className="bg-indigo-500 text-white py-2 px-4 rounded-lg  hover:bg-indigo-600">
-                        Register
-                    </button>
-                    </div>
-                    
-
-                    
-                  </form>
-            </div>
-        </div>
-    )
-}
+                    <div className="flex justify-center items-center mt-6">
+            
+            <button className="bg-indigo-500 text-white py-2 px-10 rounded-lg  hover:bg-indigo-600">
+              Register
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 export default Signup;
-
-
 
 
 
