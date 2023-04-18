@@ -223,7 +223,7 @@ const TestApi: React.FC = () => {
   
     try {
       const response = await fetch(
-        `http://localhost:8080/api/users/${username}/get`
+        `http://localhost:8080/api/username/${username}/get`
       );
       if (!response.ok) {
         throw new Error(await response.text());
