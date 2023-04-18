@@ -53,6 +53,7 @@ type Post struct {
 	Comments []Comment `bson:"comments,omitempty" json:"comments"`
 }
 
+
 type Location struct {
 	Coordinates []float64 `bson:"coordinates" json:"coordinates"`
 }
@@ -71,8 +72,6 @@ type User struct {
 	MyPhotos    []string           `bson:"MyPhotos" json:"MyPhotos"`
 	SavedPhotos []string           `bson:"SavedPhotos" json:"SavedPhotos"`
 }
-
-
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	// Get a MongoDB client and collection
