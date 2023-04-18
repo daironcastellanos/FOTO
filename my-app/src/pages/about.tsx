@@ -14,7 +14,7 @@ function About() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto bg-gray-50">
+    <div className="mx-auto bg-gray-50">
       <Head>
         <title>About Us - Freel</title>
         <link rel="icon" href="/favicon.ico" />
@@ -23,7 +23,7 @@ function About() {
         <Header isLoggedIn={isLoggedIn}/>
       </div>
 
-      <div className="p-10">
+      <div className="p-10 max-w-7xl mx-auto">
         <section className="bg-white py-8 px-6 rounded-lg shadow-md">
           <h2 className="text-3xl font-bold mb-6">Freel - The Future of Freelance Photography</h2>
           <p className="text-lg mb-4">

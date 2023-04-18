@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
-import logo from '../../public/images/Logo.png';
+import logo from '../../public/images/Freel.png';
 
 type HeaderProps = {
   isLoggedIn: boolean;
@@ -32,7 +32,7 @@ const Header = ({ isLoggedIn }: HeaderProps) => {
 const SigninHeader = () => {
   return (
     <header className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 sticky top-0 z-10">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
             <Link href="/">
