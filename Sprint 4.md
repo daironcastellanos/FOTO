@@ -6,7 +6,33 @@
 
 
 # SPRINT 4 BACK-END
+#### What's New
+Created User endpoints:
+* POST /api/create/user for creating a new user
+* GET /api/users/{fireID}/get for getting a user by their FireID
+* GET /api/username/{username}/get for getting a user by their username
+* GET /api/users/get for getting all users
+Implemented additional user-related features:
 
+* POST /api/users/{fireID}/update_bio for updating a user's bio
+* POST /api/users/{fireID}/uploadProfilePicture for uploading a profile picture
+* GET /api/users/{fireID}/getProfilePicture for retrieving a profile picture
+* POST /api/users/{fireId}/updateLocation for updating a user's location
+* POST /api/users/{fireId}/savePhoto for adding a photo to saved photos
+* POST /api/users/{fireId}/removePhoto for removing a photo from saved photos
+* POST /api/users/{fireId}/follow for following a user
+* POST /api/users/{fireId}/unfollow for unfollowing a user
+
+Created Follower and Following endpoints:
+* POST /api/users/{fireID}/addFollower/{followerID} for adding a follower
+* POST /api/users/{fireID}/removeFollower/{followerID} for removing a follower
+* POST /api/users/{fireID}/addFollowing/{followingID} for adding to the following list
+* POST /api/users/{fireID}/removeFollowing/{followingID} for removing from the following list
+
+Implemented a Nearby users endpoint:
+* GET /api/nearby_users/{fireID} for getting nearby users based on location
+
+Configured CORS settings and started the server on port 8080.
 ## Backend API Documentation - GET, POST, and DELETE Methods
 ### Introduction
 
@@ -35,24 +61,32 @@ on the directory of my-app/src/pages/api
 
 
 
+#### Unit Tests
+The TestGetUserByFireID function is a unit test for the GetUserByFireID endpoint in the back end. This test verifies that the endpoint correctly retrieves a user by their FireID and returns the expected user information.
 
-#### What's New
+The test follows these steps:
+* Creates a test user with unique values and a known FireID.
+* Constructs a new HTTP GET request with the test user's FireID.
+* Creates a ResponseRecorder to record the HTTP response.
+* Calls the GetUserByFireID function with the constructed request.
+* Checks if the HTTP response status code is 200 (OK).
+* Decodes the response body into a User struct.
+* Verifies that the returned user matches the test user, specifically comparing the FireID and FullName fields.
+* This test helps ensure that the GetUserByFireID function is working as intended and returns accurate user data based on the provided FireID.
 
-Here are some additional functions that have been added to the backend API:
 
-Get_Photo
-This function retrieves a photo from the MongoDB database using the specified photo ID. The function reads the photo data into a byte slice and writes it to the HTTP response writer. We are continue working on the unit testing of this function.
+The TestGetUserByUsername function is a unit test for the GetUserByUsername endpoint in the back end. This test ensures that the endpoint accurately retrieves a user by their username and returns the expected user information.
 
-Get_Random_Picture
-This function retrieves a random picture from the MongoDB database. The function uses the math/rand package to generate a random number, and then uses the number to select a picture from the database.
+The test follows these steps:
+* Creates a test user with unique values and a known username.
+* Constructs a new HTTP GET request with the test user's username.
+* Creates a ResponseRecorder to record the HTTP response.
+* Calls the GetUserByUsername function with the constructed request.
+* Checks if the HTTP response status code is 200 (OK).
+* Decodes the response body into a User struct.
+* Verifies that the returned user matches the test user, specifically comparing the Username and FullName fields.
 
-Get_User_Post_by_ID
-This function retrieves the posts created by a user with the specified user ID. The function uses the MongoDB Aggregate function to perform a join between the users and posts collections, and then returns the posts created by the user.
 
-GetUserById_post 
-This function returns an array of unique photo IDs. from the user object 
-
-To use these functions, you will need to define additional API endpoints and implement HTTP handlers that correspond to the functions. You will also need to write test cases for the handlers to verify that they are working correctly.
 
 #### New Issues to work on the next sprint
 * Post_Pic
