@@ -70,21 +70,23 @@ const getProfilePicture = async () => {
   console.log("firebase id",fireID)
   try {
     const response = await fetch(`http://localhost:8080/api/users/${fireID}/getProfilePicture`);
-    if (response.ok) {
+    
       const blob = await response.blob();
       const imageUrl = URL.createObjectURL(blob);
       setPhotoUrl(imageUrl);
-    } else {
+  
       console.error("Error fetching profile picture:", response.statusText);
       return null;
-    }
+    
   } catch (error) {
+
     console.error("Error fetching profile picture:", error);
-    return null;
   }
 }
 
   useEffect(() => {
+    console.log("useEffect called")
+    getAllUsers();
     getProfilePicture();
   }, []);
   
