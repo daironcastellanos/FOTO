@@ -4,6 +4,33 @@
 # Front-End
 
 # SPRINT 4 BACK-END
+
+## Backend API Documentation - Sprint 4 Updated
+### Introduction
+In Sprint 4, we've made significant improvements to our backend API by introducing new user endpoints and additional user-related features. These updates allow for actions such as creating a new user, retrieving users by FireID or username, updating user information, and managing follower and following lists. We've also implemented a nearby users endpoint to discover users based on location. To ensure a smooth experience, we've provided documentation on utilizing the GET, POST, and DELETE methods and included helpful commands for package installation, running unit tests, and executing the backend application. With a strong focus on robust testing, our team has effectively verified the correct functionality of key endpoints, bolstering the quality and reliability of our backend API.
+
+
+### How to use it
+Some helpful commands when you start using the Go_Backend directory are:
+```
+go mod tidy
+go install
+```
+to make sure all the packages are installed.
+Also you can run the unit tests with  
+```
+go test
+```
+Finally you can run the backend application with
+```
+go run main.go
+```
+To do testing of the backend application
+```
+go test -v
+```
+on the directory of my-app/src/pages/api
+
 #### What's New
 Created User endpoints:
 * POST /api/create/user for creating a new user
@@ -29,35 +56,6 @@ Created Follower and Following endpoints:
 
 Implemented a Nearby users endpoint:
 * GET /api/nearby_users/{fireID} for getting nearby users based on location
-
-
-## Backend API Documentation - Sprint 4 Updated
-### Introduction
-This documentation explains how to use the GET, POST, and DELETE methods to implement a backend API that includes the actions of retrieving, creating, and deleting information. These methods are commonly used in HTTP-based APIs to communicate between the client and the server.
-
-
-### How to use it
-Some helpful commands when you start using the Go_Backend directory are:
-```
-go mod tidy
-go install
-```
-to make sure all the packages are installed.
-Also you can run the unit tests with  
-```
-go test
-```
-Finally you can run the backend application with
-```
-go run main.go
-```
-To do testing of the backend application
-```
-go test -v
-```
-on the directory of my-app/src/pages/api
-
-
 
 #### Unit Tests
 The TestGetUserByFireID function is a unit test for the GetUserByFireID endpoint in the back end. This test verifies that the endpoint correctly retrieves a user by their FireID and returns the expected user information.
@@ -88,5 +86,5 @@ The test follows these steps:
 To effectively utilize the GET, POST, and DELETE methods in the backend API, we defined API endpoints corresponding to desired actions, such as creating, retrieving, or deleting resources. We implemented HTTP handlers for each endpoint, using the appropriate method to perform the corresponding action. To ensure the handlers worked correctly, we wrote test cases using Go's built-in testing package, verifying that they returned expected results. This approach was applied to all three methods, resulting in a robust and reliable backend API.
 
 
-#### Conclusion
-The back-end team developed a robust API for managing user data, including creation, retrieval, and profile updates, as well as handling follower/following relationships and finding nearby users. The API utilizes GET, POST, and DELETE methods for flexibility. Unit tests were created using Go's built-in testing package to ensure reliability and accurate user data retrieval. Comprehensive documentation and useful commands were provided, facilitating a seamless experience for developers working with the API, ultimately leading to a scalable and reliable back-end system.
+### Conclusion
+Sprint 4 has brought significant enhancements to the backend API by introducing new user endpoints, additional user-related features, and a nearby users endpoint. These updates streamline actions such as creating, retrieving, and updating users, as well as managing follower and following lists. The provided documentation and commands facilitate package installation, running unit tests, and executing the backend application. Through rigorous testing and verification, the quality and reliability of the backend API have been effectively bolstered, resulting in a robust and user-friendly experience.
