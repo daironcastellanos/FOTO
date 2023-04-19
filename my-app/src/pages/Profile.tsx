@@ -30,13 +30,14 @@ const getUserById = async () => {
 
   try {
     const response = await fetch(
-      `http://localhost:8080/api/users/${fireID}/get`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${fireID}/get`
     );
     var data = await response.json();
     console.log(data);
   } catch (error) {
     console.error(`Error fetching user with ID ${fireID}:`, error);
   }
+
   return data;
 };
 
@@ -104,9 +105,9 @@ const Profile: React.FC = () => {
   const [photoUrl, setPhotoUrl] = useState<string | string>("");
   const [user, setUser] = useState<User | null>(null);
 
-const getAllUsers = async () => {
+  const getAllUsers = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/users/get", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/get`, {
         mode: "cors",
       });
       const data = await response.json();
@@ -114,24 +115,29 @@ const getAllUsers = async () => {
     } catch (error) {
       console.error("Error fetching all users:", error);
     }
-};
+  };
 
-const getProfilePicture = async () => {
-  const fireID = await getUid();
-  console.log("firebase id",fireID)
-  try {
-    const response = await fetch(`http://localhost:8080/api/users/${fireID}/getProfilePicture`);
-    
-      const blob = await response.blob();
-      const imageUrl = URL.createObjectURL(blob);
-      setPhotoUrl(imageUrl);
-  
-      console.error("Error fetching profile picture:", response.statusText);
+  async function getProfilePicture() {
+    const user = await getUser();
+    const fireID = user?.uid;
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${fireID}/getProfilePicture`
+      );
+      if (response.ok) {
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        setPhotoUrl(imageUrl);
+      } else {
+        console.error("Error fetching profile picture:", response.statusText);
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching profile picture:", error);
       return null;
-  } catch (error) {
-    console.error("Error fetching profile picture:", error);
+    }
   }
-}
+  
 useEffect(() => {
   console.log("useEffect called");
 
