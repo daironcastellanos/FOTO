@@ -159,27 +159,11 @@ useEffect(() => {
     bio: user?.Bio || 'Bio',
     Following: user?.Following || [],
     Followers: user?.Followers || [],
-    profilePictureUrl: 'https://placekitten.com/200/200',
+    profilePictureUrl: '',
     pictures: [
       {
         id: '1',
-        url: 'https://placekitten.com/200/200',
-      },
-      {
-        id: '2',
-        url: 'https://placekitten.com/200/200',
-      },
-      {
-        id: '3',
-        url: 'https://placekitten.com/300/300?image=3',
-      },
-      {
-        id: '4',
-        url: 'https://placekitten.com/300/300?image=4',
-      },
-      {
-        id: '5',
-        url: 'https://placekitten.com/300/300?image=5',
+        url: '',
       },
     ],
   });
