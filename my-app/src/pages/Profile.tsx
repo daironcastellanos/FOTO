@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { auth } from "@/firebase/firebase";
 import UserStatistics from '@/components/userStats';
 
+
 const ImageDisplay: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
   return (
     <Image
@@ -235,7 +236,7 @@ useEffect(() => {
      <div className="grid grid-cols-3 gap-4 mt-4">
   {userProfile.pictures.map((picture) => (
     <div key={picture.id} className="relative overflow-hidden aspect-w-1 aspect-h-1">
-      <img
+      <Image
         src={photoUrl}
         className="object-cover"
         alt="Posted picture"

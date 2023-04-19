@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface UploadPageProps {
   onSubmit: (imageUrl: string) => void;
@@ -44,7 +45,7 @@ const UploadPage: React.FC<UploadPageProps> = ({ onSubmit }) => {
         </div>
         {imageUrl && (
           <div className="mb-4">
-            <img src={imageUrl} alt="Preview" className="max-w-full h-auto" />
+            <Image src={imageUrl} alt="Preview" className="max-w-full h-auto" />
           </div>
         )}
         <div className="text-center">

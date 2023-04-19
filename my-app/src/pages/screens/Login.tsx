@@ -85,7 +85,7 @@ const checkAuthentication = async () => {
           </Link>
           <div className="bg-white p-8 rounded-xl shadow-md">
             <div className="flex justify-center">
-              <img src="/images/Logo.png" alt="" width="249" height="107"/>
+              <Image src="/images/Logo.png" alt="Logo" width="249" height="107"/>
             </div>
             <h1 className="text-3xl font-medium mb-6 text-purple-600 text-center">Welcome to Freel</h1> 
                 <form onSubmit={handleSubmit}>
@@ -126,7 +126,7 @@ const checkAuthentication = async () => {
           <div className="text-center mt-4">
             <Link href="/screens/SignUpForm">
               <button className="text-indigo-500">
-                Don't have an account? Sign up
+                Dont have an account? Sign up
               </button>
             </Link>
           </div>

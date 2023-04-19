@@ -22,7 +22,7 @@ function Features() {
       <Header isLoggedIn={isLoggedIn}/>
 
       <div className="p-10">
-        <h1 className="text-4xl font-bold mb-10">Freel's Best Features</h1>
+        <h1 className="text-4xl font-bold mb-10">Freels Best Features</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-2xl font-medium mb-4">Location-Based Services</h2>

@@ -2,6 +2,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import Header from '../components/Header';
+import Image from 'next/image';
 
 function Follow() {
   const developers = [
@@ -52,7 +53,7 @@ function Follow() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {developers.map((developer, index) => (
             <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-              <img
+              <Image
                 className="mx-auto w-32 h-32 rounded-full mb-4"
                 src={developer.image}
                 alt={developer.name}

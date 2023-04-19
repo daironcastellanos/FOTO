@@ -32,7 +32,7 @@ function About() {
           <p className="text-lg mb-4">
             🌐 Imagine it as...
             A Google Maps for available photographers near you, but the difference is it can be anywhere in the world.
-            Users in need of a photographer can sign up and search for available photographers in their immediate surrounding. This benefits the user by allowing them to find and hire photographers at a moment's notice while viewing their work through their profile, which showcases the photographer's portfolio.
+            Users in need of a photographer can sign up and search for available photographers in their immediate surrounding. This benefits the user by allowing them to find and hire photographers at a moments notice while viewing their work through their profile, which showcases the photographers portfolio.
           </p>
           <p className="text-lg mb-4">
             For photographers, our services are nothing shy of revolutionary. Now, content creators have the ability to travel the world and generate new business anywhere they are. Our location-based services allow well-known photographers to travel to the other side of the world, showcase their portfolio to users in that area, and create new business.

@@ -16,7 +16,7 @@ const PrivacyPolicy = () => {
         <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
           <h1 className="text-4xl font-bold mb-4 text-purple-600">Privacy Policy</h1>
           <p className="text-lg mb-6">
-            Your privacy is important to us. It is Freel's policy to respect your privacy regarding any information we may collect from you across our website, https://freel.example.com, and other sites we own and operate.
+            Your privacy is important to us. It is Freels policy to respect your privacy regarding any information we may collect from you across our website, https://freel.example.com, and other sites we own and operate.
           </p>
           <h2 className="text-2xl font-semibold mb-4">Information we collect</h2>
           {/* Add your information collection policy */}
@@ -30,7 +30,7 @@ const PrivacyPolicy = () => {
           {/* Add your security policy */}
           <h2 className="text-2xl font-semibold mb-4">Links to other sites</h2>
           {/* Add your external links policy */}
-          <h2 className="text-2xl font-semibold mb-4">Children's privacy</h2>
+          <h2 className="text-2xl font-semibold mb-4">Childrens privacy</h2>
           {/* Add your children's privacy policy */}
           <h2 className="text-2xl font-semibold mb-4">Changes to this policy</h2>
           {/* Add your policy changes statement */}

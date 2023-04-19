@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 /*
 import{
     BellIcon,
@@ -7,7 +8,7 @@ import{
 function Sidebar() {
   return (
     <div>
-        <img className ="h-10 w-10" src="./images/freellogo.png" alt="" />
+        <Image className ="h-10 w-10" src="./images/freellogo.png" alt="" />
     </div>
   )
 }

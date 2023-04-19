@@ -13,7 +13,7 @@ const Footer: React.FC<FooterProps> = ({ isLoggedIn }) => {
           <div>
             <h3 className="font-bold text-xl mb-4">Freel</h3>
             <p>
-              Freel is a platform that connects freelancers with clients, making it easy to find the right talent for your projects. We're dedicated to providing a seamless experience for both freelancers and clients to collaborate and grow.
+              Freel is a platform that connects freelancers with clients, making it easy to find the right talent for your projects. Were dedicated to providing a seamless experience for both freelancers and clients to collaborate and grow.
             </p>
           </div>
           <div className="justify-center mx-auto">

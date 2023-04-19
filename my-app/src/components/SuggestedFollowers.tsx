@@ -1,12 +1,13 @@
-import React from 'react';
+import React from "react";
+import Image from "next/image";
 
 const SuggestedFollowers: React.FC = () => {
   const photographers = [
-    { id: 1, name: 'John Doe', username: 'john_doe' },
-    { id: 2, name: 'Jane Smith', username: 'jane_smith' },
-    { id: 3, name: 'Charlie Brown', username: 'charlie_brown' },
-    { id: 4, name: 'Oliver Twist', username: 'oliver_twist' },
-    { id: 5, name: 'Emma Woodhouse', username: 'emma_woodhouse' },
+    { id: 1, name: "John Doe", username: "john_doe" },
+    { id: 2, name: "Jane Smith", username: "jane_smith" },
+    { id: 3, name: "Charlie Brown", username: "charlie_brown" },
+    { id: 4, name: "Oliver Twist", username: "oliver_twist" },
+    { id: 5, name: "Emma Woodhouse", username: "emma_woodhouse" },
   ];
 
   return (
@@ -15,11 +16,14 @@ const SuggestedFollowers: React.FC = () => {
       <div className="space-y-4">
         {photographers.map((photographer) => (
           <div key={photographer.id} className="flex items-center space-x-3">
-            <img
+            <Image
               src={`https://source.unsplash.com/random/50x50?sig=${photographer.id}`}
               alt={photographer.name}
-              className="w-12 h-12 rounded-full"
+              width={50}
+              height={50}
+              className="rounded-full"
             />
+
             <div>
               <p className="text-gray-700 font-semibold">{photographer.name}</p>
               <p className="text-gray-500">@{photographer.username}</p>

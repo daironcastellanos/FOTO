@@ -1,57 +1,70 @@
-
-import {useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
+import Image from "next/image";
 
 declare var google: any;
-function GoogleSignIn() {
-  const[ user, setUser ] = useState({});
 
-  function handleCallbackResponse(response) {
+interface User {
+  name?: string;
+  picture?: string;
+}
+
+function GoogleSignIn() {
+  const [user, setUser] = useState<User>({});
+
+function handleCallbackResponse(response: { credential: string; }) {
     console.log("Encoded JWT ID token: " + response.credential);
-    var userObject = jwt_decode(response.credential);
+    var userObject: User = jwt_decode(response.credential);
     console.log(userObject);
     setUser(userObject);
-    document.getElementById("signInDiv").hidden = true;
-  }
+    const signInDiv = document.getElementById("signInDiv");
+    if (signInDiv) {
+        signInDiv.hidden = true;
+    }
+}
 
-  function handleSignOut(event){
+function handleSignOut() {
     setUser({});
-    document.getElementById("signInDiv").hidden = false;
-  }
+    const signInDiv = document.getElementById("signInDiv");
+    if (signInDiv) {
+        signInDiv.hidden = false;
+    }
+}
 
   useEffect(() => {
     console.log("before IF");
-    if (typeof google !== 'undefined') {
-      console.log("test")
+    if (typeof google !== "undefined") {
+      console.log("test");
       google.accounts.id.initialize({
-        client_id:"212725659815-f59aick9qoksihrb9qhvhk9evtr2qks7.apps.googleusercontent.com",
-        callback: handleCallbackResponse
+        client_id:
+          "212725659815-f59aick9qoksihrb9qhvhk9evtr2qks7.apps.googleusercontent.com",
+        callback: handleCallbackResponse,
       });
 
       google.accounts.id.renderButton(
         document.getElementById("signInDiv"),
-        { theme: "outline", size:"large"}
+        { theme: "outline", size: "large" }
       );
 
       google.accounts.id.prompt();
     }
   }, []);
 
-  // 
-
   return (
     <div className="App">
       <div id="signInDiv"></div>
-      { Object.keys(user).length != 0 &&
-        <button onClick={ (e) => handleSignOut(e)}>Sign Out</button>
-      }
-      
-      { user &&
+      {Object.keys(user).length !== 0 && (
+        <button onClick={(e) => handleSignOut()}>Sign Out</button>
+      )}
+
+      {user && (
         <div>
-          <img src={user.picture}></img>
+          {user.picture && (
+            <Image src={user.picture} alt="user-image" width={48} height={48} />
+          )}
           <h3>{user.name}</h3>
-          </div>
-      }
+        </div>
+      )}
     </div>
   );
 }

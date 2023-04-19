@@ -14,7 +14,7 @@ const TermsOfService = () => {
         <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
           <h1 className="text-4xl font-bold mb-4 text-purple-600">Terms of Service</h1>
           <p className="text-lg mb-6">
-            By using the Freel website, you are agreeing to be bound by the following terms and conditions ("Terms of Service").
+            By using the Freel website, you are agreeing to be bound by the following terms and conditions (Terms of Service).
           </p>
           {/* Add your Terms of Service content */}
           <h2 className="text-2xl font-semibold mb-4">Account Terms</h2>
