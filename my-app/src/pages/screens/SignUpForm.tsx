@@ -8,6 +8,15 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from "next/router";
 import { CreateUserInMongo } from "@/call_bakend/working/backend";
 
+
+const getUser = async () => {
+  const user = auth.currentUser;
+  console.log(user?.uid);
+  console.log(user?.email);
+
+  return user;
+};
+
 const Signup = () => {
     const auth = getAuth(app);
   

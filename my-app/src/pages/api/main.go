@@ -651,6 +651,7 @@ func unfollowUser(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusOK)
     json.NewEncoder(w).Encode(ResponseMessage{"User unfollowed successfully."})
 }
+
 func updateUserLocation(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
     vars := mux.Vars(r)
@@ -739,12 +740,8 @@ func Get_Nearby_users(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
-
-
-
 func Freel_Api() {
-	
+
 	r := mux.NewRouter()
 
 	// Photo endpoints
@@ -757,6 +754,7 @@ func Freel_Api() {
 	r.HandleFunc("/api/users/{fireID}/get", get.GetUserByFireID).Methods("GET")
 	r.HandleFunc("/api/username/{username}/get", get.GetUserByUsername).Methods("GET")
 	r.HandleFunc("/api/users/get", get.GetAllUsers).Methods("GET")
+
 	r.HandleFunc("/api/users/{fireID}/update_bio", Update_Bio).Methods("POST")
 	r.HandleFunc("/api/users/{fireID}/uploadProfilePicture", uploadProfilePictureHandler).Methods("POST")
 	r.HandleFunc("/api/users/{fireID}/getProfilePicture", GetProfilePicture).Methods("GET")

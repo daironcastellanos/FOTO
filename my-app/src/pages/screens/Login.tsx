@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from "next/link";
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { getAuth , signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../firebase/firebase'
 import Image from 'next/image';
 
@@ -13,6 +13,40 @@ const MENU_LIST = [
 ];
 
 const Login = () => {
+
+  
+
+const getUser = async () => {
+  const user = auth.currentUser;
+  console.log(user?.uid);
+  console.log(user?.email);
+
+  return user;
+};
+
+const getUid = async () => {
+  const user = await getUser();
+  const fireID = user?.uid;
+
+  return fireID;
+};
+
+// Wrap the code in an async function to use 'await' inside
+const checkAuthentication = async () => {
+  const uid = await getUid();
+
+  if (uid !== "") {
+    console.log('User is Authorized');
+    router.push('/screens/HomePage'); // Use Next.js router to go to the HomePage screen
+  } else {
+    console.log('not authorized');
+    router.push('/screens/SignupForm'); // Use Next.js router to go to the SignupForm screen
+  }
+};
+
+// Call the function to check authentication
+
+
     const router = useRouter(); // Add this line to use Next.js router
     let userIsAuth = null;
     const [email, setEmail] = useState('');
@@ -27,10 +61,11 @@ const Login = () => {
           userIsAuth = userCredential.user;
           setEmail('');
           setPassword('');
-          if (userIsAuth) {
+          
+          if (await checkAuthentication) {
             console.log(userIsAuth);
             console.log('User is Authorized ');
-            router.push('/screens/HomePage'); // Use Next.js router to go to the Profile screen
+            router.push('/Home'); // Use Next.js router to go to the Profile screen
           } else {
             console.log('not authorized');
             router.push('/screens/SignupForm'); // Use Next.js router to go to the SignupForm screen
@@ -81,11 +116,12 @@ const Login = () => {
                         />
                     </div>
                     <div className="flex justify-center mt-4">
-            <Link href="/Home">
-              <button className="bg-indigo-500 text-white py-2 px-6 rounded-lg hover:bg-indigo-600">
+              
+              <button className="bg-indigo-500 text-white py-2 px-6 rounded-lg hover:bg-indigo-600"
+              onClick={handleSubmit}
+              >
                 Log in
               </button>
-            </Link>
           </div>
           <div className="text-center mt-4">
             <Link href="/screens/SignUpForm">

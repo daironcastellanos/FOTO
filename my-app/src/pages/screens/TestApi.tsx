@@ -97,21 +97,24 @@ const TestApi: React.FC = () => {
 
     console.log(fireID);
 
+    var data = null;
+
     try {
       const response = await fetch(
         `http://localhost:8080/api/users/${fireID}/get`
       );
-      const data = await response.json();
+      var data = await response.json();
       console.log(data);
     } catch (error) {
       console.error(`Error fetching user with ID ${fireID}:`, error);
     }
+
+    return data;
   };
 
   const getNearbyUsers = async () => {
     const user = await getUser();
     const fireID = user?.uid;
-  
     try {
       const response = await fetch(
         `http://localhost:8080/api/nearby_users/${fireID}`
