@@ -3,8 +3,6 @@
 
 # Front-End
 
-
-
 # SPRINT 4 BACK-END
 #### What's New
 Created User endpoints:
@@ -32,10 +30,10 @@ Created Follower and Following endpoints:
 Implemented a Nearby users endpoint:
 * GET /api/nearby_users/{fireID} for getting nearby users based on location
 
-Configured CORS settings and started the server on port 8080.
-## Backend API Documentation - GET, POST, and DELETE Methods
-### Introduction
 
+## Backend API Documentation - Sprint 4 Updated
+### Introduction
+This documentation explains how to use the GET, POST, and DELETE methods to implement a backend API that includes the actions of retrieving, creating, and deleting information. These methods are commonly used in HTTP-based APIs to communicate between the client and the server.
 
 
 ### How to use it
@@ -86,17 +84,9 @@ The test follows these steps:
 * Decodes the response body into a User struct.
 * Verifies that the returned user matches the test user, specifically comparing the Username and FullName fields.
 
+### Getting Started
+To effectively utilize the GET, POST, and DELETE methods in the backend API, we defined API endpoints corresponding to desired actions, such as creating, retrieving, or deleting resources. We implemented HTTP handlers for each endpoint, using the appropriate method to perform the corresponding action. To ensure the handlers worked correctly, we wrote test cases using Go's built-in testing package, verifying that they returned expected results. This approach was applied to all three methods, resulting in a robust and reliable backend API.
 
-
-#### New Issues to work on the next sprint
-* Post_Pic
-The Post_Pic issue involves implementing functionality to allow users to upload pictures to the application. This involves creating an API endpoint that allows users to submit a POST request with a picture, and implementing an HTTP handler function that will save the picture to a database (such as MongoDB) and return a response to the client. This issue may also involve adding functionality to resize images and validate file types.
-
-* Update_Bio
-The Update_Bio issue involves implementing functionality to allow users to update their profile bio. This involves creating an API endpoint that allows users to submit a PUT request with a new bio, and implementing an HTTP handler function that will update the user's bio in a database (such as MongoDB) and return a response to the client.
-
-* Update_Profile_on_uploads
-The Update_Profile_on_uploads issue involves implementing functionality to automatically update a user's profile picture when they upload a new picture. This involves modifying the Post_Pic implementation to also update the user's profile picture in the database, and implementing an HTTP handler function that will return the updated profile picture to the client.
 
 #### Conclusion
-By implementing the GET, POST, and DELETE methods in your backend API, you can provide powerful functionality that allows clients to retrieve, create, and delete information from the server. To get started with implementing these methods, you will need to define your API endpoints, implement your HTTP handlers
+The back-end team developed a robust API for managing user data, including creation, retrieval, and profile updates, as well as handling follower/following relationships and finding nearby users. The API utilizes GET, POST, and DELETE methods for flexibility. Unit tests were created using Go's built-in testing package to ensure reliability and accurate user data retrieval. Comprehensive documentation and useful commands were provided, facilitating a seamless experience for developers working with the API, ultimately leading to a scalable and reliable back-end system.
