@@ -6,8 +6,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import logo from '../../public/images/justlogo.png';
 import Image from 'next/image';
-
-import Head from 'next/head'
 import { Inter } from '@next/font/google'
 import Login from './screens/Login';
 
