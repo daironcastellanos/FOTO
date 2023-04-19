@@ -11,6 +11,7 @@ import (
 	"os"
 	"testing"
 
+
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
@@ -135,7 +136,7 @@ func TestGetUserByUsername(t *testing.T) {
 
 	// Create a test user with unique values
 	_id,err := primitive.ObjectIDFromHex("643dbd5c00167a9b3050eee7")
-	
+
 	testUser := User{
 		ID:             _id,
 		FireID:         "1bLnAlQE7IQEnXTkwza2f4Xxn6S2",
@@ -179,6 +180,90 @@ func TestGetUserByUsername(t *testing.T) {
 
 	// Check the returned user matches the test user
 	if returnedUser.Username != testUser.Username || returnedUser.FullName != testUser.FullName {
+		t.Errorf("handler returned wrong user: got %+v want %+v", returnedUser, testUser)
+	}
+}
+
+
+func GetUserByFireID(w http.ResponseWriter, r *http.Request) {
+	// Get the FireID from the URL parameter
+	params := mux.Vars(r)
+	fireID := params["fireID"]
+
+	// Get a MongoDB client and collection
+	client := GetMongoClient()
+	collection := client.Database("freel").Collection("users")
+
+	// Query the collection for the user with the given FireID
+	var user bson.M
+	err := collection.FindOne(context.Background(), bson.M{"FireID": fireID}).Decode(&user)
+	if err != nil {
+		log.Printf("Error finding document: %v", err)
+		http.Error(w, "Error finding document", http.StatusInternalServerError)
+		return
+	}
+
+	// Return the user as JSON
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(user)
+	if err != nil {
+		log.Printf("Error encoding response: %v", err)
+		http.Error(w, "Error encoding response", http.StatusInternalServerError)
+		return
+	}
+}
+
+
+func TestGetUserByFireID(t *testing.T) {
+	// Create a test user with unique values
+	_id, err := primitive.ObjectIDFromHex("643dbd5c00167a9b3050eee7")
+	if err != nil {
+		t.Fatalf("Error parsing ObjectID: %v", err)
+	}
+
+	testUser := User{
+		ID:             _id,
+		FireID:         "1bLnAlQE7IQEnXTkwza2f4Xxn6S2",
+		FullName:       "Eric deQuevedo",
+		Username:       "ericdequu",
+		Email:          "ericdequuevedo@gmail.com",
+		Bio:            "",
+		Location:       Location{Lat: 29.6156734, Lng: -82.3659168, Coordinates: []float64{29.6156734, -82.3659168}},
+		DOB:            "2023-04-20",
+		Followers:      []string{},
+		Following:      []string{"QbKWQD6DBWQD6Pp5VXABRXZWVng1"},
+		MyPhotos:       []string{"643dbd9b00167a9b3050eeee"},
+		SavedPhotos:    []string{},
+		ProfilePicture: "643f369f1da746fbb904ce5a",
+	}
+
+	// Create a new request with the test user's FireID
+	req, err := http.NewRequest("GET", "/api/fireid/"+testUser.FireID, nil)
+	if err != nil {
+		t.Fatalf("could not create request: %v", err)
+	}
+
+	// Create a ResponseRecorder to record the HTTP response
+	w := httptest.NewRecorder()
+
+	// Call the GetUserByFireID function with the request
+	r := mux.NewRouter()
+	r.HandleFunc("/api/fireid/{fireID}", GetUserByFireID)
+	r.ServeHTTP(w, req)
+
+	// Check the HTTP response status code is 200
+	if status := w.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+	}
+
+	// Decode the response body into a User
+	var returnedUser User
+	if err := json.NewDecoder(w.Body).Decode(&returnedUser); err != nil {
+		t.Errorf("handler returned invalid JSON: %v", err)
+	}
+
+	// Check the returned user matches the test user
+	if returnedUser.FireID != testUser.FireID || returnedUser.FullName != testUser.FullName {
 		t.Errorf("handler returned wrong user: got %+v want %+v", returnedUser, testUser)
 	}
 }
