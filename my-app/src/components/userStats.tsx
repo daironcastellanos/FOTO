@@ -1,4 +1,5 @@
 import React from 'react';
+import ButtonComponent from './Booked';
 import FollowButton from './FollowButton';
 
 interface UserStatisticsProps {
@@ -17,6 +18,7 @@ const UserStatistics: React.FC<UserStatisticsProps> = ({ posts, followers, follo
         <p className="text-sm text-gray-600 tracking-wider uppercase">Posts</p>
       </div>
       <FollowButton></FollowButton>
+      <ButtonComponent></ButtonComponent>
       <div className="text-center">
       
         <h3 className="text-2xl font-bold text-indigo-500">{followers}</h3>
