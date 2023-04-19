@@ -85,6 +85,8 @@ The test follows these steps:
 ### Getting Started
 To effectively utilize the GET, POST, and DELETE methods in the backend API, we defined API endpoints corresponding to desired actions, such as creating, retrieving, or deleting resources. We implemented HTTP handlers for each endpoint, using the appropriate method to perform the corresponding action. To ensure the handlers worked correctly, we wrote test cases using Go's built-in testing package, verifying that they returned expected results. This approach was applied to all three methods, resulting in a robust and reliable backend API.
 
+### Hosting API Services
+We used a Docker Image to upload the Go Backend service to google cloud Run so we didnt have to always have the backend running to call the Front End and then connected the frontend thats hosted on vercel to the backend on gooogle cloud run server.
 
 ### Conclusion
 Sprint 4 has brought significant enhancements to the backend API by introducing new user endpoints, additional user-related features, and a nearby users endpoint. These updates streamline actions such as creating, retrieving, and updating users, as well as managing follower and following lists. The provided documentation and commands facilitate package installation, running unit tests, and executing the backend application. Through rigorous testing and verification, the quality and reliability of the backend API have been effectively bolstered, resulting in a robust and user-friendly experience.
