@@ -77,8 +77,8 @@ const Profile: React.FC = () => {
 
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <div className="w-36 h-36 relative rounded-full overflow-hidden">
+    <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100">
+      <div className="w-36 h-36 relative rounded-full overflow-hidden border-4 border-white shadow-lg">
         <Image
           src={userProfile.profilePictureUrl}
           layout="fill"
@@ -87,14 +87,14 @@ const Profile: React.FC = () => {
         />
       </div>
       <div className="absolute top-4 left-4">
-      <Link href="/Home">
-            <h1 className="absolute top-3 left-3 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">
-              Back
-            </h1>
-          </Link>
+        <Link href="/Home">
+          <h1 className="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white py-2 px-4 rounded-lg hover:opacity-90 cursor-pointer">
+            Back
+          </h1>
+        </Link>
       </div>
       <div className="text-center mt-2">
-        <h2 className="text-2xl font-bold">{userProfile.name}</h2>
+        <h2 className="text-3xl font-semibold text-gray-800">{userProfile.name}</h2>
         <p className="text-sm text-gray-600">{userProfile.bio}</p>
       </div>
       <UserStatistics
@@ -102,17 +102,17 @@ const Profile: React.FC = () => {
         followers={100} // Replace with the actual number of followers
         following={100} // Replace with the actual number of following users
       />
-     <div className="grid grid-cols-3 gap-4 mt-4">
-  {userProfile.pictures.map((picture) => (
-    <div key={picture.id} className="relative overflow-hidden aspect-w-1 aspect-h-1">
-      <img
-        src={picture.url}
-        className="object-cover"
-        alt="Posted picture"
-      />
-    </div>
-  ))}
-</div>
+      <div className="grid grid-cols-3 gap-1 mt-6 w-full max-w-3xl">
+        {userProfile.pictures.map((picture) => (
+          <div key={picture.id} className="relative overflow-hidden aspect-w-1 aspect-h-1">
+            <img
+              src={picture.url}
+              className="object-cover transition duration-300 ease-in-out transform hover:scale-110"
+              alt="Posted picture"
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

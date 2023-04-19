@@ -5,12 +5,15 @@ import ScrollingView from '@/components/ScrollView';
 import Menu from '@/components/Menu';
 import SuggestedFollowers from '@/components/SuggestedFollowers';
 import Header from '@/components/Header';
+import TopBarSearch from '@/components/topbarsearch';
 
 
 const Home: React.FC = () => {
   return (
     <div className="relative grid grid-cols-12 gap-4">
       {/* Left column: Menu */}
+     
+
       <Menu/>
 
       {/* Middle column: Feed */}
