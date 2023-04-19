@@ -185,8 +185,6 @@ const TestApi: React.FC = () => {
       return null;
     }
   }
-  
-
 
   const uploadPhoto = async () => {
     if (!uploadedFile) {

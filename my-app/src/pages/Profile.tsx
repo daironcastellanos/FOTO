@@ -17,6 +17,36 @@ const ImageDisplay: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
   );
 };
 
+const getUserById = async () => {
+  console.log("Trying to get user by ID");
+
+  const user = await getUser();
+  const fireID = user?.uid;
+
+  console.log(fireID);
+
+  var data = null;
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/users/${fireID}/get`
+    );
+    var data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(`Error fetching user with ID ${fireID}:`, error);
+  }
+  return data;
+};
+
+const getUsrPhotoArray = async () => {
+  console.log("Trying to get user photo array");
+  const userdata = await getUserById();
+
+  const usrObj = userdata;
+
+  //console.log("usr photo array", usrObj.MyPhotos);
+}
 
 const getUser = async () => {
   const user = await auth.currentUser;
@@ -45,12 +75,33 @@ interface UserProfile {
   pictures: Picture[];
 }
 
+interface User {
+  id: string;
+  Bio: string;
+  DOB: string;
+  Email: string;
+  FireID: string;
+  Followers: string[];
+  Following: string[];
+  FullName: string;
+  Location: {
+    coordinates: number[];
+    lat: number;
+    lng: number;
+  };
+  MyPhotos: string[];
+  ProfilePicture: string;
+  SavedPhotos: string[];
+  Username: string;
+  _id: string;
+}
 
 const Profile: React.FC = () => {
 
   const router = useRouter();
   const { id } = router.query;
   const [photoUrl, setPhotoUrl] = useState<string | string>("");
+  const [user, setUser] = useState<User | null>(null);
 
 const getAllUsers = async () => {
     try {
@@ -64,7 +115,6 @@ const getAllUsers = async () => {
     }
 };
 
-  
 const getProfilePicture = async () => {
   const fireID = await getUid();
   console.log("firebase id",fireID)
@@ -77,25 +127,31 @@ const getProfilePicture = async () => {
   
       console.error("Error fetching profile picture:", response.statusText);
       return null;
-    
   } catch (error) {
-
     console.error("Error fetching profile picture:", error);
   }
 }
+useEffect(() => {
+  console.log("useEffect called");
 
-  useEffect(() => {
-    console.log("useEffect called")
-    getAllUsers();
-    getProfilePicture();
-  }, []);
+  const fetchData = async () => {
+    await getAllUsers();
+    await getProfilePicture();
+    await getUsrPhotoArray();
+    const user = await getUserById();
+    setUser(user);
+  };
+
+  fetchData();
+}, []);
+
   
 
   const [userProfile, setUserProfile] = React.useState<UserProfile>({
     id: '1',
-    name: 'Gatico',
-    bio: 'Bio',
-    profilePictureUrl: photoUrl,
+    name: user?.FullName || 'Name',
+    bio: user?.Bio || 'Bio',
+    profilePictureUrl: 'https://placekitten.com/200/200',
     pictures: [
       {
         id: '1',
@@ -135,6 +191,16 @@ const getProfilePicture = async () => {
       },
     ],
   });
+
+  useEffect(() => {
+    console.log("updated user: ", user);
+    console.log("updated user profile picture: ", user?.ProfilePicture);
+    var newProfile = userProfile;
+    newProfile.name = user?.FullName || 'Name';
+    newProfile.bio = user?.Bio || 'Bio';
+    setUserProfile(newProfile)
+
+  }, [user, userProfile]);
 
   const handleBackButtonClick = () => {
     router.back();
