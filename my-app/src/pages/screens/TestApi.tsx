@@ -188,7 +188,6 @@ const TestApi: React.FC = () => {
   
 
 
-
   const uploadPhoto = async () => {
     if (!uploadedFile) {
       console.error("No file selected for upload");
