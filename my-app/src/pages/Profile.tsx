@@ -140,6 +140,7 @@ useEffect(() => {
   });
 
   useEffect(() => {
+    setLoading(true);
     getUsrPhotoArray();
     console.log("updated user: ", user);
     console.log("updated user profile picture: ", user?.ProfilePicture);
@@ -185,11 +186,7 @@ useEffect(() => {
     }
   };
 
-  useEffect(() => {
-    setLoading(true);
-    getUsrPhotoArray();
-  }, [user]);
-
+  
 
   const handleBackButtonClick = () => {
     router.back();
