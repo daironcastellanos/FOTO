@@ -1,4 +1,5 @@
-[Visit Freel Website](https://freel-one.vercel.app)
+[![Visit Freel Website](https://img.shields.io/badge/Visit-Freel--One-blue?style=for-the-badge&logo=vercel&logoColor=white)](https://freel-one.vercel.app)
+
 
 # 📸 Freel App
 #### 🌍 _Freedom for the Freelancer_
