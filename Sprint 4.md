@@ -37,9 +37,11 @@ If Node.js and npm are not installed, they can download and install them from th
 git clone https://github.com/daironcastellanos/Freel.git
 ```
 3. Navigate to the project folder: Navigate to the my-app folder within the cloned repository using the terminal:
-    ```
+
+```
 cd path/to/Freel/my-app
-    ```
+```
+
 Replace path/to with the appropriate path on the your machine.
 
 4. Install dependencies: Next, you should run the following command to install all the required dependencies for the project:
