@@ -38,22 +38,22 @@ git clone https://github.com/daironcastellanos/Freel.git
 ```
 3. Navigate to the project folder: Navigate to the my-app folder within the cloned repository using the terminal:
     ```
-    cd path/to/Freel/my-app
+cd path/to/Freel/my-app
     ```
 Replace path/to with the appropriate path on the your machine.
 
 4. Install dependencies: Next, you should run the following command to install all the required dependencies for the project:
 ```
-    npm install
+npm install
 ```
 5. Start the development server: Once the dependencies are installed, you need to start the development server by running:
 ```
-    npm run dev
-    ```
+npm run dev
+```
 6. Access the application: Finally, you can open their preferred web browser and navigate to the application at the following address:
 ```
-    http://localhost:3000
-    ```
+http://localhost:3000
+```
 
 Now, you should see the application running in their browser, and they can start exploring its features.
 
