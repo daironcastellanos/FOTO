@@ -1,7 +1,53 @@
 # Sprint 4 FREEL
 
-
 # Front-End
+#### What's New
+Sprint 4 has been an incredibly intense and transformative period for our team, with numerous improvements and new features added to the platform. The front-end team dedicated their efforts to a complete overhaul of the design, creating an immersive and enhanced user experience. Here's an in-depth look at the developments made during this sprint:
+
+* Landing Page Transformation: We kicked off Sprint 4 by developing an entirely new landing page. Before users log in, they are directed to this modern and engaging homepage. The landing page offers an interactive experience, allowing users to explore our features, understand the software's benefits, and learn about our team's background and expertise. Additionally, users can easily sign up or log in from the landing page itself.
+
+* Streamlined Sign-up and Login Process: We took a fresh approach to the sign-up and login process, focusing on simplicity and visual appeal. Our goal was to make it easy and enjoyable for users to access our platform, minimizing any potential friction points.
+
+* Redesigned Feed Experience: Once users successfully log in, they are greeted with a beautifully designed feed that has been restructured for optimal user engagement. We divided the feed page into three sections:
+
+    * Left Section: This section houses the main navigation menu, providing users with a seamless experience as they explore the platform. It includes buttons for home, profile, upload, settings, and search. Additionally, a logout button is conveniently located at the bottom left for easy access.
+    * Middle Section: The central part of the feed, also known as the "infinite feed," showcases all the photos uploaded by the people the user follows. Each picture features the uploader's username and bio, fostering a sense of community and connection among users.
+    * Right Section: This section not only offers search functionality but also includes a list of suggested followers, enabling users to discover top users in their area and expand their network.
+    
+* Revamped Profile Experience: The profile page underwent significant enhancements, resulting in a more dynamic and intuitive user experience:
+    * UI Design: The profile page now boasts a visually stunning and user-friendly interface, enabling users to easily browse and view all pictures posted by a particular user.
+    * Follow and Book Features: Users can now follow other users or book photographers directly from their profiles. As our primary target audience is photographers, this feature facilitates potential clients to book them based on their showcased portfolios.
+
+* Responsive Design: The platform has been optimized to work seamlessly across various devices and screen sizes, ensuring a consistent and enjoyable experience for users, regardless of the device they use.
+
+* Performance Enhancements: During this sprint, we also focused on improving the platform's performance, implementing various optimizations to ensure a smooth and responsive user experience. This includes faster loading times, reduced latency, and efficient resource usage.
+
+In conclusion, Sprint 4 marked a significant turning point in our platform's development, with the front-end team working tirelessly to create a visually impressive and user-friendly interface. The introduction of new features, coupled with an enhanced design and improved performance, has set the stage for continued growth and expansion of our platform. 
+
+### How to run Freel:
+1. Prerequisites: Make sure Node.js and npm (Node Package Manager) is installed. This can be checked by running the following commands in the terminal:
+    node -v
+    npm -v
+
+If Node.js and npm are not installed, they can download and install them from the official website: https://nodejs.org/
+
+2. Clone the repository: Clone the application's repository to your local machine using a Git client or by running the following command in the terminal:
+git clone https://github.com/daironcastellanos/Freel.git
+
+3. Navigate to the project folder: Navigate to the my-app folder within the cloned repository using the terminal:
+    cd path/to/Freel/my-app
+Replace path/to with the appropriate path on the your machine.
+
+4. Install dependencies: Next, you should run the following command to install all the required dependencies for the project:
+    npm install
+
+5. Start the development server: Once the dependencies are installed, you need to start the development server by running:
+    npm run dev
+
+6. Access the application: Finally, you can open their preferred web browser and navigate to the application at the following address:
+    http://localhost:3000
+
+Now, you should see the application running in their browser, and they can start exploring its features.
 
 # SPRINT 4 BACK-END
 
@@ -31,6 +77,8 @@ go test -v
 ```
 on the directory of my-app/src/pages/api
 
+
+# BACK-END
 #### What's New
 Created User endpoints:
 * POST /api/create/user for creating a new user
