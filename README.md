@@ -1,3 +1,4 @@
+[Visit Freel Website](https://freel-one.vercel.app)
 
 # 📸 Freel App
 #### 🌍 _Freedom for the Freelancer_
