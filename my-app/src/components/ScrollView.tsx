@@ -47,7 +47,6 @@ const ScrollingView = () => {
   useEffect(() => {
     const fetchImages = async () => {
       const allUsers = await getAllUsers();
-      const allPictures: ImageData[] = [];
 
       for (const user of allUsers) {
         const photos = user?.MyPhotos || [];
@@ -61,17 +60,19 @@ const ScrollingView = () => {
 
             const blobUrl = await base64ToBlobUrl(jsonResponse.data);
 
-            allPictures.push({
-              id: user.Username,
-              url: blobUrl,
-              caption: jsonResponse.caption || 'No caption',
-            });
+            setImages(prevImages => [
+              ...prevImages,
+              {
+                id: user.Username,
+                url: blobUrl,
+                caption: jsonResponse.caption || 'No caption',
+              },
+            ]);
           } catch (error) {
             console.error(`Error fetching photo with ID ${photoId}:`, error);
           }
-        }        
+        }
       }
-      setImages(allPictures);
     };
     fetchImages();
   }, []);
@@ -80,18 +81,15 @@ const ScrollingView = () => {
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       {images.map((image) => (
         <div key={image.id} className="w-full max-w-2xl mb-4">
-          <Image src={image.url} alt={image.caption} width={800} height={600} />
+          <Image src={image.url} alt={image.caption} width={800} height={600} loading="lazy" />
           <div className="bg-gray-200 p-4">
             <p className="font-bold">{`${image.id}`}</p>
             <p>{image.caption}</p>
           </div>
         </div>
       ))}
-      </div>
-  )
+    </div>
+  );
 };
 
-
-export default ScrollingView
-
-      
+export default ScrollingView;
