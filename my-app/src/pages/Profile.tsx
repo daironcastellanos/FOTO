@@ -148,15 +148,16 @@ useEffect(() => {
     newProfile.bio = user?.Bio || 'Bio';
     setUserProfile(newProfile)
   }, [user]);
-  
+
+  const [loading, setLoading] = useState<boolean>(true);
+
   const getUsrPhotoArray = async () => {
     console.log("Trying to get user photo array");
     const userdata = await getUserById();
     const usrObj = userdata;
-    
+
     const photos = usrObj?.MyPhotos || [];
-    const newPictures: Picture[] = [];
-  
+
     for (const photoId of photos) {
       try {
         const response = await fetch(
@@ -164,39 +165,52 @@ useEffect(() => {
         );
         const blob = await response.blob();
         const objectUrl = URL.createObjectURL(blob);
-  
-        newPictures.push({
-          id: photoId,
-          url: objectUrl
-        });
+
+        setUserProfile((prevProfile) => ({
+          ...prevProfile,
+          pictures: [
+            ...prevProfile.pictures,
+            {
+              id: photoId,
+              url: objectUrl,
+            },
+          ],
+        }));
+
+        // Set loading state to false after each image is loaded
+        setLoading(false);
       } catch (error) {
         console.error(`Error fetching photo with ID ${photoId}:`, error);
       }
     }
-  
-    setUserProfile(prevProfile => ({
-      ...prevProfile,
-      pictures: newPictures
-    }));
-  }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    getUsrPhotoArray();
+  }, [user]);
+
+
   const handleBackButtonClick = () => {
     router.back();
   };
+
   const userPictures = userProfile.pictures.filter(
     (picture) => picture.id.startsWith(userProfile.id)
   );
-  return (
+
+
+      return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <div className="w-36 h-36 relative rounded-full overflow-hidden">
-        <ImageDisplay src={photoUrl} alt="Profile picture" 
-        />
+        <ImageDisplay src={photoUrl} alt="Profile picture" />
       </div>
       <div className="absolute top-4 left-4">
-      <Link href="/Home">
-            <h1 className="absolute top-3 left-3 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">
-              Back
-            </h1>
-          </Link>
+        <Link href="/Home">
+          <h1 className="absolute top-3 left-3 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">
+            Back
+          </h1>
+        </Link>
       </div>
       <div className="text-center mt-2">
         <h2 className="text-2xl font-bold">{userProfile.name}</h2>
@@ -204,23 +218,31 @@ useEffect(() => {
       </div>
       <UserStatistics
         posts={userProfile.pictures.length}
-        followers={userProfile.Followers.length} // Replace with the actual number of followers
-        following={userProfile.Following.length} // Replace with the actual number of following users
+        followers={userProfile.Followers.length}
+        following={userProfile.Following.length}
       />
-     <div className="grid grid-cols-3 gap-4 mt-4">
-  {userProfile.pictures.map((picture) => (
-    <div key={picture.id} className="relative overflow-hidden aspect-w-1 aspect-h-1">
-      <Image
-        src={picture.url}
-        className="object-cover"
-        alt="Posted picture"
-        width={500}
-        height={500}
-      />
-    </div>
-  ))}
-</div>
+      <div className="grid grid-cols-3 gap-4 mt-4">
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          userProfile.pictures.map((picture) => (
+            <div
+              key={picture.id}
+              className="relative overflow-hidden aspect-w-1 aspect-h-1"
+            >
+              <Image
+                src={picture.url}
+                className="object-cover"
+                alt="Posted picture"
+                width={500}
+                height={500}
+              />
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };
+
 export default Profile;
