@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { auth } from "@/firebase/firebase";
 import UserStatistics from '@/components/userStats';
 
-
 const ImageDisplay: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
   return (
     <Image
@@ -18,7 +17,6 @@ const ImageDisplay: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
   );
 };
 
-
 const getUserById = async () => {
   console.log("Trying to get user by ID");
 
@@ -28,7 +26,6 @@ const getUserById = async () => {
   console.log(fireID);
 
   var data = null;
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${fireID}/get`
@@ -38,7 +35,6 @@ const getUserById = async () => {
   } catch (error) {
     console.error(`Error fetching user with ID ${fireID}:`, error);
   }
-
   return data;
 };
 
