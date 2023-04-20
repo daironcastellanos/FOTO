@@ -26,26 +26,34 @@ In conclusion, Sprint 4 marked a significant turning point in our platform's dev
 
 ### How to run Freel:
 1. Prerequisites: Make sure Node.js and npm (Node Package Manager) is installed. This can be checked by running the following commands in the terminal:
+```
     node -v
     npm -v
-
+```
 If Node.js and npm are not installed, they can download and install them from the official website: https://nodejs.org/
 
 2. Clone the repository: Clone the application's repository to your local machine using a Git client or by running the following command in the terminal:
+```
 git clone https://github.com/daironcastellanos/Freel.git
-
+```
 3. Navigate to the project folder: Navigate to the my-app folder within the cloned repository using the terminal:
+    ```
     cd path/to/Freel/my-app
+    ```
 Replace path/to with the appropriate path on the your machine.
 
 4. Install dependencies: Next, you should run the following command to install all the required dependencies for the project:
+```
     npm install
-
+```
 5. Start the development server: Once the dependencies are installed, you need to start the development server by running:
+```
     npm run dev
-
+    ```
 6. Access the application: Finally, you can open their preferred web browser and navigate to the application at the following address:
+```
     http://localhost:3000
+    ```
 
 Now, you should see the application running in their browser, and they can start exploring its features.
 
