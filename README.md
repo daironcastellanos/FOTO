@@ -76,7 +76,7 @@ npm run dev
 http://localhost:3000
 ```
 
-#To run the backend:
+# To run the backend:
 1. 
 ```
 go mod tidy
