@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { auth } from "@/firebase/firebase";
 import UserStatistics from '@/components/userStats';
-
 const ImageDisplay: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
   return (
     <Image
@@ -16,15 +15,11 @@ const ImageDisplay: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
     />
   );
 };
-
 const getUserById = async () => {
   console.log("Trying to get user by ID");
-
   const user = await getUser();
   const fireID = user?.uid;
-
   console.log(fireID);
-
   var data = null;
   try {
     const response = await fetch(
@@ -37,26 +32,21 @@ const getUserById = async () => {
   }
   return data;
 };
-
 const getUser = async () => {
   const user = await auth.currentUser;
   console.log(user?.uid);
   console.log(user?.email);
-
   return user;
 };
-
 const getUid = async () => {
   const user = await getUser();
   const fireID = await user?.uid;
-
   return fireID;}
-
 interface Picture {
   id: string;
   url: string;
+  
 }
-
 interface UserProfile {
   id: string;
   name: string;
@@ -66,7 +56,6 @@ interface UserProfile {
   profilePictureUrl: string;
   pictures: Picture[];
 }
-
 interface User {
   id: string;
   Bio: string;
@@ -87,15 +76,12 @@ interface User {
   Username: string;
   _id: string;
 }
-
 const Profile: React.FC = () => {
-
   const router = useRouter();
   const { id } = router.query;
   const [usersPhotos, setUsersPhotos] = useState<Picture[]>([]);
   const [photoUrl, setPhotoUrl] = useState<string | string>("");
   const [user, setUser] = useState<User | null>(null);
-
   const getAllUsers = async () => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/get`, {
@@ -107,7 +93,6 @@ const Profile: React.FC = () => {
       console.error("Error fetching all users:", error);
     }
   };
-
   async function getProfilePicture() {
     const user = await getUser();
     const fireID = user?.uid;
@@ -128,11 +113,8 @@ const Profile: React.FC = () => {
       return null;
     }
   }
-
-
 useEffect(() => {
   console.log("useEffect called");
-
   const fetchData = async () => {
     await getAllUsers();
     await getProfilePicture();
@@ -140,10 +122,8 @@ useEffect(() => {
     const user = await getUserById();
     setUser(user);
   };
-
   fetchData();
 }, []);
-
   const [userProfile, setUserProfile] = React.useState<UserProfile>({
     id: '1',
     name: user?.FullName || 'Name',
@@ -168,7 +148,7 @@ useEffect(() => {
     newProfile.bio = user?.Bio || 'Bio';
     setUserProfile(newProfile)
   }, [user]);
-
+  
   const getUsrPhotoArray = async () => {
     console.log("Trying to get user photo array");
     const userdata = await getUserById();
@@ -199,15 +179,12 @@ useEffect(() => {
       pictures: newPictures
     }));
   }
-
   const handleBackButtonClick = () => {
     router.back();
   };
-
   const userPictures = userProfile.pictures.filter(
     (picture) => picture.id.startsWith(userProfile.id)
   );
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <div className="w-36 h-36 relative rounded-full overflow-hidden">
@@ -246,5 +223,4 @@ useEffect(() => {
     </div>
   );
 };
-
 export default Profile;
