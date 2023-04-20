@@ -33,7 +33,7 @@ const UploadPage: React.FC = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:8080/api/upload/${fireID}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/upload/${fireID}`,
           {
             method: "POST",
             body: formData,
