@@ -77,7 +77,7 @@ http://localhost:3000
 ```
 
 # To run the backend:
-1. 
+1. Install files
 ```
 go mod tidy
 go install
